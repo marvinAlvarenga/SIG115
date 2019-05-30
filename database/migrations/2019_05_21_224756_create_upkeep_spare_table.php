@@ -17,7 +17,7 @@ class CreateUpkeepSpareTable extends Migration
             $table->unsignedInteger('spare_id')->index();
             $table->foreign('spare_id')->references('id')->on('spares');
             $table->unsignedInteger('unkeep_id')->index();
-            $table->foreign('unkeep_id')->references('id')->on('unkeeps');
+            $table->foreign('unkeep_id')->references('id')->on('upkeeps');
 
             $table->primary(['spare_id', 'unkeep_id']);
         });

@@ -16,10 +16,10 @@ class CreateProductLicenceTable extends Migration
         Schema::create('product_licence', function (Blueprint $table) {
             $table->unsignedInteger('licence_id')->index();
             $table->foreign('licence_id')->references('id')->on('licences');
-            $table->unsignedInteger('product_id')->index();
+            $table->unsignedBigInteger('product_id')->index();
             $table->foreign('product_id')->references('id')->on('products');
 
-            $table->primary(['licence_id', 'product_id']);
+            $table->primary(['product_id', 'licence_id']);
         });
     }
 
