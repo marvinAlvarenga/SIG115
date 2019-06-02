@@ -19,8 +19,8 @@ class CreateUpkeepsTable extends Migration
             $table->integer('user_id');
             $table->string('tipoequipo');
 
-            $table->unsignedBigInteger('id2')->index()->nullable($value = true);
-            $table->foreign('id2')->references('id')->on('users');
+            $table->unsignedBigInteger('users_id')->index()->nullable($value = true);
+            $table->foreign('users_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
