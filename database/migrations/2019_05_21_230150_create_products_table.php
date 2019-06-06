@@ -19,7 +19,7 @@ class CreateProductsTable extends Migration
             $table->string('numInv', 16);
             $table->string('marca', 20);
             $table->string('modelo', 50);
-            $table->integer('estado');
+            $table->integer('estado')->default(1);
             $table->integer('tipo');
             $table->integer('garantia');
             $table->date('fechaAdqui');
