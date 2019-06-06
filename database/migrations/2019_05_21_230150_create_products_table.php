@@ -23,11 +23,11 @@ class CreateProductsTable extends Migration
             $table->integer('tipo');
             $table->integer('garantia');
             $table->date('fechaAdqui');
-            $table->integer('employee_id');
+           
             $table->float('valorAdqui', 8, 2);
 
-            $table->unsignedInteger('id2')->index()->nullable($value = true);
-            $table->foreign('id2')->references('id')->on('employees');
+            $table->unsignedInteger('employee_id')->index()->nullable($value = true);
+            $table->foreign('employee_id')->references('id')->on('employees');
 
             $table->timestamps();
         });
