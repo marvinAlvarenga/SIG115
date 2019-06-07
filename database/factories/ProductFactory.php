@@ -9,7 +9,7 @@ $factory->define(App\Product::class, function (Faker $faker) {
     return [
         'numSe'=> $faker->randomDigit,
         'numInv'=> $faker->randomDigit,
-        'marca' => $faker->sentence(1),
+        'marca' => $faker->word,
         'modelo' => $faker->sentence(1), 
         'estado' => $faker->randomDigit,      
         'tipo' => $faker->randomDigit,

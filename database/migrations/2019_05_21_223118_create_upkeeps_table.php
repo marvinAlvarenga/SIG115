@@ -15,12 +15,12 @@ class CreateUpkeepsTable extends Migration
     {
         Schema::create('upkeeps', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('product_id');
+            $table->unsignedBigInteger('product_id');
             $table->integer('user_id');
             $table->string('tipoequipo');
-
             $table->unsignedBigInteger('users_id')->index()->nullable($value = true);
             $table->foreign('users_id')->references('id')->on('users');
+            $table->foreign('product_id')->references('id')->on('products');
             $table->timestamps();
         });
     }
