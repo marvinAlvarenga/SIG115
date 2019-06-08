@@ -17,6 +17,15 @@ Route::get('/', function () {
 })->middleware('auth');
 
 Auth::routes();
+Route::middleware(['auth'])->group(function () {
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/equipoportipo', 'GerencialController@equipoPorTipo')->name('gerenciales.equipoportipo');
 
-Route::get('/home', 'HomeController@index')->name('home');
+   
+});
+ 
+
+
+
+
 

@@ -7,8 +7,8 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Product::class, function (Faker $faker) {
     return [
-        'numSe'=> $faker->randomDigit,
-        'numInv'=> $faker->randomDigit,
+        'numSe'=> $faker->randomFLoat($nbMaxDecimals = 0, $min = 1000000, $max = 2000000000),
+        'numInv'=> $faker->randomFloat($nbMaxDecimals = 0, $min = 1000000, $max = 200000000),
         'marca' => $faker->word,
         'modelo' => $faker->sentence(1), 
         'estado' => $faker->randomDigit,      

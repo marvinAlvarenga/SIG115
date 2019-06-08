@@ -38,7 +38,7 @@
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item active">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="/">
           <i class="fas fa-fw fa-home"></i>
           <span>Inicio</span></a>
       </li>
@@ -60,7 +60,7 @@
         <div id="collapseGerencial" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Reportes:</h6>
-            <a class="collapse-item" href="#">Reporte 1</a>
+            <a class="collapse-item" href="{{route('gerenciales.equipoportipo')}}">Reporte 1</a>
             <a class="collapse-item" href="#">Reporte 2</a>
           </div>
         </div>
@@ -156,7 +156,7 @@
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 medium">{{Auth::user()->name}}</span>
+                <span class="mr-2 d-none d-lg-inline text-gray-600 medium">{{(Auth::user())?Auth::user()->name:'Invitado'}}</span>
                 <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgk/60x60">
               </a>
               <!-- Dropdown - User Information -->
@@ -182,25 +182,8 @@
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-
-          <!-- Page Heading -->
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-          </div>
-
-          <!-- Content Row -->
-          <div class="row">
-
-          <!-- Content Row -->
-          <div class="row">
-
-            <div class="col-lg-12  w-100">
-
               <!-- Main content -->
               @yield('content')
-
-            </div>
-          </div>
 
         </div>
         <!-- /.container-fluid -->
