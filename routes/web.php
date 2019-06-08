@@ -20,3 +20,5 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/repor40ad', 'GerencialController@vistaPrevRepor40')->name('repor40');
+
