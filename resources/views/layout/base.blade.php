@@ -53,17 +53,29 @@
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseGerencial" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-file"></i>
-          <span>Reportes</span>
+          <span>Reportes Gerenciales</span>
         </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseGerencial" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Reportes:</h6>
             <a class="collapse-item" href="#">Reporte 1</a>
             <a class="collapse-item" href="#">Reporte 2</a>
           </div>
         </div>
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTactico" aria-expanded="true" aria-controls="collapseTwo">
+          <i class="fas fa-fw fa-file"></i>
+          <span>Reportes Tácticos</span>
+        </a>
+        <div id="collapseTactico" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Reportes:</h6>
+            <a class="collapse-item" href="#">Reporte 1</a>
+            <a class="collapse-item" href="#">Reporte 2</a>
+          </div>
+        </div>
+       
       </li>
 
       <!-- Divider -->
@@ -144,20 +156,19 @@
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">NOMBRE USER</span>
-                <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 medium">{{Auth::user()->name}}</span>
+                <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgk/60x60">
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Cuenta
-                </a>
-                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                document.getElementById('logout-form').submit();">
-                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Cerrar Sesión
-                </a>
+                  <a class="dropdown-item" href="#">
+                      <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                      Cuenta
+                    </a>
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Cerrar sesión
+                      </a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
                   </form>
@@ -183,7 +194,7 @@
           <!-- Content Row -->
           <div class="row">
 
-            <div class="col-lg-12 mb-12">
+            <div class="col-lg-12  w-100">
 
               <!-- Main content -->
               @yield('content')
@@ -198,9 +209,9 @@
       <!-- End of Main Content -->
 
       <!-- Footer -->
-      <footer class="sticky-footer bg-white">
+      <footer class="footer-copyright sticky-footer bg-white">
         <div class="container my-auto">
-          <div class="copyright text-center my-auto">
+          <div class="copyright footer-copyright text-center my-auto">
             <span>Copyright &copy; Universidad de El Salvador 2019</span>
           </div>
         </div>
@@ -223,15 +234,16 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <h5 class="modal-title" id="exampleModalLabel">¿Listo para irte?</h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-body">Selecciona "Cerrar sesión" si estas listo para cerrar la sesión actual.</div>
         <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="login.html">Logout</a>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+          <a class="btn btn-primary" href="{{ route('logout') }}" onclick="event.preventDefault();
+          document.getElementById('logout-form').submit();">Cerrar sesión</a>
         </div>
       </div>
     </div>
