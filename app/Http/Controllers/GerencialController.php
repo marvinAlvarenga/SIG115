@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Product;
 use Illuminate\Support\Facades\DB;
-
+use Carbon\Carbon;
 class GerencialController extends Controller
 {
     public function equipoPorTipo()
@@ -13,35 +13,36 @@ class GerencialController extends Controller
         $products=Product::orderby('id','DESC')->paginate();
         return view('gerenciales.equipoPorTipo',compact('products'));
     }
-    public function verInfo40()
+public function verInfo40()
     {
-        $upkeep = DB::table('upkeep_spare')
-            ->join('upkeeps', 'upkeep_spare.upkeep_id', '=', 'upkeeps.id')
-            ->join('spares', 'upkeep_spare.spare_id', '=', 'spares.id')
-            ->join('products','upkeeps.product_id','=','products.id')
-            ->select('products.id' , DB::raw('SUM(spares.valorAdqui) as total'))
-            ->groupBy('products.id')
-            ->get();
-    foreach ($upkeep as $upkeeps) {
-       $monto=$upkeeps->total;
-         $i = 0;
-        $upkeepr[$i] = DB::table('upkeep_spare')
-            ->join('upkeeps', 'upkeep_spare.upkeep_id', '=', 'upkeeps.id')
-            ->join('spares', 'upkeep_spare.spare_id', '=', 'spares.id')
-            ->join('products','upkeeps.product_id','=','products.id')
-            ->select('products.*')
-            ->orWhere(function($query)
-            {
-                $query->where('products.valorAdqui','>=','$upkeeps->total');
-            })            
-            ->get();
-            dd($upkeepr[$i]);
-            $i++;
+      
+    	
+            $produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
+            products.numInv,products.numSe,products.estado,sum(spares.valorAdqui) as costoSpares from products
+join upkeeps on products.id = upkeeps.product_id
+join upkeep_spare on upkeep_spare.upkeep_id = upkeeps.id
+join spares on spares.id = upkeep_spare.spare_id
+group by products.id) as prods
+where prods.costoSpares >= prods.ValorAdqui*0.4;");
+$date = Carbon::now();
+$date = $date->format('d-m-Y');
+
+        return view('gerenciales.sobre4ad',compact('produc40','date'));
     }
-            
-     
-       
-    
-        return view('gerenciales.sobre4ad');
+public function pdfInfo40()
+    {
+      
+    	
+            $produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
+            products.numInv,products.numSe,products.estado,sum(spares.valorAdqui) as costoSpares from products
+join upkeeps on products.id = upkeeps.product_id
+join upkeep_spare on upkeep_spare.upkeep_id = upkeeps.id
+join spares on spares.id = upkeep_spare.spare_id
+group by products.id) as prods
+where prods.costoSpares >= prods.ValorAdqui*0.4;");
+$date = Carbon::now();
+$date = $date->format('d-m-Y');
+$pdf = \PDF::loadView('pdf.info40', compact('produc40','date'));
+return $pdf->download('repo40.pdf');
     }
 }

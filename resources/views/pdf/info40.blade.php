@@ -51,7 +51,7 @@
             <br>  
             <label for="txtfecha" class="col-sm-2 control-label">Fecha</label>
             <div class="col-sm-4">
-              <p>{{$date}}</p>    
+                <p>{{$date}}</p>
             </div>
         </div>
      
@@ -108,3 +108,13 @@
 
 <P  align="right" >_________________________________<br>Nombre<br> &nbsp; _________________________________<br>Firma</p>
     <p align="left">Sello</p>  
+    
+       
+    
+    
+        
+        
+</body>
+</html>
+   
+
