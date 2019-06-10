@@ -31,10 +31,10 @@
     <div >
         
         <div  style="height:5px; width:100%; clear:both;" align="center">
-                <h4>UNIVERSIDAD DE EL SALVADOR<br>OFICINA CENTRALES
+                <h5>UNIVERSIDAD DE EL SALVADOR<br>OFICINA CENTRALES
                 <br>SECCIÓN DE MANTENIMIENTO Y REPARACIÓN DE EQUIPO INFORMÁTICO
                  <br>DICTAMEN TÉCNICO DE FALLAS DE EQUIPOS
-                 <br>San salvador, El Salvador Centro América</h4>
+                 <br>San salvador, El Salvador Centro América</h5>
                 
             </div>      
             <div style="height:5px; width:70%; clear:both;"> <img src="./img/logoUes.jpg"  width="100" height="100"alt="Logo" align="left"> </div>

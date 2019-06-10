@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Product;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Dompdf\Dompdf;
+use Barryvdh\DomPDF\Facade as PDF;
 class GerencialController extends Controller
 {
     public function equipoPorTipo()
@@ -42,7 +44,7 @@ group by products.id) as prods
 where prods.costoSpares >= prods.ValorAdqui*0.4;");
 $date = Carbon::now();
 $date = $date->format('d-m-Y');
-$pdf = \PDF::loadView('pdf.info40', compact('produc40','date'));
-return $pdf->download('repo40.pdf');
+$pdf = PDF::loadView('pdf.info40', compact('produc40','date'))->setPaper(array(0,0,612.00,792.00));
+return $pdf->stream('repo40.pdf',array("Attachment" => 0));
     }
 }
