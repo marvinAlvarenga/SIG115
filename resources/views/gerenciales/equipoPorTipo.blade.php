@@ -2,59 +2,55 @@
  
 @section('content')
 <!-- Content Row -->
-<div class="row">
-  <div class="col-lg-12  w-100">
-<!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-2">
-        <h1 class="h3 mb-0 text-gray-800">SIGME</h1>
-    </div>
-  </div>
-</div>
+
 
 <div class="row ">
-        <div class="col-sm-4">
+        <div class="col-sm-7">
           <div class="card mb-3">
             <div class="card-body">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text ">Desde</span>
+                <form method="GET" action="{{ route('gerenciales.equipoportipo') }}" enctype="multipart/form-data">
+                    <div class="row">
+                      <div class="col">
+                          <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text ">Desde</span>
+                              </div>
+                                  <input class="form-control" type="date" id="gridCheck" name="desde">
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text ">Hasta</span>
+                              </div>
+                                  <input class="form-control" type="date" name="hasta">
+                          </div>
+                      </div>
                     </div>
-                        <input class="form-control" type="date">
-                </div>
+                  
             </div>
           </div>
         </div>
-        <div class="col-sm-4 ">
-                <div class="card mb-3 ">
-                  <div class="card-body">
-                      <div class="input-group">
-                          <div class="input-group-prepend">
-                              <span class="input-group-text ">Hasta</span>
-                          </div>
-                              <input class="form-control" type="date">
-                      </div>
-                  </div>
-                </div>
-              </div>
+      
               <div class="col-sm-3">
-                    <div class="card mb-3">
+                    <div class="card mb-3 mt-2">
                       <div class="card-body">
                           <div class="form-row">
                               <div class="col">
                           <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                                <input class="form-check-input" type="radio" name="tipo" id="exampleRadios1" value="1" checked>
                                 <label class="form-check-label" for="exampleRadios1">PC</label>
                               </div>
                             </div>
                             <div class="col">
                               <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-                                <label class="form-check-label" for="exampleRadios2">Impresora </label>
+                                <input class="form-check-input" type="radio" name="tipo" id="exampleRadios2" value="2">
+                                <label class="form-check-label" for="exampleRadios2">Impresora</label>
                               </div>
                             </div>
                             <div class="col">
                               <div class="form-check disabled">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" disabled>
+                                <input class="form-check-input" type="radio" name="tipo" id="exampleRadios3" value="3"  checked>
                                 <label class="form-check-label" for="exampleRadios3">Todo</label>
                               </div>
                             </div>
@@ -62,10 +58,12 @@
                       </div>
                     </div>
                   </div>
+              
         <div class="col-sm-3">
-                <a href="#" class="btn btn-sm btn-primary mb-2  p-2 ">Generar Reporte</a>
+            <button type="submit" class="btn btn-sm mb-3 btn-primary">Generar Reporte</button>
                 </div>
       </div>
+    </form>
       
 <div class="row">
         <div class="col-lg-12  w-100">

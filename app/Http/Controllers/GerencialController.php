@@ -8,10 +8,11 @@ use Illuminate\Support\Facades\DB;
 
 class GerencialController extends Controller
 {
-    public function equipoPorTipo()
+    public function equipoPorTipo(Request $request)
     {
         $products=Product::orderby('id','DESC')->paginate();
         return view('gerenciales.equipoPorTipo',compact('products'));
+        
     }
     public function verInfo40()
     {

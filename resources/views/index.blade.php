@@ -8,7 +8,7 @@
     </div>
     <div class="card-body m">
         <center>
-        <img src="../img/lorem.png" style="max-width:100%;" alt="logo" align="middle">
+        <img src="../img/logo.jpg" style="max-width:100%;" alt="logo" align="middle">
         </center>
     </div>
 </div>
