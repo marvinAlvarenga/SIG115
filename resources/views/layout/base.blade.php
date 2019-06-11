@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
   <!-- Custom styles for this template-->
-  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="{{ URL::asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
 
 </head>
 
@@ -62,6 +62,7 @@
             <h6 class="collapse-header">Reportes:</h6>
             <a class="collapse-item" href="{{route('gerenciales.equipoportipo')}}">Reporte 1</a>
             <a class="collapse-item" href="#">Reporte 2</a>
+            <a class="collapse-item" href="{{ route('MantsXUser') }}">Clientes y mantenimientos</a>
           </div>
         </div>
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTactico" aria-expanded="true" aria-controls="collapseTwo">
@@ -73,9 +74,10 @@
             <h6 class="collapse-header">Reportes:</h6>
             <a class="collapse-item" href="#">Reporte 1</a>
             <a class="collapse-item" href="#">Reporte 2</a>
+            <a class="collapse-item" href="{{ route('EquipoDescargado') }}">Equipo descargado</a>
           </div>
         </div>
-       
+
       </li>
 
       <!-- Divider -->

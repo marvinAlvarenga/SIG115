@@ -11,7 +11,7 @@
 |
 */
 
-    
+
 Route::get('/', function () {
     return view('index');
 })->middleware('auth');
@@ -22,12 +22,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/equipoportipo', 'GerencialController@equipoPorTipo')->name('gerenciales.equipoportipo');
     Route::get('/info40', 'GerencialController@verInfo40')->name('gerenciales.info40');
     Route::get('/pdfinfo40', 'GerencialController@pdfInfo40')->name('gerenciales.pdfinfo40');
-   
-   
+
+    Route::get('/reportes/mantsxuser', 'GerencialController@getMantsXUser')->name('MantsXUser');
+    Route::get('/reportes/equipoDescargado', 'TacticoController@getEquipoDescargado')->name('EquipoDescargado');
+    Route::post('/reportes/mantsxuser', 'GerencialController@postMantsXUser')->name('PostMantUsrs');
+    Route::post('/reportes/equipoDescargado', 'TacticoController@postEquipoDescargado')->name('PostEquipoDescargado');
+
 });
- 
-
-
-
-
-
