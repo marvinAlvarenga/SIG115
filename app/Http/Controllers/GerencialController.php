@@ -81,14 +81,15 @@ return $pdf->stream('repo40.pdf',array("Attachment" => 0));
       $final = new DateTime($fecha_final);
 
       $usuarios = DB::table('upkeeps')
-        // ->join('products', 'products.id', 'upkeeps.product_id')
-        ->join('employees', 'employees.id', 'upkeeps.user_id')
+        ->join('products', 'products.id', 'upkeeps.product_id')
+        ->rightJoin('employees', 'employees.id', 'products.employee_id')
         ->select('employees.id', 'employees.nombre', 'employees.ubicacion', DB::raw('count(upkeeps.id) as count'))
         ->groupBy('employees.id', 'employees.nombre', 'employees.ubicacion')
         ->take($count)
         ->whereDate('upkeeps.created_at', '>=', $inicial)
         ->whereDate('upkeeps.created_at', '<=', $final)
         ->get();
+
 
       return $usuarios;
     }

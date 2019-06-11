@@ -21,14 +21,14 @@
     <img style="width:150px; height:150px;" src="{{ asset('img/logo.jpg') }}" class="img-fluid pull-xs-left" alt="Logo Minerva">
    </div>
 
-<div style="padding-left: 100px;">
-  <table class="table table-bordered">
+<div class="p-5">
+  <table class="table table-bordered" style="width:850px;" align="center">
     <thead>
       <tr>
         <th scope="col">ID</th>
         <th scope="col">Nombre</th>
         <th scope="col">Ubicaci&oacute;n</th>
-        <th scope="col">Mantenimientos Solicitados</th>
+        <th scope="col" style="width: 250px;">Mantenimientos Solicitados</th>
       </tr>
     </thead>
     <tbody>
