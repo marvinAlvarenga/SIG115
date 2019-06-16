@@ -18,6 +18,8 @@
   <!-- Custom styles for this template-->
   <link href="{{ URL::asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
 
+  @yield('css')
+
 </head>
 
 <body id="page-top">
@@ -119,8 +121,8 @@
         <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Usuarios:</h6>
-            <a class="collapse-item" href="#">Consultar Usuarios</a>
-            <a class="collapse-item" href="#">Registrar usuarios</a>
+          <a class="collapse-item" href="{{ route('usuarios.index') }}">Consultar Usuarios</a>
+          <a class="collapse-item" href="{{ route('register') }}">Registrar usuarios</a>
           </div>
         </div>
       </li>
@@ -243,6 +245,8 @@
 
   <!-- Custom scripts for all pages-->
   <script src="{{asset('js/sb-admin-2.min.js')}}"></script>
+
+  @yield('js')
 
 </body>
 

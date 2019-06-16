@@ -5,10 +5,18 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model\Role;
 
 class User extends Authenticatable
 {
     use Notifiable;
+
+    public static $ADMINISTRADOR = 1;
+    public static $NIVEL_ESTRATEGICO = 2;
+    public static $NIVEL_TACTICO = 3;
+
+    public static $EMPLEADO_UES = 1;
+    public static $PRACTICANTE = 2;
 
     /**
      * The attributes that are mass assignable.
@@ -16,7 +24,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'estado', 'tipo',
     ];
 
     /**
@@ -36,4 +44,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function roles()
+    {
+        return $this->belongsToMany('Caffeinated\Shinobi\Models\Role');
+    }
 }
