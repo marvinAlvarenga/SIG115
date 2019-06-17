@@ -31,7 +31,7 @@ Route::middleware(['auth'])->group(function () {
 
     //RUTAS GONZALO
     Route::post('/info40', 'GerencialController@verInfo40')->name('info40');
-    Route::get('/pdfinfo40', 'GerencialController@pdfInfo40')->name('pdfinfo40');
+    Route::get('/pdfinfo40/{tipo}', 'GerencialController@pdfInfo40')->name('pdfinfo40');
     Route::get('/soliInf40', 'GerencialController@getEqui')->name('soli40');
 
 

@@ -45,7 +45,9 @@
         <br>    
         <br>   
         <br>   
-<div style="height:28px; width:100%; float:left;"><br><p>Unidad Solicitante: ADMINISTRACION FINANCIERA<p></div>
+<div style="height:28px; width:100%; float:left;"><br><p>Unidad Solicitante: ADMINISTRACION FINANCIERA<p>
+    <br>Equipos con mantenimientos superiores a 40% del valor de compra 
+</div>
     <div tyle="height:28px; width:100%; float:both;"  class="form-group" align="right" >
             <br>    
             <br>   
@@ -108,4 +110,7 @@
 
 <P  align="right" >_________________________________<br>Nombre<br> &nbsp; _________________________________<br>Firma</p>
     <p align="left">Sello</p>  
+
+
+    <a href="{{url('pdfinfo40', ['tipo' => $tipo,])}}">Imprimir</a>
     @endsection
