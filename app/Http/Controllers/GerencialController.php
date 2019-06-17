@@ -49,8 +49,9 @@ public function getEqui(){
 }
 public function verInfo40(Request $request)
 {
-  
-  if ($request->count>=0 ) {
+  $tipo=$request->tipo;
+  $count=$request->count;
+  if ($this->validarInt($count)) {
     if ($request->tipo==0) {
       $produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
       products.numInv,products.numSe,products.estado,sum(spares.valorAdqui) as costoSpares from products
@@ -84,7 +85,8 @@ public function verInfo40(Request $request)
       $date = Carbon::now();
       $date = $date->format('d-m-Y');
     }
-return view('gerenciales.sobre4ad',compact('produc40','date'));
+
+return view('gerenciales.sobre4ad',compact('produc40','date','tipo'));
     
   }
   $errores = 'Error en los datos ingresados';
@@ -92,10 +94,23 @@ return view('gerenciales.sobre4ad',compact('produc40','date'));
 }
 
 ///genera el pdf del reporte    
-public function pdfInfo40()
+public function pdfInfo40($tipo)
 {
+  if($tipo!=0){
         $produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
-        products.numInv,products.numSe,products.estado,sum(spares.valorAdqui) as costoSpares from products
+        products.numInv,products.numSe,products.estado,products.tipo,sum(spares.valorAdqui) as costoSpares from products
+        join upkeeps on products.id = upkeeps.product_id
+        join upkeep_spare on upkeep_spare.upkeep_id = upkeeps.id
+        join spares on spares.id = upkeep_spare.spare_id
+        group by products.id) as prods
+        where prods.costoSpares >= prods.ValorAdqui*0.4  AND prods.tipo =  ?;",[$tipo]);
+$date = Carbon::now();
+$date = $date->format('d-m-Y');
+$pdf = PDF::loadView('pdf.info40', compact('produc40','date'))->setPaper(array(0,0,612.00,792.00));
+return $pdf->stream('repo40.pdf',array("Attachment" => 0));
+}
+$produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
+products.numInv,products.numSe,products.estado,sum(spares.valorAdqui) as costoSpares from products
 join upkeeps on products.id = upkeeps.product_id
 join upkeep_spare on upkeep_spare.upkeep_id = upkeeps.id
 join spares on spares.id = upkeep_spare.spare_id
@@ -104,6 +119,7 @@ where prods.costoSpares >= prods.ValorAdqui*0.4;");
 $date = Carbon::now();
 $date = $date->format('d-m-Y');
 $pdf = PDF::loadView('pdf.info40', compact('produc40','date'))->setPaper(array(0,0,612.00,792.00));
+
 return $pdf->stream('repo40.pdf',array("Attachment" => 0));
   
 }
