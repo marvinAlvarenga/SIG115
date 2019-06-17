@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Password;
 use \Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ResetPasswordController extends Controller
 {
@@ -58,6 +59,8 @@ class ResetPasswordController extends Controller
         $user->save();
 
         event(new PasswordReset($user));
+
+        Log::info("El usuario: '".$user->name."' Ha restablecido su contraseña");
 
         //$this->guard()->login($user);
 

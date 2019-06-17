@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
@@ -104,7 +106,8 @@ class RegisterController extends Controller
         $rol = Role::find($data['role']);
         $rol->users()->attach($user->id);
 
-        
+        Log::notice("El usuario: '".Auth::user()->name."' ha registrado en el sistema al siguiente usuario: ", ['id'=>$user->id,'nombre'=>$user->name,'email'=>$user->email]);
+
         return $user;
     }
 

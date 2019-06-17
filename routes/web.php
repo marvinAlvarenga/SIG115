@@ -32,4 +32,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/usuarios/{usuario}/editar', 'UserController@edit')->name('usuarios.edit');
     Route::post('/usuarios/{usuario}/actualizar', 'UserController@update')->name('usuarios.update');
 
+    Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('logs');
+
 });

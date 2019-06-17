@@ -128,6 +128,16 @@
       </li>
 
       <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" href="{{route('logs')}}">
+          <i class="fas fa-fw fa-history"></i>
+          <span>Bitacoras</span></a>
+      </li>
+
+      <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
 
       <!-- Sidebar Toggler (Sidebar) -->
