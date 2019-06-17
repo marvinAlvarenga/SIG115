@@ -19,10 +19,10 @@
             <span class="h4">
                 <br>Reporte de empleados con equipo antiguo ( > 3 años)
             </span>
-            </h1>
-        
+            </h1>        
             <img style="width:150px; height:150px;" src="{{ asset('img/logo.jpg') }}" class="img-fluid pull-xs-left" alt="Logo Minerva">
         </div>
+        @if(!isset($computadoras) && !isset($impresoras))
                     @if (session('status'))
                         <div class="alert alert-info" role="alert">
                             {{ session('status') }}
@@ -52,7 +52,91 @@
                     </div>
                 </div>
                 </form>
-        
+        @else
+
+                @if($computadoras != null)
+                <span class="h5">Computadoras</span>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>N°</th>
+                  <th>Nombre</th>
+                  <th>Ubicación</th>
+                  <th>Marca</th>
+                  <th>Modelo</th>
+                  <th>Fecha Adquisición</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($computadoras as $i => $compu)
+                <tr>
+                    <td>{{$i+1}}</td>
+                    <td>{{$compu->employee->nombre}}</td>
+                    <td>{{$compu->employee->ubicacion}}</td>
+                    <td>{{$compu->marca}}</td>
+                    <td>{{$compu->modelo}}</td>
+                    <td>{{(new Carbon\Carbon($compu->fechaAdqui))->format('d/m/Y')}}</td>
+                </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
+        @endif
+
+        @if($impresoras != null)
+        <span class="h5">Impresoras</span>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>N°</th>
+                  <th>Nombre</th>
+                  <th>Ubicación</th>
+                  <th>Marca</th>
+                  <th>Modelo</th>
+                  <th>Fecha Adquisición</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($impresoras as $i => $impre)
+                <tr>
+                    <td>{{$i+1}}</td>
+                    <td>{{$impre->employee->nombre}}</td>
+                    <td>{{$impre->employee->ubicacion}}</td>
+                    <td>{{$impre->marca}}</td>
+                    <td>{{$impre->modelo}}</td>
+                    <td>{{(new Carbon\Carbon($impre->fechaAdqui))->format('d/m/Y')}}</td>
+                </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
+        @endif
+
+        @if ($computadoras==null && $impresoras==null)
+          <span class="h5">No hay datos que mostrar para los parámetros seleccionados</span>
+          @else
+          <div class="row justify-content-center">
+            <div class="col-6">
+            <form action="{{route('tacticos.equipoAntiguoImprimirPost')}}" method="POST">
+              @csrf
+              @if($computadoras!=null)
+            <input type="hidden" name="tipo[]" value="{{$computadoras[0]->tipo}}">
+            @endif
+            @if($impresoras!=null)
+            <input type="hidden" name="tipo[]" value="{{$impresoras[0]->tipo}}">
+            @endif
+            <input type="submit" class="btn btn-lg btn-primary" value="Imprimir reporte">
+            <a href="{{route('tacticos.equipoAntiguoIndex')}}" class="btn btn-lg btn-primary">Regresar</a>
+            <a href="{{route('tacticos.equipoAntiguoPdf',[$computadoras!=null?$computadoras[0]->tipo:'null',$impresoras!=null?$impresoras[0]->tipo:null])}}" id="pdf" class="btn btn-lg btn-primary">Exportar PDF</a>
+
+            </form>
+            
+        </div>
+    </div>
+        @endif 
+        @endif     
     </div>
 </div>
 
@@ -66,6 +150,7 @@ const todosCheckBox = document.getElementById('todos')
 const compuCheckBox = document.getElementById('computadora')
 const impreCheckBox = document.getElementById('impresora')
 const limpiarBtn = document.getElementById('limpiar')
+const pdfBtn = document.getElementById('pdf')
 
 todosCheckBox.addEventListener('change', (event) => {
   let state = event.target.checked
@@ -86,6 +171,10 @@ limpiarBtn.addEventListener('click', (event) => {
     compuCheckBox.checked = false
   impreCheckBox.checked = false
   todosCheckBox.checked = false
+})
+
+pdfBtn.addEventListener('click', (event) => {
+    event.preventDefault()
 })
 
 </script>

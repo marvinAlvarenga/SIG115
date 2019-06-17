@@ -54,5 +54,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/reportes/equipoAntiguo', 'TacticoController@equipoAntiguoIndex')->name('tacticos.equipoAntiguoIndex');
     Route::post('/reportes/equipoAntiguo', 'TacticoController@equipoAntiguoGenerate')->name('tacticos.equipoAntiguoGenerate');
+    Route::get('/reportes/equipoAntiguo/imprimir', 'TacticoController@equipoAntiguoImprimir')->name('tacticos.equipoAntiguoImprimirGet');
+    Route::post('/reportes/equipoAntiguo/imprimir', 'TacticoController@equipoAntiguoImprimir')->name('tacticos.equipoAntiguoImprimirPost');
+    Route::get('/reportes/equipoAntiguo/pdf/{compu?}/{impre?}', 'TacticoController@equipoAntiguoPdf')->name('tacticos.equipoAntiguoPdf');
 
 });
