@@ -9,8 +9,10 @@ use Illuminate\Validation\Rule;
 use DateTime;
 use Auth;
 use PDF;
+use Excel;
 use App\Upkeep;
 use App\Product;
+use App\Exports\EquipoViejoExport;
 use Carbon\Carbon;
 
 class TacticoController extends Controller
@@ -161,4 +163,21 @@ class TacticoController extends Controller
       Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de Empleados con equipo viejo > 3 años");
       return $pdf->stream('empleadosEquipoViejo_'.Carbon::now()->format('d-m-y').'.pdf');
     }
+
+    public function equipoAntiguoExcel($compu=null, $impre=null)
+    {
+      $computadoras = null;
+      $impresoras = null;
+      if($compu == Product::$COMPUTADORA) {
+        $computadoras = Product::where('tipo', $compu)->where('fechaAdqui', '<=', Carbon::now()->subyears(3))->get();
+      }
+      if($impre == Product::$IMPRESORA) {
+        $impresoras = Product::where('tipo', $impre)->where('fechaAdqui', '<=', Carbon::now()->subyears(3))->get();
+      }
+      Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Empleados con equipo viejo > 3 años");
+      return Excel::download(new EquipoViejoExport($computadoras, $impresoras), 'empleadosEquipoViejo_'.Carbon::now()->format('d-m-y').'.xlsx');
+
+    }
+
+    ////////////////////////////////FIN DEL REPORTE DE EQUIPO ANTIGUO////////////////////////////////////77
 }

@@ -118,7 +118,7 @@
           <span class="h5">No hay datos que mostrar para los parámetros seleccionados</span>
           @else
           <div class="row justify-content-center">
-            <div class="col-6">
+            <div class="col-9">
             <form action="{{route('tacticos.equipoAntiguoImprimirPost')}}" method="POST">
               @csrf
               @if($computadoras!=null)
@@ -129,7 +129,8 @@
             @endif
             <input type="submit" class="btn btn-lg btn-primary" value="Imprimir reporte">
             <a href="{{route('tacticos.equipoAntiguoIndex')}}" class="btn btn-lg btn-primary">Regresar</a>
-            <a href="{{route('tacticos.equipoAntiguoPdf',[$computadoras!=null?$computadoras[0]->tipo:'null',$impresoras!=null?$impresoras[0]->tipo:null])}}" id="pdf" class="btn btn-lg btn-primary">Exportar PDF</a>
+            <a href="{{route('tacticos.equipoAntiguoPdf',[$computadoras!=null?$computadoras[0]->tipo:'null',$impresoras!=null?$impresoras[0]->tipo:null])}}" id="pdf" class="btn btn-lg btn-primary">Exportar a PDF</a>
+            <a href="{{route('tacticos.equipoAntiguoExcel',[$computadoras!=null?$computadoras[0]->tipo:'null',$impresoras!=null?$impresoras[0]->tipo:null])}}" id="pdf" class="btn btn-lg btn-primary">Exportar a Excel</a>
 
             </form>
             
