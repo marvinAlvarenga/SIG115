@@ -52,4 +52,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('logs');
 
+    Route::get('/reportes/equipoAntiguo', 'TacticoController@equipoAntiguoIndex')->name('tacticos.equipoAntiguoIndex');
+    Route::post('/reportes/equipoAntiguo', 'TacticoController@equipoAntiguoGenerate')->name('tacticos.equipoAntiguoGenerate');
+
 });

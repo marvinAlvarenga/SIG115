@@ -77,6 +77,7 @@
             <a class="collapse-item" href="{{route('tacticos.mantenimientosRealizados')}}">Mantenimientos realizados</a>
             <a class="collapse-item" href="{{route('tacticos.licenciasPorVencer')}}">Licencias por vencer</a>
             <a class="collapse-item" href="{{ route('EquipoDescargado') }}">Equipo descargado</a>
+            <a class="collapse-item" href="{{route('tacticos.equipoAntiguoIndex')}}">Equipo antiguo</a>
           </div>
         </div>
 
@@ -115,7 +116,7 @@
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
-          <i class="fas fa-fw fa-file"></i>
+          <i class="fas fa-fw fa-user"></i>
           <span>Gestión de Usuarios</span>
         </a>
         <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">

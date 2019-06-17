@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 use DateTime;
+use Auth;
 use App\Upkeep;
 use App\Product;
+use Carbon\Carbon;
 
 class TacticoController extends Controller
 {
@@ -89,4 +93,33 @@ class TacticoController extends Controller
       return $releases;
     }
     //////////////////////// FIN DE REPORTE ////////////////////////////////////////
+
+
+    //////////////////////// REPORTE EQUIPO ANTIGUO////////////////////////////////
+
+    public function equipoAntiguoIndex()
+    {
+      Log::info("El usuario: '".Auth::user()->name."' seleccionó que desea ver el reporte: Ver empleados con equipo antiguo");
+      return view('tacticos.reporteEquipoAntiguoIndex');
+    }
+
+    public function equipoAntiguoGenerate(Request $request)
+    {
+      
+      if($request['tipo'] == null) return redirect('reportes/equipoAntiguo')->with('status', 'Debe seleccionar al menos un tipo de equipo de la lista');
+
+      $computadoras = null;
+      $impresoras = null;
+      foreach($request['tipo'] as $tipo) {
+        if($tipo == Product::$COMPUTADORA) {
+          $computadoras = Product::where('tipo', $tipo)->where('fechaAdqui', '<=', Carbon::now()->subyears(3))->get();
+        } elseif($tipo == Product::$IMPRESORA) {
+          $impresoras = Product::where('tipo', $tipo)->where('fechaAdqui', '<=', Carbon::now()->subyears(3))->get();
+        }
+      }
+
+      Log::info("El usuario: '".Auth::user()->name."' está viendo el reporte: Ver empleados con equipo antiguo");
+      
+      return view('tacticos.reporteEquipoAntiguoDetail')->with('computadoras', $computadoras)->with('impresoras', $impresoras);
+    }
 }
