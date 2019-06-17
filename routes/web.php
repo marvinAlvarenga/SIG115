@@ -19,9 +19,15 @@ Route::get('/', function () {
 Auth::routes();
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', 'HomeController@index')->name('home');
+    //RUTAS PARA REPORTES GERENCIALES//
     Route::get('/equipoportipo', 'GerencialController@equipoPorTipo')->name('gerenciales.equipoportipo');
     Route::get('/info40', 'GerencialController@verInfo40')->name('gerenciales.info40');
     Route::get('/pdfinfo40', 'GerencialController@pdfInfo40')->name('gerenciales.pdfinfo40');
+    Route::get('/repuestosCambiados','GerencialController@repuestosCambiados')->name('gerenciales.repuestosCambiados');
+
+    //RUTAS PARA REPORTES TÁCTICOS//
+    Route::get('/mantenimientos','TacticoController@mantenimientosRealizados')->name('tacticos.mantenimientosRealizados');
+    Route::get('/licencias','TacticoController@licenciasPorVencer')->name('tacticos.licenciasPorVencer');
 
     Route::get('/reportes/mantsxuser', 'GerencialController@getMantsXUser')->name('MantsXUser');
     Route::get('/reportes/equipoDescargado', 'TacticoController@getEquipoDescargado')->name('EquipoDescargado');

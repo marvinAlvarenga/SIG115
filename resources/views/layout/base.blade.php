@@ -60,8 +60,8 @@
         <div id="collapseGerencial" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Reportes:</h6>
-            <a class="collapse-item" href="{{route('gerenciales.equipoportipo')}}">Reporte 1</a>
-            <a class="collapse-item" href="#">Reporte 2</a>
+            <a class="collapse-item" href="{{route('gerenciales.equipoportipo')}}">Equipo agregado</a>
+            <a class="collapse-item" href="{{route('gerenciales.repuestosCambiados')}}">Repuestos ambiados</a>
             <a class="collapse-item" href="{{ route('MantsXUser') }}">Clientes y mantenimientos</a>
           </div>
         </div>
@@ -72,8 +72,8 @@
         <div id="collapseTactico" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Reportes:</h6>
-            <a class="collapse-item" href="#">Reporte 1</a>
-            <a class="collapse-item" href="#">Reporte 2</a>
+            <a class="collapse-item" href="{{route('tacticos.mantenimientosRealizados')}}">Mantenimientos realizados</a>
+            <a class="collapse-item" href="{{route('tacticos.licenciasPorVencer')}}">Licencias por vencer</a>
             <a class="collapse-item" href="{{ route('EquipoDescargado') }}">Equipo descargado</a>
           </div>
         </div>

@@ -16,6 +16,6 @@ $factory->define(App\Product::class, function (Faker $faker) {
         'fechaAdqui'=>$faker->date,
         'valorAdqui'=>$faker->randomFloat($nbMaxDecimals = 2, $min = 10, $max = 2000), 
         'garantia' => $faker->randomDigit,
-        'employee_id' => 3,
+        'employee_id' => $faker->numberBetween($min = 1, $max = 25),
     ];
 });

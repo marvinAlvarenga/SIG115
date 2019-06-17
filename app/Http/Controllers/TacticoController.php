@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use DateTime;
+use App\Upkeep;
+use App\Product;
 
 class TacticoController extends Controller
 {
@@ -26,6 +28,16 @@ class TacticoController extends Controller
 
     $errores = "Error en los datos ingresados";
     return view('tacticos.formEquipoDescargado', ['errores' => $errores]);
+  }
+
+  public function mantenimientosRealizados(Request $request){
+    $upkeeps=Upkeep::orderby('id','DESC')->paginate();
+    return view('tacticos.reporteMantenimientos',compact('upkeeps'));
+  }
+
+  public function licenciasPorVencer(Request $request){
+    $products=Product::orderby('id','DESC')->paginate();
+    return view('tacticos.reportelicenciasPorVencer',compact('products'));
   }
 
   //Valida qe cada elemento del array sea un entero.

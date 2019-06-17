@@ -32,7 +32,7 @@
         <div class="col-sm-7">
           <div class="card mb-3">
             <div class="card-body">
-                <form method="GET" action="{{ route('gerenciales.equipoportipo') }}" enctype="multipart/form-data">
+                <form method="GET" action="{{ route('gerenciales.repuestosCambiados') }}" enctype="multipart/form-data">
                     <div class="row">
                       <div class="col">
                           <div class="input-group">
@@ -88,8 +88,8 @@
                 </div>
       </div>
     </form>
-@if(isset($products))
-@if(count($products)>0)
+@if(isset($spares))
+@if(count($spares)>0)
 <div class="row">
         <div class="col-lg-12  w-100">
     <!-- DataTales Example -->
@@ -102,34 +102,27 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
-                      <th>Serie</th>
-                      <th>Inventario</th>
+                      <th>Nombre</th>
+                      <th>Tipo</th>
                       <th>Marca</th>
-                      <th>Modelo</th>
-                      <th>Garantía</th>
-                      <th>Adquisicion</th>
+                      <th>Valor Unitario</th>
+                      <th>Total Usados</th>
                     </tr>
                   </thead>
  
                   <tbody>
-                        @foreach($products as $product)
-                        @php($rowe="")
-                        @if(($product->state)!=true)
-                            @php( $rowe="bg-dnger")
-                        @endif
-                        <tr class="{{$rowe}}">
-                            <td>{{$product->numSe}}</td>
-                            <td>{{$product->numInv}}</td>
-                            
-                            
-                            <td>{{$product->marca}}</td>
-                            <td>{{$product->modelo}}</td>
-                            <td>{{$product->garantia}}</td>
-                            <td>{{$product->fechaAdqui}}</td>
+                        @foreach($spares as $spare)
+  
+                        <tr>
+                            <td>{{$spare->nombre}}</td>
+                            <td>{{$spare->tipo}}</td>
+                            <td>{{$spare->marca}}</td>
+                            <td>{{$spare->valorAdqui}}</td>
+                            <td>{{$spare->total}}</td>
                     @endforeach
                 </tbody>
                 </table>
-                {{$products->appends(Request::all())->render()}}
+                {{$spares->appends(Request::all())->render()}}
               </div>
             </div>
     </div>
