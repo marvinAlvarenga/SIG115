@@ -1,5 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layout.base')
+
+@section('content')
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,9 +59,8 @@
    
         <div  align="center" >                
            
-            <table      >
+            <table>
                 
-                    <caption> <h3 class="page-header">Datos generales</h3></caption>
                 <thead>
                     <tr>
       
@@ -108,3 +108,4 @@
 
 <P  align="right" >_________________________________<br>Nombre<br> &nbsp; _________________________________<br>Firma</p>
     <p align="left">Sello</p>  
+    @endsection

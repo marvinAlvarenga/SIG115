@@ -42,8 +42,16 @@ class GerencialController extends Controller
       return view('gerenciales.repuestosCambiados',compact('spares'));
     }
 
-public function verInfo40()
-    {
+//reporte que sobrepasen en 40% del valor de adquisicion respecto al costo de mantenimientos    
+public function getEqui(){
+  $errores = 'Error en los datos ingresados';
+  return view('gerenciales.soliSobre4', ['errores' => $errores]);
+}
+public function verInfo40(Request $request)
+{
+  
+  if ($request->count>=0 ) {
+    if ($request->tipo==0) {
       $produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
       products.numInv,products.numSe,products.estado,sum(spares.valorAdqui) as costoSpares from products
       join upkeeps on products.id = upkeeps.product_id
@@ -53,23 +61,52 @@ public function verInfo40()
       where prods.costoSpares >= prods.ValorAdqui*0.4;");
       $date = Carbon::now();
       $date = $date->format('d-m-Y');
+    }
+    if ($request->tipo==1) {
+      $produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
+      products.numInv,products.numSe,products.estado,products.tipo,sum(spares.valorAdqui) as costoSpares from products
+      join upkeeps on products.id = upkeeps.product_id
+      join upkeep_spare on upkeep_spare.upkeep_id = upkeeps.id
+      join spares on spares.id = upkeep_spare.spare_id
+      group by products.id) as prods
+      where prods.costoSpares >= prods.ValorAdqui*0.4 AND prods.tipo = 1;");
+      $date = Carbon::now();
+      $date = $date->format('d-m-Y');
+    }
+    if ($request->tipo==2) {
+      $produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
+      products.numInv,products.numSe,products.estado,products.tipo,sum(spares.valorAdqui) as costoSpares from products
+      join upkeeps on products.id = upkeeps.product_id
+      join upkeep_spare on upkeep_spare.upkeep_id = upkeeps.id
+      join spares on spares.id = upkeep_spare.spare_id
+      group by products.id) as prods
+      where prods.costoSpares >= prods.ValorAdqui*0.4  AND prods.tipo = 2;");
+      $date = Carbon::now();
+      $date = $date->format('d-m-Y');
+    }
+return view('gerenciales.sobre4ad',compact('produc40','date'));
+    
+  }
+  $errores = 'Error en los datos ingresados';
+  return view('gerenciales.soliSobre4', ['errores' => $errores]);      
+}
 
-        return view('gerenciales.sobre4ad',compact('produc40','date'));
-    }
+///genera el pdf del reporte    
 public function pdfInfo40()
-    {
-      $produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
-      products.numInv,products.numSe,products.estado,sum(spares.valorAdqui) as costoSpares from products
-      join upkeeps on products.id = upkeeps.product_id
-      join upkeep_spare on upkeep_spare.upkeep_id = upkeeps.id
-      join spares on spares.id = upkeep_spare.spare_id
-      group by products.id) as prods
-      where prods.costoSpares >= prods.ValorAdqui*0.4;");
-      $date = Carbon::now();
-      $date = $date->format('d-m-Y');
-      $pdf = PDF::loadView('pdf.info40', compact('produc40','date'))->setPaper(array(0,0,612.00,792.00));
-      return $pdf->stream('repo40.pdf',array("Attachment" => 0));
-    }
+{
+        $produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
+        products.numInv,products.numSe,products.estado,sum(spares.valorAdqui) as costoSpares from products
+join upkeeps on products.id = upkeeps.product_id
+join upkeep_spare on upkeep_spare.upkeep_id = upkeeps.id
+join spares on spares.id = upkeep_spare.spare_id
+group by products.id) as prods
+where prods.costoSpares >= prods.ValorAdqui*0.4;");
+$date = Carbon::now();
+$date = $date->format('d-m-Y');
+$pdf = PDF::loadView('pdf.info40', compact('produc40','date'))->setPaper(array(0,0,612.00,792.00));
+return $pdf->stream('repo40.pdf',array("Attachment" => 0));
+  
+}
 
 
 ////////////REPORTE DE USRS QUE MAS MMTOS. SOLICITAN ////////////////////////////
