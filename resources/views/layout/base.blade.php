@@ -63,7 +63,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Reportes:</h6>
             <a class="collapse-item" href="{{route('gerenciales.equipoportipo')}}">Equipo agregado</a>
-            <a class="collapse-item" href="{{route('gerenciales.repuestosCambiados')}}">Repuestos ambiados</a>
+            <a class="collapse-item" href="{{route('gerenciales.repuestosCambiados')}}">Repuestos cambiados</a>
             <a class="collapse-item" href="{{ route('MantsXUser') }}">Clientes y mantenimientos</a>
           </div>
         </div>

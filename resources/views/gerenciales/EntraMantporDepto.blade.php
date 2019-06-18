@@ -58,11 +58,11 @@
         </div>
       
               <div class="col-sm-3">
-                    <div class="card mb-3 mt-2">
+                    <div class="card mb-3 ">
                       <div class="card-body">
                           <div class="form-row">
                                   
-                              <select name="tipo">
+                              <select class="custom-select" name="tipo">
                                 <option value="0">Todo</option>
                                 @foreach ($depto as $deptos)   
                                 <option value="{{$deptos->id}}">{{$deptos->nombre}}</option>
