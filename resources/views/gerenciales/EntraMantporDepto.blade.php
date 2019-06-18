@@ -14,7 +14,7 @@
       <br><br>Unidad de Mantenimiento de Inform&aacute;tica
     </span>
     <span class="h4">
-      <br>Reporte de Equipos agregados al inventario por fecha.
+      <br>Reporte de Mantenimientos por departamento
     </span>
   </h1>
 
@@ -61,22 +61,19 @@
                     <div class="card mb-3 mt-2">
                       <div class="card-body">
                           <div class="form-row">
-                              @foreach ($depto as $deptos)         
-                            <div class="col">
-                                           
-                       
-                          <div class="form-check">
-                                <input class="form-check-input" type="radio" name="tipo" id= {{$deptos->nombre}} value={{$deptos->id}} checked>
-                                <label class="form-check-label" for="exampleRadios1">{{$deptos->nombre}}</label>
-                              </div>
-                             
+                                  
+                              <select name="tipo">
+                                <option value="0">Todo</option>
+                                @foreach ($depto as $deptos)   
+                                <option value="{{$deptos->id}}">{{$deptos->nombre}}</option>
+                                @endforeach  
+                                
+                                
+                              </select>
+                                                       
                             </div>              
-                            @endforeach    
-                            <div class="col">
-                              <div class="form-check disabled">
-                                <input class="form-check-input" type="radio" name="tipo" id="exampleRadios3" value="0"  checked>
-                                <label class="form-check-label" for="exampleRadios3">Todo</label>
-                              </div>
+                             
+                            
                             </div>
                         </div>
                       </div>
