@@ -33,7 +33,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/info40', 'GerencialController@verInfo40')->name('info40');
     Route::get('/pdfinfo40/{tipo}', 'GerencialController@pdfInfo40')->name('pdfinfo40');
     Route::get('/soliInf40', 'GerencialController@getEqui')->name('soli40');
-
+    Route::get('/deptmante', 'GerencialController@ManDep')->name('depmant');
+    Route::get('/soliInfdepma', 'GerencialController@soliDepMant')->name('solidepmant');
+    Route::get('/pdfmanDeto/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@pdfMandep')->name('pdfmanDeto');
+    
 
 
     //RUTAS EDWIN

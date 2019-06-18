@@ -44,7 +44,7 @@ class GerencialController extends Controller
 
 //reporte que sobrepasen en 40% del valor de adquisicion respecto al costo de mantenimientos    
 public function getEqui(){
-  $errores = 'Error en los datos ingresados';
+  $errores = ' ';
   return view('gerenciales.soliSobre4', ['errores' => $errores]);
 }
 public function verInfo40(Request $request)
@@ -190,5 +190,75 @@ return $pdf->stream('repo40.pdf',array("Attachment" => 0));
       checkdate($fecha2_arr[1], $fecha2_arr[2], $fecha2_arr[0]));
 }
 /////////////////////////////////FIN REPORTE //////////////////////////////
+///Reporte de cantidad de mantenimientos solicitados por departamento////////
+public function soliDepMant()
+{
+  
+  $depto=DB::select('select * from departments');
+  return view('gerenciales.EntraMantporDepto',compact('depto'));
+}
+ 
+public function ManDep(Request $request){
+ 
+  $fecha_inicial=$request->get('desde');
+  $fecha_final=$request->get('hasta');
+  $tipo=$request->get('tipo');
+  $depto=DB::select('select * from departments');
+  if(isset($tipo)){
+ if($this->validarFechas($fecha_inicial,$fecha_final)){
+   if($tipo==0){
+    $manDeto=DB::select("select departments.nombre as Departamento ,departments.id  ,COUNT(upkeeps.product_id) as Cantidad ,upkeeps.created_at
+    from departments JOIN employees on departments.id = employees.department_id JOIN products on employees.id = products.employee_id JOIN upkeeps 
+    on products.id = upkeeps.product_id 
+    WHERE upkeeps.created_at > ? AND upkeeps.created_at< ?
+    GROUP BY departments.nombre",[$fecha_inicial,$fecha_final]);
+    $date = Carbon::now();
+    $date = $date->format('d-m-Y');
+   
+   return view('gerenciales.previDeptManto',compact('manDeto','date','fecha_inicial','fecha_final','tipo'));
+   }else{
+    $manDeto=DB::select("select departments.nombre as Departamento ,  COUNT(upkeeps.product_id) as Cantidad ,upkeeps.created_at
+    from departments JOIN employees on departments.id = employees.department_id JOIN products on employees.id = products.employee_id JOIN upkeeps 
+    on products.id = upkeeps.product_id 
+    WHERE upkeeps.created_at > ? AND upkeeps.created_at< ? AND departments.id= ?
+    GROUP BY departments.nombre",[$fecha_inicial,$fecha_final,$tipo]);
+    $date = Carbon::now();
+    $date = $date->format('d-m-Y');   
+    return view('gerenciales.previDeptManto',compact('manDeto','date','fecha_inicial','fecha_final','tipo'));
+   }  
+}
+  return view('gerenciales.EntraMantporDepto',compact('depto'))->withErrors('Error en las fechas ingresadas');
+}
+else{
+  return view('gerenciales.EntraMantporDepto',compact('depto'));
+}
+   
+  }
+
+ public function pdfMandep($fecha_inicial,$fecha_final,$tipo){
+ 
+  if($tipo==0){
+    $manDeto=DB::select("select departments.nombre as Departamento ,departments.id  ,COUNT(upkeeps.product_id) as Cantidad ,upkeeps.created_at
+    from departments JOIN employees on departments.id = employees.department_id JOIN products on employees.id = products.employee_id JOIN upkeeps 
+    on products.id = upkeeps.product_id 
+    WHERE upkeeps.created_at > ? AND upkeeps.created_at< ?
+    GROUP BY departments.nombre",[$fecha_inicial,$fecha_final]);
+    $date = Carbon::now();
+    $date = $date->format('d-m-Y');   
+  
+   }else{
+    $manDeto=DB::select("select departments.nombre as Departamento ,  COUNT(upkeeps.product_id) as Cantidad ,upkeeps.created_at
+    from departments JOIN employees on departments.id = employees.department_id JOIN products on employees.id = products.employee_id JOIN upkeeps 
+    on products.id = upkeeps.product_id 
+    WHERE upkeeps.created_at > ? AND upkeeps.created_at< ? AND departments.id= ?
+    GROUP BY departments.nombre",[$fecha_inicial,$fecha_final,$tipo]);
+    $date = Carbon::now();
+    $date = $date->format('d-m-Y');      
+   }  
+  
+  $pdf = PDF::loadView('pdf.ManDepto', compact('manDeto','date'))->setPaper(array(0,0,612.00,792.00));  
+  return $pdf->stream('repoManDepto.pdf',array("Attachment" => 0));
+ } 
+///termina el reporte//////
 
 }
