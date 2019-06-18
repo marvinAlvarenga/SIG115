@@ -118,7 +118,7 @@
                             <td>{{$spare->tipo}}</td>
                             <td>{{$spare->marca}}</td>
                             <td>{{$spare->valorAdqui}}</td>
-                            <td>{{$spare->total}}</td>
+                            <td>{{$spare->count}}</td>
                     @endforeach
                 </tbody>
                 </table>

@@ -27,6 +27,7 @@ class GerencialController extends Controller
        }else{
         $products=Product::whereDate('created_at','>=',$fecha_inicial)->whereDate('created_at','<=',$fecha_final)->where('tipo',$tipo)->orderby('id','DESC')->paginate();
        }
+
       return view('gerenciales.equipoPorTipo',compact('products'));
     }else{
       return view('gerenciales.equipoPorTipo')->withErrors('Error en las fechas ingresadas');
@@ -38,7 +39,12 @@ class GerencialController extends Controller
 
     public function repuestosCambiados(Request $request){
 
-      $spares=Spare::orderby('id','DESC')->paginate();
+      $spares=DB::table('spares as s')
+      ->join('upkeep_spare as us','s.id','=','us.spare_id')
+      ->select('s.nombre','s.tipo','s.marca','s.valorAdqui',DB::raw('count(us.spare_id) as count'))
+      ->groupBy('s.id')
+      ->orderBy('s.id')
+      ->paginate();
       return view('gerenciales.repuestosCambiados',compact('spares'));
     }
 
