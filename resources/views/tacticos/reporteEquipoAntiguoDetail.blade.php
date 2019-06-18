@@ -82,8 +82,18 @@
             </table>
           </div>
         @endif
-        
-        
+
+        @if (!@isset($computadoras) && !isset($impresoras) || $computadoras==null && $impresoras==null)
+          <span class="h5">No hay datos que mostrar para los parámetros seleccionados</span>
+          @else
+          <div class="row justify-content-center">
+            <div class="col-6">
+            
+            <input type="submit" class="btn btn-lg btn-primary" value="Imprimir reporte">
+            <a href="{{route('tacticos.equipoAntiguoIndex')}}" class="btn btn-lg btn-primary">Regresar</a>
+        </div>
+    </div>
+        @endif      
     </div>
 </div>
 

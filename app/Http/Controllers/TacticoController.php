@@ -8,8 +8,11 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use DateTime;
 use Auth;
+use PDF;
+use Excel;
 use App\Upkeep;
 use App\Product;
+use App\Exports\EquipoViejoExport;
 use Carbon\Carbon;
 
 class TacticoController extends Controller
@@ -99,7 +102,7 @@ class TacticoController extends Controller
 
     public function equipoAntiguoIndex()
     {
-      Log::info("El usuario: '".Auth::user()->name."' seleccionó que desea ver el reporte: Ver empleados con equipo antiguo");
+      Log::info("El usuario: '".Auth::user()->name."' seleccionó que desea configurar el reporte: Ver empleados con equipo antiguo");
       return view('tacticos.reporteEquipoAntiguoIndex');
     }
 
@@ -120,6 +123,61 @@ class TacticoController extends Controller
 
       Log::info("El usuario: '".Auth::user()->name."' está viendo el reporte: Ver empleados con equipo antiguo");
       
-      return view('tacticos.reporteEquipoAntiguoDetail')->with('computadoras', $computadoras)->with('impresoras', $impresoras);
+      return view('tacticos.reporteEquipoAntiguoIndex')->with('computadoras', $computadoras)->with('impresoras', $impresoras);
     }
+
+    public function equipoAntiguoImprimir(Request $request)
+    {
+      switch($request->method()) {
+        case "POST":
+          Log::info("El usuario: '".Auth::user()->name."' indicó IMPRIMIR reporte de empleados con equipo informático viejo > 3 años");
+          $computadoras = null;
+          $impresoras = null;
+          foreach($request['tipo'] as $tipo) {
+            if($tipo == Product::$COMPUTADORA) {
+              $computadoras = Product::where('tipo', $tipo)->where('fechaAdqui', '<=', Carbon::now()->subyears(3))->get();
+            } elseif($tipo == Product::$IMPRESORA) {
+              $impresoras = Product::where('tipo', $tipo)->where('fechaAdqui', '<=', Carbon::now()->subyears(3))->get();
+            }
+          }
+          return redirect()->route('tacticos.equipoAntiguoImprimirGet')->with('computadoras', $computadoras)->with('impresoras', $impresoras);
+        break;
+        case "GET":
+        Log::info("El usuario: '".Auth::user()->name."' Ya está en la vista de impresión del reporte empleados con equipo informático viejo > 3 años");
+          return view('pdf.equipoAntiguoImprimir');
+        break;
+      }
+    }
+
+    public function equipoAntiguoPdf($compu=null, $impre=null)
+    {
+      $computadoras = null;
+      $impresoras = null;
+      if($compu == Product::$COMPUTADORA) {
+        $computadoras = Product::where('tipo', $compu)->where('fechaAdqui', '<=', Carbon::now()->subyears(3))->get();
+      }
+      if($impre == Product::$IMPRESORA) {
+        $impresoras = Product::where('tipo', $impre)->where('fechaAdqui', '<=', Carbon::now()->subyears(3))->get();
+      }
+      $pdf = PDF::loadView('pdf.equipoAntiguoPdf', ["computadoras" => $computadoras, "impresoras" => $impresoras]);
+      Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de Empleados con equipo viejo > 3 años");
+      return $pdf->stream('empleadosEquipoViejo_'.Carbon::now()->format('d-m-y').'.pdf');
+    }
+
+    public function equipoAntiguoExcel($compu=null, $impre=null)
+    {
+      $computadoras = null;
+      $impresoras = null;
+      if($compu == Product::$COMPUTADORA) {
+        $computadoras = Product::where('tipo', $compu)->where('fechaAdqui', '<=', Carbon::now()->subyears(3))->get();
+      }
+      if($impre == Product::$IMPRESORA) {
+        $impresoras = Product::where('tipo', $impre)->where('fechaAdqui', '<=', Carbon::now()->subyears(3))->get();
+      }
+      Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Empleados con equipo viejo > 3 años");
+      return Excel::download(new EquipoViejoExport($computadoras, $impresoras), 'empleadosEquipoViejo_'.Carbon::now()->format('d-m-y').'.xlsx');
+
+    }
+
+    ////////////////////////////////FIN DEL REPORTE DE EQUIPO ANTIGUO////////////////////////////////////77
 }
