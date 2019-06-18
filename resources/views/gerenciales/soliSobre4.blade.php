@@ -44,7 +44,7 @@
     <div class="pl-4">
     <input type="submit" class="btn btn-primary" value="Generar Reporte" style="width:220px;">
     &nbsp;&nbsp;&nbsp;&nbsp;
-    <input type="" class="btn btn-primary" value="Limpiar Campos">
+    
     </div>
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
   </form>

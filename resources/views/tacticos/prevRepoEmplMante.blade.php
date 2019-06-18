@@ -14,7 +14,7 @@
             <br><br>Unidad de Mantenimiento de Inform&aacute;tica
           </span>
           <span class="h4">
-            <br>Reporte de Equipos con costo de Mantenimiento mayor al 40% del precio de adquisicion.
+            <br>Reporte de cantidad de Mantenimientos solicitados por Empleado.
           </span>
         </h1>
       
@@ -29,9 +29,9 @@
               <p>{{$date}}</p>    
             </div>
         </div>
-     
-        @if(isset($produc40))
-@if(count($produc40)>0)
+   
+@if(isset($empleManto))
+@if(count($empleManto)>0)
 <div class="row">
         <div class="col-lg-12  w-100">
     <!-- DataTales Example -->
@@ -46,41 +46,27 @@
                         <tr>
           
              
-                            <th scope="row">N° de serie</th>
+                            <th scope="row">Departamento</th>
+    
+                            <th scope="row">Ubicacion</th>
                          
-                            <th scope="row">N° inv.</th>
+                            <th scope="row">Cantidad de mantenimientos solicitados</th>
                          
-                            <th scope="row">Marca</th>
-                         
-                            <th scope="row">Modelo</th>
-                   
-                            <th scope="row">Estado</th>
-                   
-                            <th scope="row">Valor adquisicion</th>
-                           
-                            <th scope="row">Monto</th>
+                            
                            </tr>                     
                     </thead>
                     <tbody>
-                        @foreach ($produc40 as $producs40)     
+                        @foreach ($empleManto as $empleMantos)     
                         <tr>
                       
-                        <td>{{$producs40->numSe}}</td>
+                        <td>{{$empleMantos->nombre}}</td>
+    
+                        <td>{{$empleMantos->ubicacion}}</td>
                       
-                        <td>{{$producs40->numInv}}</td>
-                      
-                        <td>{{$producs40->marca}}</td>
-                
-                        <td>{{$producs40->modelo}}</td>
-                
-                        <td>{{$producs40->estado}}</td>
-                
-                        <td>{{$producs40->valorAdqui}}</td>
-                
-                        <td>{{$producs40->costoSpares}}</td>
+                        <td>{{$empleMantos->Cantidad}}</td>
                       
                         </tr>       
-                 @endforeach                       
+                 @endforeach                             
                     </tbody>
                 </table>
                
@@ -94,23 +80,13 @@
     <h3>No hay registros que cumplan con los parámetros ingresados</h3>
     @endif
     
-    @endif
- 
-      
-        <div  align="center" >                
-           
-            <table>
-                
-                
-            </table>
-        </div >
+    @endif     
 
-<hr>
 
 
 <div class="form-group p-4" style="display:inline-block;">
-    <a href="{{url('pdfinfo40', ['tipo' => $tipo,])}}">Generar PDF</a>
+    <a href="{{url('pdfmantempl',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,])}}">Generar PDF</a>
     &nbsp;
-    <a href="{{url('soli40')}}">Regresar</a>
-</div>
+    <a href="{{ route('solimantempl') }}">Regresar</a>
+   </div>
     @endsection

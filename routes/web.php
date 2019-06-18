@@ -36,6 +36,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/deptmante', 'GerencialController@ManDep')->name('depmant');
     Route::get('/soliInfdepma', 'GerencialController@soliDepMant')->name('solidepmant');
     Route::get('/pdfmanDeto/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@pdfMandep')->name('pdfmanDeto');
+    Route::get('/solimantempl', 'TacticoController@SoliMantEmple')->name('solimantempl');
+    Route::get('/premantempl', 'TacticoController@PrevMantEmple')->name('premantempl');
+    Route::get('/pdfmantempl/{fecha_inicial}/{fecha_final}', 'TacticoController@PdfMantEmple')->name('pdfmantempl');
     
 
 

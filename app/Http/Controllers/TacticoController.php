@@ -180,4 +180,48 @@ class TacticoController extends Controller
     }
 
     ////////////////////////////////FIN DEL REPORTE DE EQUIPO ANTIGUO////////////////////////////////////77
+
+
+/////REPORTE DE MANTENIMIENTOS SOLICITADOS POR EMPLEADOS EN UN RANGO DE TIEMPO////////
+
+
+ public function SoliMantEmple(){
+  return view('tacticos.soliEmplMante');
+  }
+
+  public function PrevMantEmple(Request $request)
+  {
+    
+  $fecha_inicial=$request->get('desde');
+  $fecha_final=$request->get('hasta');  
+  
+ if($this->validarFechas($fecha_inicial,$fecha_final)){
+   
+    $empleManto=DB::select("select employees.nombre  ,employees.ubicacion, COUNT(upkeeps.product_id) as Cantidad 
+    from employees JOIN products on employees.id = products.employee_id 
+    JOIN upkeeps on products.id = upkeeps.product_id 
+    WHERE upkeeps.created_at > ? AND upkeeps.created_at< ?
+    GROUP BY  employees.nombre",[$fecha_inicial,$fecha_final]);
+    $date = Carbon::now();
+    $date = $date->format('d-m-Y');
+   
+   return view('tacticos.prevRepoEmplMante',compact('empleManto','date','fecha_inicial','fecha_final'));
+   
+}
+  return view('tacticos.soliEmplMante')->withErrors('Error en las fechas ingresadas');
+ 
+}
+
+  public function PdfMantEmple($fecha_inicial,$fecha_final){
+    $empleManto=DB::select("select employees.nombre  ,employees.ubicacion, COUNT(upkeeps.product_id) as Cantidad 
+    from employees JOIN products on employees.id = products.employee_id 
+    JOIN upkeeps on products.id = upkeeps.product_id 
+    WHERE upkeeps.created_at > ? AND upkeeps.created_at< ?
+    GROUP BY  employees.nombre",[$fecha_inicial,$fecha_final]);
+    $date = Carbon::now();
+    $date = $date->format('d-m-Y');
+    $pdf = PDF::loadView('pdf.EmpleadoMantenimiento', compact('empleManto','date'))->setPaper(array(0,0,612.00,792.00));  
+  return $pdf->stream('repoManEmple.pdf',array("Attachment" => 0));
+  }
+
 }

@@ -80,6 +80,7 @@
             <a class="collapse-item" href="{{route('tacticos.licenciasPorVencer')}}">Licencias por vencer</a>
             <a class="collapse-item" href="{{ route('EquipoDescargado') }}">Equipo descargado</a>
             <a class="collapse-item" href="{{route('tacticos.equipoAntiguoIndex')}}">Equipo antiguo</a>
+            <a class="collapse-item" href="{{route('solimantempl')}}">Cantidad Mantes solicitados</a>
           </div>
         </div>
 
