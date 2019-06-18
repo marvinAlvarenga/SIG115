@@ -14,7 +14,7 @@
         <br><br>Unidad de Mantenimiento de Inform&aacute;tica
       </span>
       <span class="h4">
-        <br>Reporte de Usuarios que solicitan mas Mantenimientos
+        <br>Reporte de Equipo con costos de mante mayor al 40% del valor de adqui
       </span>
     </h1>
   
@@ -30,8 +30,8 @@
       <label for="id_count">Cantidad de Registros:</label>
         <input type="number" class="form-control" id="id_count" name="count" value="">
     </div>
-    <div class="form-group p-4" style="display:inline-block;">
-      <select name="tipo">
+    <div style="display:inline-block;">
+      <select class="custom-select"  name="tipo">
           <option value="2">Impresora</option>
           <option value="1">Computadora</option>
           <option value="0">Todo</option>

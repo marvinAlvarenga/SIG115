@@ -29,25 +29,24 @@
     <title>Document</title>
 </head>
 <body>
-    <div >
-        
-        <div  style="height:5px; width:100%; clear:both;" align="center">
-                <h5>UNIVERSIDAD DE EL SALVADOR<br>OFICINA CENTRALES
-                <br>SECCIÓN DE MANTENIMIENTO Y REPARACIÓN DE EQUIPO INFORMÁTICO
-                 <br>DICTAMEN TÉCNICO DE FALLAS DE EQUIPOS
-                 <br>San salvador, El Salvador Centro América</h5>
-                
-            </div>      
-            <div style="height:5px; width:70%; clear:both;"> <img src="./img/logoUes.jpg"  width="100" height="100"alt="Logo" align="left"> </div>
-            <div style="height:5px; width:100%; clear:right;"> <img src="./img/logo.jpg" width="100" height="100"alt="Logo" align="right"> </div>   
-            
-        </div>      
-        <br>    
-        <br>   
-        <br>   
-<div style="height:28px; width:100%; float:left;"><br><p>Unidad Solicitante: ADMINISTRACION FINANCIERA<p>
-    <br>Cantidad de mantenimientos por departamento
-</div>
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <img style="width:120px; height:148px;" src="{{ asset('img/logoUes.jpg') }}" class="img-fluid pull-xs-left" alt="Logo Minerva">
+      
+        <h1 class="h2 mb-0 text-gray-800 text-center">
+          Universidad de El Salvador
+          <span class="h3">
+            <br>Facultad de Ciencias y Humanidades
+          </span>
+          <span class="h4">
+            <br><br>Unidad de Mantenimiento de Inform&aacute;tica
+          </span>
+          <span class="h4">
+            <br>Reporte de Mantenimientos por departamento.
+          </span>
+        </h1>
+      
+        <img style="width:150px; height:150px;" src="{{ asset('img/logo.jpg') }}" class="img-fluid pull-xs-left" alt="Logo Minerva">
+       </div>
     <div tyle="height:28px; width:100%; float:both;"  class="form-group" align="right" >
             <br>    
             <br>   
@@ -90,9 +89,11 @@
 
 <hr>
 
-<P  align="right" >_________________________________<br>Nombre<br> &nbsp; _________________________________<br>Firma</p>
-    <p align="left">Sello</p>  
 
 
-    <a href="{{url('pdfmanDeto',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo,])}}">Imprimir</a>
+<div class="form-group p-4" style="display:inline-block;">
+    <a href="{{url('pdfmanDeto',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo,])}}">Generar PDF</a>
+    &nbsp;
+    <a href="{{ route('solidepmant') }}">Regresar</a>
+   </div>
     @endsection
