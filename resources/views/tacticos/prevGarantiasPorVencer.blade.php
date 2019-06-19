@@ -46,12 +46,21 @@
                         <tr>
           
              
-                            <th scope="row">Departamento</th>
+                            <th scope="row">Num Serie</th>
     
-                            <th scope="row">Ubicacion</th>
+                            <th scope="row">Num Inv.</th>                   
+                                                     
+                            <th scope="row">Marca </th>
                          
-                            <th scope="row">Cantidad de mantenimientos solicitados</th>
+                            <th scope="row"> Modelo </th>
                          
+                            <th scope="row"> Estado </th>
+                         
+                            <th scope="row"> Tipo </th>
+                         
+                            <th scope="row">Tiempo faltante </th>
+                         
+                           
                             
                            </tr>                     
                     </thead>
@@ -64,9 +73,17 @@
                         <td>{{$product->numSe}}</td>
     
                         <td>{{$product->numSe}}</td>
-                      
+
                         <td>{{$product->marca}}</td>
+
+                        <td>{{$product->modelo}}</td>
                       
+                        <td>{{$product->estado}}</td>
+
+                        <td>{{$product->tipo}}</td>
+
+                        <td>{{$tiempoFaltante[$i]}}</td>
+
                         </tr>       
                  @endforeach                             
                     </tbody>
@@ -87,7 +104,7 @@
 
 
 
-    <a class="btn btn-primary" href="{{url('pdfmantempl',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,])}}" role="button">Generar PDF</a>
+    <a class="btn btn-primary" href="{{url('pdfgaranve',['tipo'=>$tipo,])}}" role="button">Generar PDF</a>
     &nbsp;
     <a class="btn btn-primary" href="{{ route('soligaranven') }}" role="button">Regresar</a>
   
