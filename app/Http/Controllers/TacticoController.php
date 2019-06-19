@@ -171,15 +171,21 @@ class TacticoController extends Controller
 
     ////////////////////////////////FIN DEL REPORTE DE EQUIPO ANTIGUO////////////////////////////////////77
 
+
+    /////REPORTE DE MANTENIMIENTOS REALIZADOS POR EMPLEADOS Y PRACTICANTES////////
     public function mantenimientosRealizados(Request $request){
       $users=User::orderby('id','DESC')->paginate();
       return view('tacticos.reporteMantenimientos',compact('users'));
     }
+    ////////////////////////////////FIN DEL REPORTE DE MANTENIMIENTO POR EMPLEADOS/PRACTICANTES////////////////////////////////////77
   
+    
+    /////REPORTE DE LICENCIAS POR VENCER////////
     public function licenciasPorVencer(Request $request){
       $products=DB::table('products as p')->join('product_licence as pl','p.id','=','pl.product_id')->join('licences as l','pl.licence_id','=','l.id')->select('p.numSe','p.numInv','p.tipo','p.valorAdqui as descripcion','l.nombre','l.fechaVencimiento')->orderBy('p.id')->paginate();
       return view('tacticos.reportelicenciasPorVencer',compact('products'));
     }
+        ////////////////////////////////FIN DEL REPORTE LICENCIAS POR VENCER////////////////////////////////////
 
 /////REPORTE DE MANTENIMIENTOS SOLICITADOS POR EMPLEADOS EN UN RANGO DE TIEMPO////////
 
