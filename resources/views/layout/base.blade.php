@@ -65,6 +65,8 @@
             <a class="collapse-item" href="{{route('gerenciales.equipoportipo')}}">Equipo agregado</a>
             <a class="collapse-item" href="{{route('gerenciales.repuestosCambiados')}}">Repuestos cambiados</a>
             <a class="collapse-item" href="{{ route('MantsXUser') }}">Clientes y mantenimientos</a>
+            <a class="collapse-item" href="{{ route('soli40') }}">Costo de mante mayor al <br> 40% de valor adqui</a>
+            <a class="collapse-item" href="{{ route('solidepmant') }}">Cantidad de mante por <br>depto</a>
           </div>
         </div>
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTactico" aria-expanded="true" aria-controls="collapseTwo">
@@ -78,6 +80,7 @@
             <a class="collapse-item" href="{{route('tacticos.licenciasPorVencer')}}">Licencias por vencer</a>
             <a class="collapse-item" href="{{ route('EquipoDescargado') }}">Equipo descargado</a>
             <a class="collapse-item" href="{{route('tacticos.equipoAntiguoIndex')}}">Equipo antiguo</a>
+            <a class="collapse-item" href="{{route('solimantempl')}}">Cantidad Mantes solicitados</a>
           </div>
         </div>
 
