@@ -18,6 +18,7 @@ class CreateLicencesTable extends Migration
             $table->string('nombre', 100);
             $table->integer('tipo');
             $table->date('fechaVencimiento');
+            $table->timestamps();
             
         });
     }

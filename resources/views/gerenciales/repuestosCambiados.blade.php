@@ -14,7 +14,7 @@
       <br><br>Unidad de Mantenimiento de Inform&aacute;tica
     </span>
     <span class="h4">
-      <br>Reporte de Equipos agregados al inventario por fecha.
+      <br>Reporte de cantidad de repuestos cambiados 
     </span>
   </h1>
 

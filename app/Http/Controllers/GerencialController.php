@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Product;
 use App\Spare;
+use Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Dompdf\Dompdf;
@@ -27,7 +29,7 @@ class GerencialController extends Controller
        }else{
         $products=Product::whereDate('created_at','>=',$fecha_inicial)->whereDate('created_at','<=',$fecha_final)->where('tipo',$tipo)->orderby('id','DESC')->paginate();
        }
-
+       Log::info("El usuario: '".Auth::user()->name." Vió el reporte de equipos agregados a inventario");
       return view('gerenciales.equipoPorTipo',compact('products'));
     }else{
       return view('gerenciales.equipoPorTipo')->withErrors('Error en las fechas ingresadas');

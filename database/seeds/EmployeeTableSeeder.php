@@ -19,5 +19,11 @@ class EmployeeTableSeeder extends Seeder
             'password'=> bcrypt('1234'),
 
         ]);
+
+        
+        DB::insert('insert into roles (id, name, slug) values (?, ?,?)', [1, 'Administrador','admin  ']);
+        DB::insert('insert into roles (id, name, slug) values (?, ?,?)', [2, 'Estratégico','est']);
+        DB::insert('insert into roles (id, name, slug) values (?, ?,?)', [3, 'Táctico','tac']);
+        
     }
 }

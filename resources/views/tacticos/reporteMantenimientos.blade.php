@@ -88,8 +88,8 @@
                 </div>
       </div>
     </form>
-@if(isset($upkeeps))
-@if(count($upkeeps)>0)
+@if(isset($users))
+@if(count($users)>0)
 <div class="row">
         <div class="col-lg-12  w-100">
     <!-- DataTales Example -->
@@ -103,26 +103,26 @@
                   <thead>
                     <tr>
                       <th>Nombre</th>
+                      <th>E-Mail</th>
+                      <th>Status</th>
                       <th>Tipo</th>
-                      <th>Marca</th>
-                      <th>Valor Unitario</th>
-                      <th>Total Usados</th>
+                      <th>Total mantenimientos</th>
                     </tr>
                   </thead>
  
                   <tbody>
-                        @foreach($upkeeps as $upkeep)
+                        @foreach($users as $user)
   
                         <tr>
-                            <td>{{$upkeep->id}}</td>
-                            <td>{{$upkeep->tipo}}</td>
-                            <td>{{$upkeep->marca}}</td>
-                            <td>{{$upkeep->valorAdqui}}</td>
-                            <td>{{$upkeep->total}}</td>
+                            <td>{{$user->id}}</td>
+                            <td>{{$user->tipo}}</td>
+                            <td>{{$user->marca}}</td>
+                            <td>{{$user->valorAdqui}}</td>
+                            <td>{{$user->total}}</td>
                     @endforeach
                 </tbody>
                 </table>
-                {{$upkeeps->appends(Request::all())->render()}}
+                {{$users->appends(Request::all())->render()}}
               </div>
             </div>
     </div>
