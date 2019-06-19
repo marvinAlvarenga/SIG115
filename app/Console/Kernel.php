@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
+        '\App\Console\Commands\EtlAuto'
     ];
 
     /**
@@ -26,6 +27,8 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        $schedule->command('etl:auto')->dailyAt('01:00'); //Cada dia a la 1 a.m.
+        // $schedule->command('etl:auto')->everyMinute(); //testing
     }
 
     /**
