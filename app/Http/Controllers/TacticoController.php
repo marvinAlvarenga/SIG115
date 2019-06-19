@@ -173,8 +173,10 @@ class TacticoController extends Controller
 
 
     /////REPORTE DE MANTENIMIENTOS REALIZADOS POR EMPLEADOS Y PRACTICANTES////////
+
     public function mantenimientosRealizados(Request $request){
-      $users=User::orderby('id','DESC')->paginate();
+      $users=User::join('upkeeps','users.id','=','upkeeps.user_id')->select('users.name','users.email','users.tipo','users.estado',DB::raw('count(upkeeps.user_id) as total'))->groupBy('users.id')->orderby('users.id','DESC')->paginate();
+  
       return view('tacticos.reporteMantenimientos',compact('users'));
     }
     ////////////////////////////////FIN DEL REPORTE DE MANTENIMIENTO POR EMPLEADOS/PRACTICANTES////////////////////////////////////77
@@ -182,7 +184,18 @@ class TacticoController extends Controller
     
     /////REPORTE DE LICENCIAS POR VENCER////////
     public function licenciasPorVencer(Request $request){
-      $products=DB::table('products as p')->join('product_licence as pl','p.id','=','pl.product_id')->join('licences as l','pl.licence_id','=','l.id')->select('p.numSe','p.numInv','p.tipo','p.valorAdqui as descripcion','l.nombre','l.fechaVencimiento')->orderBy('p.id')->paginate();
+      $date=Carbon::now();
+      $date=$date->toDateString();
+      DB::enableQueryLog();
+      
+      $products=DB::table('products as p')
+      ->join('product_licence as pl','p.id','=','pl.product_id')
+      ->join('licences as l','pl.licence_id','=','l.id')
+      ->select('p.numSe','p.numInv','p.tipo','p.valorAdqui as descripcion','l.nombre','l.fechaVencimiento')
+      ->orWhereDate('l.fechaVencimiento','<=',Carbon::now())->orWhere( DB::raw('DATEDIFF(l.fechaVencimiento,NOW()) <= 90'),1)->orderBy('p.id')->paginate();
+
+      $log = DB::getQueryLog();
+
       return view('tacticos.reportelicenciasPorVencer',compact('products'));
     }
         ////////////////////////////////FIN DEL REPORTE LICENCIAS POR VENCER////////////////////////////////////

@@ -114,10 +114,10 @@
                         @foreach($users as $user)
   
                         <tr>
-                            <td>{{$user->id}}</td>
+                            <td>{{$user->name}}</td>
+                            <td>{{$user->email}}</td>
+                            <td>{{$user->estado}}</td>
                             <td>{{$user->tipo}}</td>
-                            <td>{{$user->marca}}</td>
-                            <td>{{$user->valorAdqui}}</td>
                             <td>{{$user->total}}</td>
                     @endforeach
                 </tbody>
