@@ -41,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pdfmantempl/{fecha_inicial}/{fecha_final}', 'TacticoController@PdfMantEmple')->name('pdfmantempl');
     Route::get('/soligaranven', 'TacticoController@SoliGaraVen')->name('soligaranven');
     Route::get('/pregaranven', 'TacticoController@PrevGaraVen')->name('pregaranven');
+    Route::get('/pdfgaranve/{tipo}', 'TacticoController@pdfGaraVen')->name('pdfgaranve');
     
 
     //RUTAS EDWIN

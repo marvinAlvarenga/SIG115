@@ -81,6 +81,8 @@
             <a class="collapse-item" href="{{ route('EquipoDescargado') }}">Equipo descargado</a>
             <a class="collapse-item" href="{{route('tacticos.equipoAntiguoIndex')}}">Equipo antiguo</a>
             <a class="collapse-item" href="{{route('solimantempl')}}">Cantidad Mantes solicitados</a>
+            <a class="collapse-item" href="{{route('soligaranven')}}">Equip. Garantias vencidas</a>
+            
           </div>
         </div>
 

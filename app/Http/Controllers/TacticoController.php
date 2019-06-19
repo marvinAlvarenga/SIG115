@@ -231,17 +231,18 @@ class TacticoController extends Controller
   }
   
   public function PrevGaraVen(Request $request){
-    $fecha_inicial=$request->get('desde');
-    $fecha_final=$request->get('hasta');  
-    
-   if($this->validarFechas($fecha_inicial,$fecha_final)){
-
-
     $fechafinal= Carbon::now();   
 
     $products=DB::table('products')
     ->get();
     $i=0;
+    $tipo=$request->tipo;
+
+   if($tipo==3){
+
+
+    
+  
     foreach ($products as $product) {
      $date=Carbon::parse($product->fechaAdqui);
     $fechaVenciminto=$date->addYear($product->garantia);
@@ -249,27 +250,151 @@ class TacticoController extends Controller
      $fechaActual = Carbon::parse( $fechafinal );  /// da formato Y-m-d
       if( $fechaActual > $fechaVenciminto){
        $empleManto[$i]=$product;
-       
+       $tiempoFaltante[$i]=0;
       } else {   
-     $diasDiferencia =$fechaVenciminto->diffInMonths($fechaActual);// compara las fechas para saber cuanto es la diferencia de dias
+     $mesesDiferencia =$fechaVenciminto->diffInMonths($fechaActual);// compara las fechas para saber cuanto es la diferencia de meses
      
-      if($diasDiferencia <=3 ){
+      if($mesesDiferencia <=3 ){
        $empleManto[$i]=$product;
-        dd($productVen[$i]);
+       $tiempoFaltante[$i]=$mesesDiferencia;        
       }
     }
      
-     $i=+1;
+     $i=$i+1;
     }
     $date= Carbon::now();  
     $date = $date->format('d-m-Y'); 
-    return view('tacticos.prevGarantiasPorVencer',compact('empleManto','date','fecha_inicial','fecha_final'));
+    return view('tacticos.prevGarantiasPorVencer',compact('empleManto','date','tiempoFaltante','tipo'));
    
    // return view('tacticos.prevGarantiasPorVencer', compact('productVen','date','fecha_inicial','fecha_final'));
     
   }
-  return view('tacticos.SoliGarantiasPorVencer')->withErrors('Error en las fechas ingresadas');
+  else{
+    if($tipo==2){
+      foreach ($products as $product) {
+        $date=Carbon::parse($product->fechaAdqui);
+       $fechaVenciminto=$date->addYear($product->garantia);
+      
+        $fechaActual = Carbon::parse( $fechafinal );  /// da formato Y-m-d
+         if( $fechaActual > $fechaVenciminto){
+          $empleManto[$i]=$product;
+          $tiempoFaltante[$i]=0;
+         }         
+        $i=$i+1;
+       }
+       $date= Carbon::now();  
+       $date = $date->format('d-m-Y'); 
+       return view('tacticos.prevGarantiasPorVencer',compact('empleManto','date','tiempoFaltante','tipo'));
+      }else{
+        if($tipo==1){
+          
+    foreach ($products as $product) {
+      $date=Carbon::parse($product->fechaAdqui);
+     $fechaVenciminto=$date->addYear($product->garantia);
     
+      $fechaActual = Carbon::parse( $fechafinal );  /// da formato Y-m-d
+       if( $fechaActual < $fechaVenciminto){
+        $mesesDiferencia =$fechaVenciminto->diffInMonths($fechaActual);// compara las fechas para saber cuanto es la diferencia de meses
+      
+       if($mesesDiferencia <=3 ){
+        $empleManto[$i]=$product;
+        $tiempoFaltante[$i]=$mesesDiferencia;        
+       }
+       }
+      
+      $i=$i+1;
+     }
+     $date= Carbon::now();  
+       $date = $date->format('d-m-Y'); 
+       return view('tacticos.prevGarantiasPorVencer',compact('empleManto','date','tiempoFaltante','tipo'));    
     }
+      }
+  }
+ }
+
+ public function pdfGaraVen($tipo)
+ {
+  
+  $fechafinal= Carbon::now();   
+
+  $products=DB::table('products')
+  ->get();
+  $i=0;
+ 
+
+ if($tipo==3){  
+
+  foreach ($products as $product) {
+   $date=Carbon::parse($product->fechaAdqui);
+  $fechaVenciminto=$date->addYear($product->garantia);
+ 
+   $fechaActual = Carbon::parse( $fechafinal );  /// da formato Y-m-d
+    if( $fechaActual > $fechaVenciminto){
+     $empleManto[$i]=$product;
+     $tiempoFaltante[$i]=0;
+    } else {   
+   $mesesDiferencia =$fechaVenciminto->diffInMonths($fechaActual);// compara las fechas para saber cuanto es la diferencia de meses
+   
+    if($mesesDiferencia <=3 ){
+     $empleManto[$i]=$product;
+     $tiempoFaltante[$i]=$mesesDiferencia;        
+    }
+  }
+   
+   $i=$i+1;
+  }
+  $date= Carbon::now();  
+  $date = $date->format('d-m-Y'); 
+ $pdf = PDF::loadView('pdf.equipoGarantivaVencida',compact('empleManto','date','tiempoFaltante','tipo'))->setPaper(array(0,0,612.00,792.00));  
+  return $pdf->stream('repoManEmple.pdf',array("Attachment" => 0));
+ 
+ // return view('tacticos.prevGarantiasPorVencer', compact('productVen','date','fecha_inicial','fecha_final'));
+  
+}
+else{
+  if($tipo==2){
+    foreach ($products as $product) {
+      $date=Carbon::parse($product->fechaAdqui);
+     $fechaVenciminto=$date->addYear($product->garantia);
+    
+      $fechaActual = Carbon::parse( $fechafinal );  /// da formato Y-m-d
+       if( $fechaActual > $fechaVenciminto){
+        $empleManto[$i]=$product;
+        $tiempoFaltante[$i]=0;
+       }         
+      $i=$i+1;
+     }
+     $date= Carbon::now();  
+     $date = $date->format('d-m-Y'); 
+    $pdf = PDF::loadView('pdf.equipoGarantivaVencida',compact('empleManto','date','tiempoFaltante','tipo'))->setPaper(array(0,0,612.00,792.00));  
+  return $pdf->stream('repoManEmple.pdf',array("Attachment" => 0));
+    }else{
+      if($tipo==1){
+        
+  foreach ($products as $product) {
+    $date=Carbon::parse($product->fechaAdqui);
+   $fechaVenciminto=$date->addYear($product->garantia);
+  
+    $fechaActual = Carbon::parse( $fechafinal );  /// da formato Y-m-d
+     if( $fechaActual < $fechaVenciminto){
+      $mesesDiferencia =$fechaVenciminto->diffInMonths($fechaActual);// compara las fechas para saber cuanto es la diferencia de meses
+    
+     if($mesesDiferencia <=3 ){
+      $empleManto[$i]=$product;
+      $tiempoFaltante[$i]=$mesesDiferencia;        
+     }
+     }
+    
+    $i=$i+1;
+   }
+   $date= Carbon::now();  
+     $date = $date->format('d-m-Y'); 
+    $pdf = PDF::loadView('pdf.equipoGarantivaVencida',compact('empleManto','date','tiempoFaltante','tipo'))->setPaper(array(0,0,612.00,792.00));  
+  return $pdf->stream('GaranVeci.pdf',array("Attachment" => 0));    
+  }
+    }
+}
+ }
+    
     
 }
