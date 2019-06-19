@@ -39,8 +39,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/solimantempl', 'TacticoController@SoliMantEmple')->name('solimantempl');
     Route::get('/premantempl', 'TacticoController@PrevMantEmple')->name('premantempl');
     Route::get('/pdfmantempl/{fecha_inicial}/{fecha_final}', 'TacticoController@PdfMantEmple')->name('pdfmantempl');
+    Route::get('/soligaranven', 'TacticoController@SoliGaraVen')->name('soligaranven');
+    Route::get('/pregaranven', 'TacticoController@PrevGaraVen')->name('pregaranven');
     
-
 
     //RUTAS EDWIN
     Route::get('/reportes/mantsxuser', 'GerencialController@getMantsXUser')->name('MantsXUser');

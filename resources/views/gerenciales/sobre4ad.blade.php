@@ -109,8 +109,8 @@
 
 
 <div class="form-group p-4" style="display:inline-block;">
-    <a href="{{url('pdfinfo40', ['tipo' => $tipo,])}}">Generar PDF</a>
+    <a class="btn btn-primary"  href="{{url('pdfinfo40', ['tipo' => $tipo,])}}">Generar PDF</a>
     &nbsp;
-    <a href="{{url('soli40')}}">Regresar</a>
+    <a class="btn btn-primary" class="btn btb-primary" href="{{url('soli40')}}">Regresar</a>
 </div>
     @endsection
