@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rule; 
 use DateTime;
 use Auth;
 use PDF;
 use Excel;
 use App\Upkeep;
 use App\Product;
+use App\User;
 use App\Exports\EquipoViejoExport;
 use Carbon\Carbon;
 
@@ -36,17 +37,6 @@ class TacticoController extends Controller
     $errores = "Error en los datos ingresados";
     return view('tacticos.formEquipoDescargado', ['errores' => $errores]);
   }
-
-  public function mantenimientosRealizados(Request $request){
-    $upkeeps=Upkeep::orderby('id','DESC')->paginate();
-    return view('tacticos.reporteMantenimientos',compact('upkeeps'));
-  }
-
-  public function licenciasPorVencer(Request $request){
-    $products=Product::orderby('id','DESC')->paginate();
-    return view('tacticos.reportelicenciasPorVencer',compact('products'));
-  }
-
   //Valida qe cada elemento del array sea un entero.
   private function validarArrayTipo($tipo_arr){
     $valido = true;
@@ -181,6 +171,15 @@ class TacticoController extends Controller
 
     ////////////////////////////////FIN DEL REPORTE DE EQUIPO ANTIGUO////////////////////////////////////77
 
+    public function mantenimientosRealizados(Request $request){
+      $users=User::orderby('id','DESC')->paginate();
+      return view('tacticos.reporteMantenimientos',compact('users'));
+    }
+  
+    public function licenciasPorVencer(Request $request){
+      $products=DB::table('products as p')->join('product_licence as pl','p.id','=','pl.product_id')->join('licences as l','pl.licence_id','=','l.id')->select('p.numSe','p.numInv','p.tipo','p.valorAdqui as descripcion','l.nombre','l.fechaVencimiento')->orderBy('p.id')->paginate();
+      return view('tacticos.reportelicenciasPorVencer',compact('products'));
+    }
 
 /////REPORTE DE MANTENIMIENTOS SOLICITADOS POR EMPLEADOS EN UN RANGO DE TIEMPO////////
 
