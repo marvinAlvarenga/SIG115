@@ -14,7 +14,7 @@
             <br><br>Unidad de Mantenimiento de Inform&aacute;tica
           </span>
           <span class="h4">
-            <br>Reporte de cantidad de Mantenimientos solicitados por Empleado.
+            <br>Reporte de Garantias proximas a vencer
           </span>
         </h1>
       
@@ -37,7 +37,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary">Equipo informático agregado al inventario por tipo</h6>
+          <h6 class="m-0 font-weight-bold text-primary">Equipos con licencias a vencer o vencidas</h6>
         </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -56,14 +56,16 @@
                            </tr>                     
                     </thead>
                     <tbody>
-                        @foreach ($empleManto as $empleMantos)     
+                           
+                        @foreach ($empleManto as $i => $product)    
+                        
                         <tr>
-                      
-                        <td>{{$empleMantos->nombre}}</td>
+                               
+                        <td>{{$product->numSe}}</td>
     
-                        <td>{{$empleMantos->ubicacion}}</td>
+                        <td>{{$product->numSe}}</td>
                       
-                        <td>{{$empleMantos->Cantidad}}</td>
+                        <td>{{$product->marca}}</td>
                       
                         </tr>       
                  @endforeach                             
@@ -87,6 +89,6 @@
 
     <a class="btn btn-primary" href="{{url('pdfmantempl',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,])}}" role="button">Generar PDF</a>
     &nbsp;
-    <a class="btn btn-primary" href="{{ route('solimantempl') }}" role="button">Regresar</a>
+    <a class="btn btn-primary" href="{{ route('soligaranven') }}" role="button">Regresar</a>
   
     @endsection

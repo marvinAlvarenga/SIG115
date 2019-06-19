@@ -228,5 +228,54 @@ class TacticoController extends Controller
     $pdf = PDF::loadView('pdf.EmpleadoMantenimiento', compact('empleManto','date'))->setPaper(array(0,0,612.00,792.00));  
   return $pdf->stream('repoManEmple.pdf',array("Attachment" => 0));
   }
+/////Fin del reporte////
 
+///Reporte de Garantias por vencer o vencidas//////
+
+  public function SoliGaraVen(){
+  return view('tacticos.SoliGarantiasPorVencer');
+  }
+  
+  public function PrevGaraVen(Request $request){
+    $fecha_inicial=$request->get('desde');
+    $fecha_final=$request->get('hasta');  
+    
+   if($this->validarFechas($fecha_inicial,$fecha_final)){
+
+
+    $fechafinal= Carbon::now();   
+
+    $products=DB::table('products')
+    ->get();
+    $i=0;
+    foreach ($products as $product) {
+     $date=Carbon::parse($product->fechaAdqui);
+    $fechaVenciminto=$date->addYear($product->garantia);
+   
+     $fechaActual = Carbon::parse( $fechafinal );  /// da formato Y-m-d
+      if( $fechaActual > $fechaVenciminto){
+       $empleManto[$i]=$product;
+       
+      } else {   
+     $diasDiferencia =$fechaVenciminto->diffInMonths($fechaActual);// compara las fechas para saber cuanto es la diferencia de dias
+     
+      if($diasDiferencia <=3 ){
+       $empleManto[$i]=$product;
+        dd($productVen[$i]);
+      }
+    }
+     
+     $i=+1;
+    }
+    $date= Carbon::now();  
+    $date = $date->format('d-m-Y'); 
+    return view('tacticos.prevGarantiasPorVencer',compact('empleManto','date','fecha_inicial','fecha_final'));
+   
+   // return view('tacticos.prevGarantiasPorVencer', compact('productVen','date','fecha_inicial','fecha_final'));
+    
+  }
+  return view('tacticos.SoliGarantiasPorVencer')->withErrors('Error en las fechas ingresadas');
+    
+    }
+    
 }

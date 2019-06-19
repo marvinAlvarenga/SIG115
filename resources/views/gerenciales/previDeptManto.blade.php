@@ -81,9 +81,9 @@
     @endif
    
 
-<div class="form-group p-4" style="display:inline-block;">
-    <a href="{{url('pdfmanDeto',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo,])}}">Generar PDF</a>
+
+    <a class="btn btn-primary" href="{{url('pdfmanDeto',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo,])}}" role="button">Generar PDF</a>
     &nbsp;
-    <a href="{{ route('solidepmant') }}">Regresar</a>
-   </div>
+    <a class="btn btn-primary" href="{{ route('solidepmant') }}" role="button">Regresar</a>
+   
     @endsection
