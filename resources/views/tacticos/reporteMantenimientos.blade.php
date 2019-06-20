@@ -56,20 +56,20 @@
           </div>
         </div>
       
-              <div class="col-sm-3">
+              <div class="col-sm-4">
                     <div class="card mb-3 mt-2">
                       <div class="card-body">
                           <div class="form-row">
                               <div class="col">
                           <div class="form-check">
                                 <input class="form-check-input" type="radio" name="tipo" id="exampleRadios1" value="1" checked>
-                                <label class="form-check-label" for="exampleRadios1">PC</label>
+                                <label class="form-check-label" for="exampleRadios1">Empleado</label>
                               </div>
                             </div>
                             <div class="col">
                               <div class="form-check">
                                 <input class="form-check-input" type="radio" name="tipo" id="exampleRadios2" value="2">
-                                <label class="form-check-label" for="exampleRadios2">Impresora</label>
+                                <label class="form-check-label" for="exampleRadios2">Prácticante</label>
                               </div>
                             </div>
                             <div class="col">

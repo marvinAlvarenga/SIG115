@@ -175,27 +175,58 @@ class TacticoController extends Controller
     /////REPORTE DE MANTENIMIENTOS REALIZADOS POR EMPLEADOS Y PRACTICANTES////////
 
     public function mantenimientosRealizados(Request $request){
-      $users=User::join('upkeeps','users.id','=','upkeeps.user_id')->select('users.name','users.email','users.tipo','users.estado',DB::raw('count(upkeeps.user_id) as total'))->groupBy('users.id')->orderby('users.id','DESC')->paginate();
-  
+
+      $fecha_inicial=$request->get('desde');
+      $fecha_final=$request->get('hasta');
+      $tipo=$request->get('tipo');
+      $tipos=$tipo;
+      if(isset($tipo)){
+      if($this->validarFechas($fecha_inicial,$fecha_final)){
+      $users=User::join('upkeeps','users.id','=','upkeeps.user_id')
+      ->select('users.name','users.email','users.tipo','users.estado',DB::raw('count(upkeeps.user_id) as total'))
+      ->when($tipo!=3, function ($users, $tipo) use($tipos) {//si tipo no es 3 ( es 1 o 2) agrega un where para filtar por pc o impresora
+        return $users->where('users.tipo',$tipos);
+      })
+      ->whereDate('upkeeps.created_at','>=',$fecha_inicial)->whereDate('upkeeps.created_at','<=',$fecha_final)->groupBy('users.id')->orderby('users.id','DESC')->paginate();
       return view('tacticos.reporteMantenimientos',compact('users'));
+      }
+      else{ return view ('tacticos.reporteMantenimientos')->withErrors('Error en las fechas ingresadas');}
+    }else {return view ('tacticos.reporteMantenimientos');}
     }
-    ////////////////////////////////FIN DEL REPORTE DE MANTENIMIENTO POR EMPLEADOS/PRACTICANTES////////////////////////////////////77
+    ////////////////////////////////FIN DEL REPORTE DE MANTENIMIENTO POR EMPLEADOS/PRACTICANTES///////////////}/////////////////////77
   
     
     /////REPORTE DE LICENCIAS POR VENCER////////
     public function licenciasPorVencer(Request $request){
       $date=Carbon::now();
       $date=$date->toDateString();
-      DB::enableQueryLog();
-      
+      $vencida=$request->get('vencida');
+      $tipo=$request->get('tipo');
+      $tipos=$tipo; //para usar en el where dentro del when
+      if($vencida==1){
       $products=DB::table('products as p')
       ->join('product_licence as pl','p.id','=','pl.product_id')
       ->join('licences as l','pl.licence_id','=','l.id')
       ->select('p.numSe','p.numInv','p.tipo','p.valorAdqui as descripcion','l.nombre','l.fechaVencimiento')
-      ->orWhereDate('l.fechaVencimiento','<=',Carbon::now())->orWhere( DB::raw('DATEDIFF(l.fechaVencimiento,NOW()) <= 90'),1)->orderBy('p.id')->paginate();
-
-      $log = DB::getQueryLog();
-
+      ->when($tipo!=3, function ($products, $tipo) use($tipos) {//si tipo no es 3 ( es 1 o 2) agrega un where para filtar por pc o impresora
+              return $products->where('p.tipo',$tipos);
+      })->WhereDate('l.fechaVencimiento','<=',Carbon::now())->orderBy('p.id')->paginate();
+      }else if($vencida==2){
+        $products=DB::table('products as p')
+      ->join('product_licence as pl','p.id','=','pl.product_id')
+      ->join('licences as l','pl.licence_id','=','l.id')
+      ->select('p.numSe','p.numInv','p.tipo','p.valorAdqui as descripcion','l.nombre','l.fechaVencimiento')
+      ->when($tipo!=3, function ($products, $tipo) use($tipos) {
+        return $products->where('p.tipo',$tipos);
+      })->WhereDate('l.fechaVencimiento','>=',Carbon::now())
+      ->Where( DB::raw('DATEDIFF(l.fechaVencimiento,NOW()) <= 90'),1)->orderBy('p.id')->paginate();
+      }
+      //consulta para ambas
+      // $products=DB::table('products as p')
+      // ->join('product_licence as pl','p.id','=','pl.product_id')
+      // ->join('licences as l','pl.licence_id','=','l.id')
+      // ->select('p.numSe','p.numInv','p.tipo','p.valorAdqui as descripcion','l.nombre','l.fechaVencimiento')
+      // ->orWhereDate('l.fechaVencimiento','<=',Carbon::now())->orWhere( DB::raw('DATEDIFF(l.fechaVencimiento,NOW()) <= 90'),1)->orderBy('p.id')->paginate();
       return view('tacticos.reportelicenciasPorVencer',compact('products'));
     }
         ////////////////////////////////FIN DEL REPORTE LICENCIAS POR VENCER////////////////////////////////////

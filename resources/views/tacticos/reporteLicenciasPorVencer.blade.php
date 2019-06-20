@@ -29,7 +29,7 @@
  </div>
  @endif
 <div class="row ">
-        <div class="col-sm-7">
+        <div class="col-sm-4">
           <div class="card mb-3">
             <div class="card-body">
                 <form method="GET" action="{{ route('tacticos.licenciasPorVencer') }}" enctype="multipart/form-data">
@@ -37,17 +37,13 @@
                       <div class="col">
                           <div class="input-group">
                               <div class="input-group-prepend">
-                                  <span class="input-group-text ">Desde</span>
+                                  <span class="input-group-text ">Estado</span>
                               </div>
-                                  <input class="form-control" type="date" id="gridCheck" name="desde">
-                          </div>
-                      </div>
-                      <div class="col">
-                          <div class="input-group">
-                              <div class="input-group-prepend">
-                                  <span class="input-group-text ">Hasta</span>
-                              </div>
-                                  <input class="form-control" type="date" name="hasta">
+                              <select class="form-control"  name="vencida">
+                                  <option value=1>Vencidas</option>
+                                  <option value=2>Por Vencer</option>
+
+                                </select>
                           </div>
                       </div>
                     </div>
@@ -83,8 +79,8 @@
                     </div>
                   </div>
               
-        <div class="col-sm-3">
-            <button type="submit" class="btn btn-sm mb-3 btn-primary">Generar Reporte</button>
+        <div class="col-sm-3 mt-4">
+            <button type="submit" class="btn btn-xs mb-3 btn-primary">Generar Reporte</button>
                 </div>
       </div>
     </form>
@@ -95,7 +91,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary">Reporte periódico de mantenimientos realizado por todos los encargados de mantenimientoo</h6>
+          <h6 class="m-0 font-weight-bold text-primary">Reporte de productos con licencias vencidas o por vencer</h6>
         </div>
             <div class="card-body">
               <div class="table-responsive">
