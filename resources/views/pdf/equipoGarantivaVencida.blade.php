@@ -78,7 +78,7 @@
                                          
                                             <th scope="row"> Tipo </th>
                                          
-                                            <th scope="row">Tiempo faltante </th>
+                                            <th scope="row">Tiempo faltante(meses) </th>
                                          
                                            
                                             

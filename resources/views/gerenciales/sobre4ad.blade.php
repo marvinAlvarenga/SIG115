@@ -109,8 +109,10 @@
 
 
 <div class="form-group p-4" style="display:inline-block;">
-    <a class="btn btn-primary"  href="{{url('pdfinfo40', ['tipo' => $tipo,])}}">Generar PDF</a>
+    <a class="btn btn-primary"  href="{{route('pdfinfo40', ['tipo' => $tipo,])}}">Generar PDF</a>
     &nbsp;
-    <a class="btn btn-primary" class="btn btb-primary" href="{{url('soli40')}}">Regresar</a>
+    <a class="btn btn-primary"  href="{{route('excellinfo40', ['tipo' => $tipo,])}}">Generar Excell</a>
+    &nbsp;
+    <a class="btn btn-primary" class="btn btb-primary" href="{{route('soli40')}}">Regresar</a>
 </div>
     @endsection
