@@ -12,7 +12,7 @@ use Carbon\Carbon;
 use Dompdf\Dompdf;
 use DateTime;
 use Barryvdh\DomPDF\Facade as PDF;
-use App\Exports\EquipSobre40;
+use App\Exports\EquipSobre40Export;
 use Excel;
 class GerencialController extends Controller
 {
@@ -147,7 +147,7 @@ public function excellInfo40($tipo)
 $date = Carbon::now();
 $date = $date->format('d-m-Y');
 Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Equipo con valor de mantenimiento mayor a 40% valor adqui");
-return Excel::download(new EquipSobre40($produc40), 'EquipoSobreAdqui_'.Carbon::now()->format('d-m-y').'.xlsx');
+return Excel::download(new EquipSobre40Export($produc40), 'EquipoSobreAdqui_'.Carbon::now()->format('d-m-y').'.xlsx');
 }
 $produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
 products.numInv,products.numSe,products.estado,sum(spares.valorAdqui) as costoSpares from products
@@ -159,7 +159,7 @@ where prods.costoSpares >= prods.ValorAdqui*0.4;");
 $date = Carbon::now();
 $date = $date->format('d-m-Y');
 Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Equipo con valor de mantenimiento mayor a 40% valor adqui");
-return Excel::download(new EquipSobre40($produc40), 'EquipoSobreAdqui_'.Carbon::now()->format('d-m-y').'.xlsx');
+return Excel::download(new EquipSobre40Export($produc40), 'EquipoSobreAdqui_'.Carbon::now()->format('d-m-y').'.xlsx');
 
     }
 

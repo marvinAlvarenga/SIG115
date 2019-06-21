@@ -1,13 +1,12 @@
-@if(isset($producs40)!= null)
+@if(isset($produc40) != null)
    
         <div  align="center" >                
-           <p>Equipos con costos de mantenimientos arriba del 40% mas que el valor de adquisicion</p>
-           <table      >
+           <p>Equipo con mas de del 40% porciento del valor de adquisicion</p>
+            <table>
                 
-                    <caption> <h3 class="page-header">Datos generales</h3></caption>
+                    <caption> <h3 class="page-header">Equipo con mas de del 40 porciento del valor de adquisicion</h3></caption>
                 <thead>
-                    <tr>
-      
+                    <tr>     
          
                         <th scope="row">N° de serie</th>
                      
@@ -49,4 +48,4 @@
         </div >
         @endif
 
-      
+       
