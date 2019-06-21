@@ -39,7 +39,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary">Equipo informático agregado al inventario por tipo</h6>
+          <h6 class="m-0 font-weight-bold text-primary">Cantidad de mantenimientos por departamento</h6>
         </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -82,7 +82,9 @@
    
 
 
-    <a class="btn btn-primary" href="{{url('pdfmanDeto',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo,])}}" role="button">Generar PDF</a>
+    <a class="btn btn-primary" href="{{route('pdfmanDeto',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo,])}}" role="button">Generar PDF</a>
+    &nbsp;
+    <a class="btn btn-primary" href="{{route('excelmanDeto',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo,])}}" role="button">Generar Excel</a>
     &nbsp;
     <a class="btn btn-primary" href="{{ route('solidepmant') }}" role="button">Regresar</a>
    

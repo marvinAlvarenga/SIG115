@@ -40,12 +40,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/deptmante', 'GerencialController@ManDep')->name('depmant');
     Route::get('/soliInfdepma', 'GerencialController@soliDepMant')->name('solidepmant');
     Route::get('/pdfmanDeto/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@pdfMandep')->name('pdfmanDeto');
+    Route::get('/excelmanDeto/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@ExcelMandep')->name('excelmanDeto');
     Route::get('/solimantempl', 'TacticoController@SoliMantEmple')->name('solimantempl');
     Route::get('/premantempl', 'TacticoController@PrevMantEmple')->name('premantempl');
-    Route::get('/pdfmantempl/{fecha_inicial}/{fecha_final}', 'TacticoController@PdfMantEmple')->name('pdfmantempl');
+    Route::get('/pdfmantempl/{fecha_inicial}/{fecha_final}', 'TacticoController@PdfMantEmple')->name('pdfmantempl'); 
+    Route::get('/excelmantempl/{fecha_inicial}/{fecha_final}', 'TacticoController@ExcelMantEmple')->name('excelmantempl');
     Route::get('/soligaranven', 'TacticoController@SoliGaraVen')->name('soligaranven');
     Route::get('/pregaranven', 'TacticoController@PrevGaraVen')->name('pregaranven');
     Route::get('/pdfgaranve/{tipo}', 'TacticoController@pdfGaraVen')->name('pdfgaranve');
+    Route::get('/excelgaranve/{tipo}', 'TacticoController@ExcelGaraVen')->name('excelgaranve');
+    
     
    
     //RUTAS EDWIN

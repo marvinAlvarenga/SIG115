@@ -104,7 +104,9 @@
 
 
 
-    <a class="btn btn-primary" href="{{url('pdfgaranve',['tipo'=>$tipo,])}}" role="button">Generar PDF</a>
+    <a class="btn btn-primary" href="{{route('pdfgaranve',['tipo'=>$tipo,])}}" role="button">Generar PDF</a>
+    &nbsp;
+    <a class="btn btn-primary" href="{{route('excelgaranve',['tipo'=>$tipo,])}}" role="button">Generar Excell</a>
     &nbsp;
     <a class="btn btn-primary" href="{{ route('soligaranven') }}" role="button">Regresar</a>
   

@@ -12,7 +12,8 @@ use Carbon\Carbon;
 use Dompdf\Dompdf;
 use DateTime;
 use Barryvdh\DomPDF\Facade as PDF;
-use App\Exports\EquipSobre40;
+use App\Exports\EquipSobre40Export;
+use App\Exports\ManDepExport;
 use Excel;
 class GerencialController extends Controller
 {
@@ -159,7 +160,7 @@ $pdf = PDF::loadView('pdf.info40', compact('produc40','date'))->setPaper(array(0
 return $pdf->stream('repo40.pdf',array("Attachment" => 0));
   
 }
-
+//generar excell
 public function excellInfo40($tipo)
     {
       if($tipo!=0){
@@ -173,7 +174,7 @@ public function excellInfo40($tipo)
 $date = Carbon::now();
 $date = $date->format('d-m-Y');
 Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Equipo con valor de mantenimiento mayor a 40% valor adqui");
-return Excel::download(new EquipSobre40($produc40), 'EquipoSobreAdqui_'.Carbon::now()->format('d-m-y').'.xlsx');
+return Excel::download(new EquipSobre40Export($produc40), 'EquipoSobreAdqui_'.Carbon::now()->format('d-m-y').'.xlsx');
 }
 $produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
 products.numInv,products.numSe,products.estado,sum(spares.valorAdqui) as costoSpares from products
@@ -185,7 +186,7 @@ where prods.costoSpares >= prods.ValorAdqui*0.4;");
 $date = Carbon::now();
 $date = $date->format('d-m-Y');
 Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Equipo con valor de mantenimiento mayor a 40% valor adqui");
-return Excel::download(new EquipSobre40($produc40), 'EquipoSobreAdqui_'.Carbon::now()->format('d-m-y').'.xlsx');
+return Excel::download(new EquipSobre40Export($produc40), 'EquipoSobreAdqui_'.Carbon::now()->format('d-m-y').'.xlsx');
 
     }
 
@@ -326,7 +327,28 @@ else{
  } 
 ///termina el reporte//////
 
-
+public function ExcelMandep($fecha_inicial,$fecha_final,$tipo){
+ 
+  if($tipo==0){
+    $manDeto=DB::select("select departments.nombre as Departamento ,departments.id  ,COUNT(upkeeps.product_id) as Cantidad ,upkeeps.created_at
+    from departments JOIN employees on departments.id = employees.department_id JOIN products on employees.id = products.employee_id JOIN upkeeps 
+    on products.id = upkeeps.product_id 
+    WHERE upkeeps.created_at > ? AND upkeeps.created_at< ?
+    GROUP BY departments.nombre",[$fecha_inicial,$fecha_final]);
+   
+  
+   }else{
+    $manDeto=DB::select("select departments.nombre as Departamento ,  COUNT(upkeeps.product_id) as Cantidad ,upkeeps.created_at
+    from departments JOIN employees on departments.id = employees.department_id JOIN products on employees.id = products.employee_id JOIN upkeeps 
+    on products.id = upkeeps.product_id 
+    WHERE upkeeps.created_at > ? AND upkeeps.created_at< ? AND departments.id= ?
+    GROUP BY departments.nombre",[$fecha_inicial,$fecha_final,$tipo]);
+       
+   }  
+  
+   Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Cantidad de mantenimientos por");
+  return Excel::download(new ManDepExport($manDeto), 'MantenimientosPorDepto_'.Carbon::now()->format('d-m-y').'.xlsx');
+ } 
 
 
 }

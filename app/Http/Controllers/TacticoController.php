@@ -14,6 +14,8 @@ use App\Upkeep;
 use App\Product;
 use App\User;
 use App\Exports\EquipoViejoExport;
+use App\Exports\ManEmplExport;
+use App\Exports\GaranVenExport;
 use Carbon\Carbon;
 
 class TacticoController extends Controller
@@ -272,6 +274,18 @@ class TacticoController extends Controller
     $pdf = PDF::loadView('pdf.EmpleadoMantenimiento', compact('empleManto','date'))->setPaper(array(0,0,612.00,792.00));  
   return $pdf->stream('repoManEmple.pdf',array("Attachment" => 0));
   }
+
+  public function ExcelMantEmple($fecha_inicial,$fecha_final){
+    $empleManto=DB::select("select employees.nombre  ,employees.ubicacion, COUNT(upkeeps.product_id) as Cantidad 
+    from employees JOIN products on employees.id = products.employee_id 
+    JOIN upkeeps on products.id = upkeeps.product_id 
+    WHERE upkeeps.created_at > ? AND upkeeps.created_at< ?
+    GROUP BY  employees.nombre",[$fecha_inicial,$fecha_final]);
+   
+    Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Cantidad de mantenimientos por empleado");
+    return Excel::download(new ManEmplExport($empleManto), 'MantenimientosPorEmpleado_'.Carbon::now()->format('d-m-y').'.xlsx');
+  }
+
 /////Fin del reporte////
 
 ///Reporte de Garantias por vencer o vencidas//////
@@ -441,6 +455,84 @@ else{
      $date = $date->format('d-m-Y'); 
     $pdf = PDF::loadView('pdf.equipoGarantivaVencida',compact('empleManto','date','tiempoFaltante','tipo'))->setPaper(array(0,0,612.00,792.00));  
   return $pdf->stream('GaranVeci.pdf',array("Attachment" => 0));    
+  }
+    }
+}
+ }
+
+ public function ExcelGaraVen($tipo)
+ {
+  
+  $fechafinal= Carbon::now();   
+
+  $products=DB::table('products')
+  ->get();
+  $i=0;
+ 
+
+ if($tipo==3){  
+
+  foreach ($products as $product) {
+   $date=Carbon::parse($product->fechaAdqui);
+  $fechaVenciminto=$date->addYear($product->garantia);
+ 
+   $fechaActual = Carbon::parse( $fechafinal );  /// da formato Y-m-d
+    if( $fechaActual > $fechaVenciminto){
+     $empleManto[$i]=$product;
+     $tiempoFaltante[$i]=0;
+    } else {   
+   $mesesDiferencia =$fechaVenciminto->diffInMonths($fechaActual);// compara las fechas para saber cuanto es la diferencia de meses
+   
+    if($mesesDiferencia <=3 ){
+     $empleManto[$i]=$product;
+     $tiempoFaltante[$i]=$mesesDiferencia;        
+    }
+  }
+   
+   $i=$i+1;
+  }
+  Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Garantias por vencer o vencidas");
+     return Excel::download(new GaranVenExport($empleManto,$tiempoFaltante), 'Garantias_por_vencer_o_vencidas_'.Carbon::now()->format('d-m-y').'.xlsx');
+ 
+ // return view('tacticos.prevGarantiasPorVencer', compact('productVen','date','fecha_inicial','fecha_final'));
+  
+}
+else{
+  if($tipo==2){
+    foreach ($products as $product) {
+      $date=Carbon::parse($product->fechaAdqui);
+     $fechaVenciminto=$date->addYear($product->garantia);
+    
+      $fechaActual = Carbon::parse( $fechafinal );  /// da formato Y-m-d
+       if( $fechaActual > $fechaVenciminto){
+        $empleManto[$i]=$product;
+        $tiempoFaltante[$i]=0;
+       }         
+      $i=$i+1;
+     }
+     Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Garantias por vencer o vencidas");
+     return Excel::download(new GaranVenExport($empleManto,$tiempoFaltante), 'Garantias_por_vencer_o_vencidas_'.Carbon::now()->format('d-m-y').'.xlsx');
+    }else{
+      if($tipo==1){
+        
+  foreach ($products as $product) {
+    $date=Carbon::parse($product->fechaAdqui);
+   $fechaVenciminto=$date->addYear($product->garantia);
+  
+    $fechaActual = Carbon::parse( $fechafinal );  /// da formato Y-m-d
+     if( $fechaActual < $fechaVenciminto){
+      $mesesDiferencia =$fechaVenciminto->diffInMonths($fechaActual);// compara las fechas para saber cuanto es la diferencia de meses
+    
+     if($mesesDiferencia <=3 ){
+      $empleManto[$i]=$product;
+      $tiempoFaltante[$i]=$mesesDiferencia;        
+     }
+     }
+    
+    $i=$i+1;
+   }
+   Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Cantidad de Garantias por vencer o vencidas");
+   return Excel::download(new GaranVenExport($empleManto,$tiempoFaltante), 'Garantias_por_vencer_o_vencidas_'.Carbon::now()->format('d-m-y').'.xlsx');
   }
     }
 }
