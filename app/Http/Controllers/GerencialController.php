@@ -12,6 +12,8 @@ use Carbon\Carbon;
 use Dompdf\Dompdf;
 use DateTime;
 use Barryvdh\DomPDF\Facade as PDF;
+use App\Exports\EquipSobre40;
+use Excel;
 class GerencialController extends Controller
 {
 
@@ -149,6 +151,35 @@ $pdf = PDF::loadView('pdf.info40', compact('produc40','date'))->setPaper(array(0
 return $pdf->stream('repo40.pdf',array("Attachment" => 0));
   
 }
+
+public function excellInfo40($tipo)
+    {
+      if($tipo!=0){
+        $produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
+        products.numInv,products.numSe,products.estado,products.tipo,sum(spares.valorAdqui) as costoSpares from products
+        join upkeeps on products.id = upkeeps.product_id
+        join upkeep_spare on upkeep_spare.upkeep_id = upkeeps.id
+        join spares on spares.id = upkeep_spare.spare_id
+        group by products.id) as prods
+        where prods.costoSpares >= prods.ValorAdqui*0.4  AND prods.tipo =  ?;",[$tipo]);
+$date = Carbon::now();
+$date = $date->format('d-m-Y');
+Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Equipo con valor de mantenimiento mayor a 40% valor adqui");
+return Excel::download(new EquipSobre40($produc40), 'EquipoSobreAdqui_'.Carbon::now()->format('d-m-y').'.xlsx');
+}
+$produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
+products.numInv,products.numSe,products.estado,sum(spares.valorAdqui) as costoSpares from products
+join upkeeps on products.id = upkeeps.product_id
+join upkeep_spare on upkeep_spare.upkeep_id = upkeeps.id
+join spares on spares.id = upkeep_spare.spare_id
+group by products.id) as prods
+where prods.costoSpares >= prods.ValorAdqui*0.4;");
+$date = Carbon::now();
+$date = $date->format('d-m-Y');
+Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Equipo con valor de mantenimiento mayor a 40% valor adqui");
+return Excel::download(new EquipSobre40($produc40), 'EquipoSobreAdqui_'.Carbon::now()->format('d-m-y').'.xlsx');
+
+    }
 
 
 ////////////REPORTE DE USRS QUE MAS MMTOS. SOLICITAN ////////////////////////////
