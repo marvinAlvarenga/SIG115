@@ -136,7 +136,12 @@
 
      </div>
     </div>
-    <a class="btn btn-primary" href="{{route('gerenciales.equipoportipoPdf',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo,])}}" role="button">Generar PDF</a>
+    <form method="post" action="{{route('gerenciales.equipoportipoPdf',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo,])}}">
+        @csrf
+      <input class="btn btn-primary" type="submit" name="submit" value="Generar PDF">
+ 
+    <a class="btn btn-primary" href="{{route('gerenciales.equipoportipoImprimir',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo,])}}" role="button">Imprimir</a>
+  </form>
     @else
     <h3>No hay registros que cumplan con los parámetros ingresados</h3>
     @endif

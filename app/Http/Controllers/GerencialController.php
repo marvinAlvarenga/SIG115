@@ -40,8 +40,10 @@ class GerencialController extends Controller
       return view('gerenciales.equipoPorTipo');
     }
     }
-    public function equipoPorTipoPdf($fecha_inicial,$fecha_final,$tipo)
+    public function equipoPorTipoPdf(Request $request,$fecha_inicial,$fecha_final,$tipo)
     {
+      $date = Carbon::now();
+      $imprimir=1;
       $products=array();
      if($this->validarFechas($fecha_inicial,$fecha_final)){
        if($tipo==3){
@@ -49,15 +51,21 @@ class GerencialController extends Controller
        }else{
         $products=Product::whereDate('created_at','>=',$fecha_inicial)->whereDate('created_at','<=',$fecha_final)->where('tipo',$tipo)->orderby('id','DESC')->get();
        }
+      }else{
+        return view('gerenciales.equipoPorTipo')->withErrors('Error en las fechas ingresadas');
+      }
        Log::info("El usuario: '".Auth::user()->name." Vió el reporte de equipos agregados a inventario");
        $date = Carbon::now();
        $date = $date->format('d-m-Y');
+       switch($request->method()){
+        case "POST":
        $pdf = PDF::loadView('pdf.equipoPorTipoPdf', compact('products','date'))->setPaper(array(0,0,612.00,792.00));
        return $pdf->stream('EquipoPorTipo_'.$date.'pdf',array("Attachment" => 0));
-    }else{
-      return view('gerenciales.equipoPorTipo')->withErrors('Error en las fechas ingresadas');
+       break;
+    case "GET":
+    return view('pdf.equipoPorTipoPdf',compact('products','fecha_inicial','fecha_final','tipo','imprimir','date'));
     }
-    }
+  }
 
     public function repuestosCambiados(Request $request){
 

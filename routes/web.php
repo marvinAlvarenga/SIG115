@@ -22,8 +22,9 @@ Route::middleware(['auth'])->group(function () {
 
     //RUTAS CH15013
     Route::get('/equipoportipo', 'GerencialController@equipoPorTipo')->name('gerenciales.equipoportipo');
-    Route::get('/equipoportipo/pdf/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@equipoPorTipoPdf')->name('gerenciales.equipoportipoPdf');
-
+    Route::post('/equipoportipo/pdf/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@equipoPorTipoPdf')->name('gerenciales.equipoportipoPdf');
+    Route::get('/equipoportipo/pdf/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@equipoPorTipoPdf')->name('gerenciales.equipoportipoImprimir');
+    
     Route::get('/repuestosCambiados','GerencialController@repuestosCambiados')->name('gerenciales.repuestosCambiados');
     Route::get('/mantenimientos','TacticoController@mantenimientosRealizados')->name('tacticos.mantenimientosRealizados');
     Route::get('/licencias','TacticoController@licenciasPorVencer')->name('tacticos.licenciasPorVencer');
