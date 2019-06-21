@@ -30,12 +30,30 @@ class GerencialController extends Controller
         $products=Product::whereDate('created_at','>=',$fecha_inicial)->whereDate('created_at','<=',$fecha_final)->where('tipo',$tipo)->orderby('id','DESC')->paginate();
        }
        Log::info("El usuario: '".Auth::user()->name." Vió el reporte de equipos agregados a inventario");
-      return view('gerenciales.equipoPorTipo',compact('products'));
+      return view('gerenciales.equipoPorTipo',compact('products','fecha_inicial','fecha_final','tipo'));
     }else{
       return view('gerenciales.equipoPorTipo')->withErrors('Error en las fechas ingresadas');
     }}
     else{
       return view('gerenciales.equipoPorTipo');
+    }
+    }
+    public function equipoPorTipoPdf($fecha_inicial,$fecha_final,$tipo)
+    {
+      $products=array();
+     if($this->validarFechas($fecha_inicial,$fecha_final)){
+       if($tipo==3){
+        $products=Product::whereDate('created_at','>=',$fecha_inicial)->whereDate('created_at','<=',$fecha_final)->orderby('id','DESC')->get();
+       }else{
+        $products=Product::whereDate('created_at','>=',$fecha_inicial)->whereDate('created_at','<=',$fecha_final)->where('tipo',$tipo)->orderby('id','DESC')->get();
+       }
+       Log::info("El usuario: '".Auth::user()->name." Vió el reporte de equipos agregados a inventario");
+       $date = Carbon::now();
+       $date = $date->format('d-m-Y');
+       $pdf = PDF::loadView('pdf.equipoPorTipoPdf', compact('products','date'))->setPaper(array(0,0,612.00,792.00));
+       return $pdf->stream('EquipoPorTipo_'.$date.'pdf',array("Attachment" => 0));
+    }else{
+      return view('gerenciales.equipoPorTipo')->withErrors('Error en las fechas ingresadas');
     }
     }
 

@@ -136,10 +136,12 @@
 
      </div>
     </div>
+    <a class="btn btn-primary" href="{{route('gerenciales.equipoportipoPdf',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo,])}}" role="button">Generar PDF</a>
     @else
     <h3>No hay registros que cumplan con los parámetros ingresados</h3>
     @endif
     
     @endif
+   
  
 @endsection
