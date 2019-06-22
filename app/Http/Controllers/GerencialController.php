@@ -195,8 +195,8 @@ public function getEqui(){
 public function verInfo40(Request $request)
 {
   $tipo=$request->tipo;
-  $count=$request->count;
-  if ($this->validarInt($count)) {
+  
+  
     if ($request->tipo==0) {
       $produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
       products.numInv,products.numSe,products.estado,sum(spares.valorAdqui) as costoSpares from products
@@ -233,14 +233,14 @@ public function verInfo40(Request $request)
 
 return view('gerenciales.sobre4ad',compact('produc40','date','tipo'));
     
-  }
-  $errores = 'Error en los datos ingresados';
-  return view('gerenciales.soliSobre4', ['errores' => $errores]);      
+  
+   
 }
 
 ///genera el pdf del reporte    
-public function pdfInfo40($tipo)
+public function pdfInfo40(Request $request,$tipo)
 {
+  $imprimir=1;
   if($tipo!=0){
         $produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
         products.numInv,products.numSe,products.estado,products.tipo,sum(spares.valorAdqui) as costoSpares from products
@@ -261,12 +261,17 @@ join upkeep_spare on upkeep_spare.upkeep_id = upkeeps.id
 join spares on spares.id = upkeep_spare.spare_id
 group by products.id) as prods
 where prods.costoSpares >= prods.ValorAdqui*0.4;");
-$date = Carbon::now();
-$date = $date->format('d-m-Y');
-$pdf = PDF::loadView('pdf.info40', compact('produc40','date'))->setPaper(array(0,0,612.00,792.00));
-
-return $pdf->stream('repo40.pdf',array("Attachment" => 0));
   
+$date = Carbon::now();
+$date = $date->format('d-m-Y');    
+switch($request->method()){
+ case "POST":
+ $pdf = PDF::loadView('pdf.info40', compact('produc40','date'))->setPaper(array(0,0,612.00,792.00));
+return $pdf->stream('repo40.pdf',array("Attachment" => 0));
+break;
+case "GET":
+return view('pdf.info40',compact('produc40','date','imprimir'));
+}
 }
 //generar excell
 public function excellInfo40($tipo)
@@ -409,16 +414,15 @@ else{
    
   }
 
- public function pdfMandep($fecha_inicial,$fecha_final,$tipo){
- 
+ public function pdfMandep(Request $request,$fecha_inicial,$fecha_final,$tipo){
+ $imprimir=1;
   if($tipo==0){
     $manDeto=DB::select("select departments.nombre as Departamento ,departments.id  ,COUNT(upkeeps.product_id) as Cantidad ,upkeeps.created_at
     from departments JOIN employees on departments.id = employees.department_id JOIN products on employees.id = products.employee_id JOIN upkeeps 
     on products.id = upkeeps.product_id 
     WHERE upkeeps.created_at > ? AND upkeeps.created_at< ?
     GROUP BY departments.nombre",[$fecha_inicial,$fecha_final]);
-    $date = Carbon::now();
-    $date = $date->format('d-m-Y');   
+  
   
    }else{
     $manDeto=DB::select("select departments.nombre as Departamento ,  COUNT(upkeeps.product_id) as Cantidad ,upkeeps.created_at
@@ -426,12 +430,19 @@ else{
     on products.id = upkeeps.product_id 
     WHERE upkeeps.created_at > ? AND upkeeps.created_at< ? AND departments.id= ?
     GROUP BY departments.nombre",[$fecha_inicial,$fecha_final,$tipo]);
-    $date = Carbon::now();
-    $date = $date->format('d-m-Y');      
+      
    }  
   
-  $pdf = PDF::loadView('pdf.ManDepto', compact('manDeto','date'))->setPaper(array(0,0,612.00,792.00));  
-  return $pdf->stream('repoManDepto.pdf',array("Attachment" => 0));
+   $date = Carbon::now();
+   $date = $date->format('d-m-Y');    
+  switch($request->method()){
+    case "POST":
+    $pdf = PDF::loadView('pdf.ManDepto', compact('manDeto','date'))->setPaper(array(0,0,612.00,792.00));  
+    return $pdf->stream('repoManDepto.pdf',array("Attachment" => 0));
+   break;
+  case "GET":
+  return view('pdf.ManDepto',compact('manDeto','date','imprimir'));
+  }
  } 
 ///termina el reporte//////
 

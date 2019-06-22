@@ -102,12 +102,17 @@
     @endif     
 
 
+    <form method="post" action="{{route('pdfgaranve',['tipo'=>$tipo,])}}">
+      @csrf
+    <input class="btn btn-primary" type="submit" name="submit" value="Generar PDF">
 
-
-    <a class="btn btn-primary" href="{{route('pdfgaranve',['tipo'=>$tipo,])}}" role="button">Generar PDF</a>
-    &nbsp;
-    <a class="btn btn-primary" href="{{route('excelgaranve',['tipo'=>$tipo,])}}" role="button">Generar Excell</a>
+  <a class="btn btn-primary" href="{{route('impgaranve',['tipo'=>$tipo,])}}" role="button">Imprimir</a>
+  <a class="btn btn-primary" href="{{route('excelgaranve',['tipo'=>$tipo,])}}" role="button">Generar Excell</a>
     &nbsp;
     <a class="btn btn-primary" href="{{ route('soligaranven') }}" role="button">Regresar</a>
-  
+
+</form>
+
+   
+     
     @endsection

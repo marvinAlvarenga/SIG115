@@ -80,12 +80,17 @@
     
     @endif
    
+    <form method="post" action="{{route('pdfmanDeto',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo,])}}">
+      @csrf
+    <input class="btn btn-primary" type="submit" name="submit" value="Generar PDF">
 
-
-    <a class="btn btn-primary" href="{{route('pdfmanDeto',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo,])}}" role="button">Generar PDF</a>
-    &nbsp;
-    <a class="btn btn-primary" href="{{route('excelmanDeto',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo,])}}" role="button">Generar Excel</a>
+  <a class="btn btn-primary" href="{{route('impmanDeto',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo,])}}" role="button">Imprimir</a>
+  <a class="btn btn-primary" href="{{route('excelmanDeto',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo,])}}" role="button">Generar Excel</a>
     &nbsp;
     <a class="btn btn-primary" href="{{ route('solidepmant') }}" role="button">Regresar</a>
    
+</form>
+
+    
+    
     @endsection

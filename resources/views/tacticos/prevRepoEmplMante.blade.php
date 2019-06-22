@@ -84,11 +84,17 @@
 
 
 
+    <form method="post" action="{{route('pdfmantempl',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,])}}">
+      @csrf
+    <input class="btn btn-primary" type="submit" name="submit" value="Generar PDF">
 
-    <a class="btn btn-primary" href="{{route('pdfmantempl',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,])}}" role="button">Generar PDF</a>
-    &nbsp;
-    <a class="btn btn-primary" href="{{route('excelmantempl',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,])}}" role="button">Generar Excell</a>
-    &nbsp;
-    <a class="btn btn-primary" href="{{ route('solimantempl') }}" role="button">Regresar</a>
-  
+  <a class="btn btn-primary" href="{{route('impmantempl',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,])}}" role="button">Imprimir</a>
+  <a class="btn btn-primary" href="{{route('excelmantempl',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,])}}" role="button">Generar Excell</a>
+  &nbsp;
+  <a class="btn btn-primary" href="{{ route('solimantempl') }}" role="button">Regresar</a>
+
+</form>
+
+   
+   
     @endsection

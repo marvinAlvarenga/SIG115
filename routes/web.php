@@ -44,20 +44,24 @@ Route::middleware(['auth'])->group(function () {
 
     //RUTAS GONZALO
     Route::post('/info40', 'GerencialController@verInfo40')->name('info40');
-    Route::get('/pdfinfo40/{tipo}', 'GerencialController@pdfInfo40')->name('pdfinfo40');
+    Route::post('/pdfinfo40/{tipo}', 'GerencialController@pdfInfo40')->name('pdfinfo40');
+    Route::get('/impinfo40/{tipo}', 'GerencialController@pdfInfo40')->name('impinfo40');
     Route::get('/soliInf40', 'GerencialController@getEqui')->name('soli40');
     Route::get('/excellinfo40/{tipo}', 'GerencialController@excellInfo40')->name('excellinfo40');
     Route::get('/deptmante', 'GerencialController@ManDep')->name('depmant');
     Route::get('/soliInfdepma', 'GerencialController@soliDepMant')->name('solidepmant');
-    Route::get('/pdfmanDeto/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@pdfMandep')->name('pdfmanDeto');
+    Route::post('/pdfmanDeto/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@pdfMandep')->name('pdfmanDeto');
+    Route::get('/impmanDeto/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@pdfMandep')->name('impmanDeto');
     Route::get('/excelmanDeto/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@ExcelMandep')->name('excelmanDeto');
     Route::get('/solimantempl', 'TacticoController@SoliMantEmple')->name('solimantempl');
     Route::get('/premantempl', 'TacticoController@PrevMantEmple')->name('premantempl');
-    Route::get('/pdfmantempl/{fecha_inicial}/{fecha_final}', 'TacticoController@PdfMantEmple')->name('pdfmantempl'); 
+    Route::post('/pdfmantempl/{fecha_inicial}/{fecha_final}', 'TacticoController@PdfMantEmple')->name('pdfmantempl'); 
+    Route::get('/impmantempl/{fecha_inicial}/{fecha_final}', 'TacticoController@PdfMantEmple')->name('impmantempl');
     Route::get('/excelmantempl/{fecha_inicial}/{fecha_final}', 'TacticoController@ExcelMantEmple')->name('excelmantempl');
     Route::get('/soligaranven', 'TacticoController@SoliGaraVen')->name('soligaranven');
     Route::get('/pregaranven', 'TacticoController@PrevGaraVen')->name('pregaranven');
-    Route::get('/pdfgaranve/{tipo}', 'TacticoController@pdfGaraVen')->name('pdfgaranve');
+    Route::post('/pdfgaranve/{tipo}', 'TacticoController@pdfGaraVen')->name('pdfgaranve');
+    Route::get('/impgaranve/{tipo}', 'TacticoController@pdfGaraVen')->name('impgaranve');
     Route::get('/excelgaranve/{tipo}', 'TacticoController@ExcelGaraVen')->name('excelgaranve');
     
     

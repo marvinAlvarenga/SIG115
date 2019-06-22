@@ -1,10 +1,10 @@
 @if(isset($empleManto)!= null)
    
         <div  align="center" >                
-           <p>Cantidad de mantenimientos solicitados por empleados</p>
+           <p>Equipos con Garantias por vencer o vencidas</p>
             <table>
                 
-                    <caption> <h3 class="page-header">Cantidad de mantenimientos solicitados por empleado</h3></caption>
+                    <caption> <h3 class="page-header">Equipo con garantias por vencer o vencidas</h3></caption>
                     <thead>
                         <tr>
           

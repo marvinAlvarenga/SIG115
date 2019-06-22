@@ -26,10 +26,7 @@
   <div class="pl-5">
   
   <form action="{{ route('info40') }}" method="POST">
-    <div class="form-group p-4" style="display:inline-block;">
-      <label for="id_count">Cantidad de Registros:</label>
-        <input type="number" class="form-control" id="id_count" name="count" value="">
-    </div>
+    
     <div style="display:inline-block;">
       <select class="custom-select"  name="tipo">
           <option value="2">Impresora</option>

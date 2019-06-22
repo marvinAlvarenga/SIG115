@@ -107,12 +107,16 @@
 
 <hr>
 
+<form method="post" action="{{route('pdfinfo40', ['tipo' => $tipo,])}}">
+  @csrf
+<input class="btn btn-primary" type="submit" name="submit" value="Generar PDF">
 
-<div class="form-group p-4" style="display:inline-block;">
-    <a class="btn btn-primary"  href="{{route('pdfinfo40', ['tipo' => $tipo,])}}">Generar PDF</a>
-    &nbsp;
-    <a class="btn btn-primary"  href="{{route('excellinfo40', ['tipo' => $tipo,])}}">Generar Excell</a>
-    &nbsp;
-    <a class="btn btn-primary" class="btn btb-primary" href="{{route('soli40')}}">Regresar</a>
-</div>
+<a class="btn btn-primary" href="{{route('impinfo40', ['tipo' => $tipo,])}}" role="button">Imprimir</a>
+<a class="btn btn-primary"  href="{{route('excellinfo40', ['tipo' => $tipo,])}}">Generar Excell</a>
+&nbsp;
+<a class="btn btn-primary" class="btn btb-primary" href="{{route('soli40')}}">Regresar</a>
+
+</form>
+
+
     @endsection
