@@ -127,6 +127,13 @@
 
      </div>
     </div>
+    <form method="post" action="{{route('tacticos.licenciasPorVencerPdf',['vencida'=>$vencida,'tipo'=>$tipo,])}}">
+        @csrf
+      <input class="btn btn-primary" type="submit" name="submit" value="Generar PDF">
+ 
+    <a class="btn btn-primary" href="{{route('tacticos.licenciasPorVencerImprimir',['vencida'=>$vencida,'tipo'=>$tipo,])}}" role="button">Imprimir</a>
+    <a class="btn btn-primary" href="{{route('tacticos.licenciasPorVencerExcel',['vencida'=>$vencida,'tipo'=>$tipo,])}}" role="button">Exportar Excel</a>
+  </form>
     @else
     <h3>No hay registros que cumplan con los parámetros ingresados</h3>
     @endif

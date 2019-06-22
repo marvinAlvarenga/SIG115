@@ -16,6 +16,7 @@ use App\User;
 use App\Exports\EquipoViejoExport;
 use App\Exports\ManEmplExport;
 use App\Exports\GaranVenExport;
+use App\Exports\LicenciasPorVencerExport;
 use Carbon\Carbon;
 
 class TacticoController extends Controller
@@ -173,30 +174,6 @@ class TacticoController extends Controller
 
     ////////////////////////////////FIN DEL REPORTE DE EQUIPO ANTIGUO////////////////////////////////////77
 
-
-    /////REPORTE DE MANTENIMIENTOS REALIZADOS POR EMPLEADOS Y PRACTICANTES////////
-
-    public function mantenimientosRealizados(Request $request){
-
-      $fecha_inicial=$request->get('desde');
-      $fecha_final=$request->get('hasta');
-      $tipo=$request->get('tipo');
-      $tipos=$tipo;
-      if(isset($tipo)){
-      if($this->validarFechas($fecha_inicial,$fecha_final)){
-      $users=User::join('upkeeps','users.id','=','upkeeps.user_id')
-      ->select('users.name','users.email','users.tipo','users.estado',DB::raw('count(upkeeps.user_id) as total'))
-      ->when($tipo!=3, function ($users, $tipo) use($tipos) {//si tipo no es 3 ( es 1 o 2) agrega un where para filtar por pc o impresora
-        return $users->where('users.tipo',$tipos);
-      })
-      ->whereDate('upkeeps.created_at','>=',$fecha_inicial)->whereDate('upkeeps.created_at','<=',$fecha_final)->groupBy('users.id')->orderby('users.id','DESC')->paginate();
-      return view('tacticos.reporteMantenimientos',compact('users'));
-      }
-      else{ return view ('tacticos.reporteMantenimientos')->withErrors('Error en las fechas ingresadas');}
-    }else {return view ('tacticos.reporteMantenimientos');}
-    }
-    ////////////////////////////////FIN DEL REPORTE DE MANTENIMIENTO POR EMPLEADOS/PRACTICANTES///////////////}/////////////////////77
-  
     
     /////REPORTE DE LICENCIAS POR VENCER////////
     public function licenciasPorVencer(Request $request){
@@ -229,8 +206,74 @@ class TacticoController extends Controller
       // ->join('licences as l','pl.licence_id','=','l.id')
       // ->select('p.numSe','p.numInv','p.tipo','p.valorAdqui as descripcion','l.nombre','l.fechaVencimiento')
       // ->orWhereDate('l.fechaVencimiento','<=',Carbon::now())->orWhere( DB::raw('DATEDIFF(l.fechaVencimiento,NOW()) <= 90'),1)->orderBy('p.id')->paginate();
-      return view('tacticos.reportelicenciasPorVencer',compact('products'));
+      return view('tacticos.reportelicenciasPorVencer',compact('products','tipo','vencida'));
     }
+
+    public function licenciasPorVencerPDF(Request $request,$vencida,$tipo)
+    {
+      $products=array();
+      $imprimir=1;
+      $date=Carbon::now();
+      $date=$date->toDateString();
+      $tipos=$tipo; //para usar en el where dentro del when
+      if($vencida==1){
+      $products=DB::table('products as p')
+      ->join('product_licence as pl','p.id','=','pl.product_id')
+      ->join('licences as l','pl.licence_id','=','l.id')
+      ->select('p.numSe','p.numInv','p.tipo','p.valorAdqui as descripcion','l.nombre','l.fechaVencimiento')
+      ->when($tipo!=3, function ($products, $tipo) use($tipos) {//si tipo no es 3 ( es 1 o 2) agrega un where para filtar por pc o impresora
+              return $products->where('p.tipo',$tipos);
+      })->WhereDate('l.fechaVencimiento','<=',Carbon::now())->orderBy('p.id')->paginate();
+      }else if($vencida==2){
+        $products=DB::table('products as p')
+      ->join('product_licence as pl','p.id','=','pl.product_id')
+      ->join('licences as l','pl.licence_id','=','l.id')
+      ->select('p.numSe','p.numInv','p.tipo','p.valorAdqui as descripcion','l.nombre','l.fechaVencimiento')
+      ->when($tipo!=3, function ($products, $tipo) use($tipos) {
+        return $products->where('p.tipo',$tipos);
+      })->WhereDate('l.fechaVencimiento','>=',Carbon::now())
+      ->Where( DB::raw('DATEDIFF(l.fechaVencimiento,NOW()) <= 90'),1)->orderBy('p.id')->paginate();
+      }
+       Log::info("El usuario: '".Auth::user()->name." Vió el reporte de equipos agregados a inventario");
+       $date = Carbon::now();
+       $date = $date->format('d-m-Y');
+       switch($request->method()){
+        case "POST":
+       $pdf = PDF::loadView('pdf.licenciasPorVencerPdf', compact('products','date'))->setPaper(array(0,0,612.00,792.00));
+       return $pdf->stream('EquipoPorTipo_'.$date.'pdf',array("Attachment" => 0));
+       break;
+    case "GET":
+    return view('pdf.licenciasPorVencerPdf',compact('products','fecha_inicial','fecha_final','tipo','imprimir','date'));
+    }
+  }
+
+  public function licenciasPorVencerExcel($vencida,$tipo)
+  {
+    $date=Carbon::now();
+      $date=$date->toDateString();
+      $tipos=$tipo; //para usar en el where dentro del when
+      if($vencida==1){
+      $products=DB::table('products as p')
+      ->join('product_licence as pl','p.id','=','pl.product_id')
+      ->join('licences as l','pl.licence_id','=','l.id')
+      ->select('p.numSe','p.numInv','p.tipo','p.valorAdqui as descripcion','l.nombre','l.fechaVencimiento')
+      ->when($tipo!=3, function ($products, $tipo) use($tipos) {//si tipo no es 3 ( es 1 o 2) agrega un where para filtar por pc o impresora
+              return $products->where('p.tipo',$tipos);
+      })->WhereDate('l.fechaVencimiento','<=',Carbon::now())->orderBy('p.id')->paginate();
+      }else if($vencida==2){
+        $products=DB::table('products as p')
+      ->join('product_licence as pl','p.id','=','pl.product_id')
+      ->join('licences as l','pl.licence_id','=','l.id')
+      ->select('p.numSe','p.numInv','p.tipo','p.valorAdqui as descripcion','l.nombre','l.fechaVencimiento')
+      ->when($tipo!=3, function ($products, $tipo) use($tipos) {
+        return $products->where('p.tipo',$tipos);
+      })->WhereDate('l.fechaVencimiento','>=',Carbon::now())
+      ->Where( DB::raw('DATEDIFF(l.fechaVencimiento,NOW()) <= 90'),1)->orderBy('p.id')->paginate();
+      }
+    Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de equipo con licencias vencidas/por vencer");
+    return Excel::download(new LicenciasPorVencerExport($products), 'equipoLicenciasPorVencer'.Carbon::now()->format('d-m-y').'.xlsx');
+
+  }
         ////////////////////////////////FIN DEL REPORTE LICENCIAS POR VENCER////////////////////////////////////
 
 /////REPORTE DE MANTENIMIENTOS SOLICITADOS POR EMPLEADOS EN UN RANGO DE TIEMPO////////

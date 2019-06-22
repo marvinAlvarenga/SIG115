@@ -24,10 +24,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/equipoportipo', 'GerencialController@equipoPorTipo')->name('gerenciales.equipoportipo');
     Route::post('/equipoportipo/pdf/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@equipoPorTipoPdf')->name('gerenciales.equipoportipoPdf');
     Route::get('/equipoportipo/pdf/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@equipoPorTipoPdf')->name('gerenciales.equipoportipoImprimir');
+    Route::get('/equipoportipo/Excel/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@equipoPorTipoExcel')->name('gerenciales.equipoportipoExcel');
     
     Route::get('/repuestosCambiados','GerencialController@repuestosCambiados')->name('gerenciales.repuestosCambiados');
-    Route::get('/mantenimientos','TacticoController@mantenimientosRealizados')->name('tacticos.mantenimientosRealizados');
+
+    Route::get('/mantenimientos','GerencialController@mantenimientosRealizados')->name('gerenciales.mantenimientosRealizados');
+    Route::post('/mantenimientos/pdf/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@mantenimientosRealizadosPdf')->name('gerenciales.mantenimientosRealizadosPdf');
+    Route::get('/mantenimientos/pdf/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@mantenimientosRealizadosPdf')->name('gerenciales.mantenimientosRealizadosImprimir');
+    Route::get('/mantenimientos/excel/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@mantenimientosRealizadosExcel')->name('gerenciales.mantenimientosRealizadosExcel');
+
+
     Route::get('/licencias','TacticoController@licenciasPorVencer')->name('tacticos.licenciasPorVencer');
+    Route::post('/licencias/pdf/{vencida}/{tipo}', 'TacticoController@licenciasPorVencerPdf')->name('tacticos.licenciasPorVencerPdf');
+    Route::get('/licencias/pdf/{vencida}/{tipo}', 'TacticoController@licenciasPorVencerPdf')->name('tacticos.licenciasPorVencerImprimir');
+    Route::get('/licencias/excel/{vencida}/{tipo}', 'TacticoController@licenciasPorVencerExcel')->name('tacticos.licenciasPorVencerExcel');
 
 
     

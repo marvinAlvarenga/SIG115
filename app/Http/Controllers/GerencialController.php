@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Product;
@@ -14,6 +15,7 @@ use DateTime;
 use Barryvdh\DomPDF\Facade as PDF;
 use App\Exports\EquipSobre40Export;
 use App\Exports\ManDepExport;
+use App\Exports\EquipoPorTipoExport;
 use Excel;
 class GerencialController extends Controller
 {
@@ -60,13 +62,81 @@ class GerencialController extends Controller
        $date = $date->format('d-m-Y');
        switch($request->method()){
         case "POST":
-       $pdf = PDF::loadView('pdf.equipoPorTipoPdf', compact('products','date'))->setPaper(array(0,0,612.00,792.00));
+       $pdf = PDF::loadView('pdf.equipoPorTipoPdf', compact('products','date','tipo'))->setPaper(array(0,0,612.00,792.00));
        return $pdf->stream('EquipoPorTipo_'.$date.'pdf',array("Attachment" => 0));
        break;
     case "GET":
     return view('pdf.equipoPorTipoPdf',compact('products','fecha_inicial','fecha_final','tipo','imprimir','date'));
     }
   }
+
+  public function equipoPorTipoExcel($fecha_inicial,$fecha_final,$tipo)
+  {
+      if($this->validarFechas($fecha_inicial,$fecha_final)){
+        if($tipo==3){
+         $products=Product::whereDate('created_at','>=',$fecha_inicial)->whereDate('created_at','<=',$fecha_final)->orderby('id','DESC')->paginate();
+        }else{
+         $products=Product::whereDate('created_at','>=',$fecha_inicial)->whereDate('created_at','<=',$fecha_final)->where('tipo',$tipo)->orderby('id','DESC')->paginate();
+        }
+       
+     }else{
+       
+     }
+    Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Equipo agregado al inventario");
+    return Excel::download(new EquipoPorTipoExport($products), 'EquipoAgregado'.Carbon::now()->format('d-m-y').'.xlsx');
+
+  }
+
+  /////REPORTE DE MANTENIMIENTOS REALIZADOS POR EMPLEADOS Y PRACTICANTES////////
+
+  public function mantenimientosRealizados(Request $request){
+
+    $fecha_inicial=$request->get('desde');
+    $fecha_final=$request->get('hasta');
+    $tipo=$request->get('tipo');
+    $tipos=$tipo;
+    if(isset($tipo)){
+    if($this->validarFechas($fecha_inicial,$fecha_final)){
+    $users=User::join('upkeeps','users.id','=','upkeeps.user_id')
+    ->select('users.name','users.email','users.tipo','users.estado',DB::raw('count(upkeeps.user_id) as total'))
+    ->when($tipo!=3, function ($users, $tipo) use($tipos) {//si tipo no es 3 ( es 1 o 2) agrega un where para filtar por pc o impresora
+      return $users->where('users.tipo',$tipos);
+    })
+    ->whereDate('upkeeps.created_at','>=',$fecha_inicial)->whereDate('upkeeps.created_at','<=',$fecha_final)->groupBy('users.id')->orderby('users.id','DESC')->paginate();
+    return view('gerenciales.reporteMantenimientos',compact('users','tipo','fecha_inicial','fecha_final'));
+    }
+    else{ return view ('gerenciales.reporteMantenimientos')->withErrors('Error en las fechas ingresadas');}
+  }else {return view ('gerenciales.reporteMantenimientos');}
+  }
+
+  
+  public function mantenimientosRealizadosPdf(Request $request,$fecha_inicial,$fecha_final,$tipo){
+
+    $tipos=$tipo;
+    if($this->validarFechas($fecha_inicial,$fecha_final)){
+    $users=User::join('upkeeps','users.id','=','upkeeps.user_id')
+    ->select('users.name','users.email','users.tipo','users.estado',DB::raw('count(upkeeps.user_id) as total'))
+    ->when($tipo!=3, function ($users, $tipo) use($tipos) {//si tipo no es 3 ( es 1 o 2) agrega un where para filtar por pc o impresora
+      return $users->where('users.tipo',$tipos);
+    })
+    ->whereDate('upkeeps.created_at','>=',$fecha_inicial)->whereDate('upkeeps.created_at','<=',$fecha_final)->groupBy('users.id')->orderby('users.id','DESC')->paginate();
+    }
+    else{}
+
+      $date = Carbon::now();
+      $date = $date->format('d-m-Y');
+      switch($request->method()){
+       case "POST":
+      $pdf = PDF::loadView('pdf.mantenimientosRealizadosPdf', compact('users','date'))->setPaper(array(0,0,612.00,792.00));
+      return $pdf->stream('EquipoPorTipo_'.$date.'pdf',array("Attachment" => 0));
+      break;
+   case "GET":
+   return view('pdf.mantenimientosRealizadosPdf',compact('users','fecha_inicial','fecha_final','tipo','imprimir','date'));
+   }
+  }
+
+  ////////////////////////////////FIN DEL REPORTE DE MANTENIMIENTO POR EMPLEADOS/PRACTICANTES///////////////}/////////////////////77
+
 
     public function repuestosCambiados(Request $request){
 

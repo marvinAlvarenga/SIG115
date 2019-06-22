@@ -32,7 +32,7 @@
         <div class="col-sm-7">
           <div class="card mb-3">
             <div class="card-body">
-                <form method="GET" action="{{ route('tacticos.mantenimientosRealizados') }}" enctype="multipart/form-data">
+                <form method="GET" action="{{ route('gerenciales.mantenimientosRealizados') }}" enctype="multipart/form-data">
                     <div class="row">
                       <div class="col">
                           <div class="input-group">
@@ -129,6 +129,13 @@
 
      </div>
     </div>
+    <form method="post" action="{{route('gerenciales.mantenimientosRealizadosPdf',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo])}}">
+        @csrf
+      <input class="btn btn-primary" type="submit" name="submit" value="Generar PDF">
+ 
+    <a class="btn btn-primary" href="{{route('gerenciales.mantenimientosRealizadosImprimir',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo])}}" role="button">Imprimir</a>
+    <a class="btn btn-primary" href="{{route('gerenciales.mantenimientosRealizadosExcel',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo,])}}" role="button">Exportar Excel</a>
+  </form>
     @else
     <h3>No hay registros que cumplan con los parámetros ingresados</h3>
     @endif
