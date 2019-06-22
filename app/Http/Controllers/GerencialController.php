@@ -16,6 +16,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 use App\Exports\EquipSobre40Export;
 use App\Exports\ManDepExport;
 use App\Exports\EquipoPorTipoExport;
+use App\Exports\MantenimientosRealizadosExport;
 use Excel;
 class GerencialController extends Controller
 {
@@ -135,18 +136,55 @@ class GerencialController extends Controller
    }
   }
 
+  public function mantenimientosRealizadosExcel($fecha_inicial,$fecha_final,$tipo)
+  {
+    $tipos=$tipo;
+    if(isset($tipo)){
+    if($this->validarFechas($fecha_inicial,$fecha_final)){
+    $users=User::join('upkeeps','users.id','=','upkeeps.user_id')
+    ->select('users.name','users.email','users.tipo','users.estado',DB::raw('count(upkeeps.user_id) as total'))
+    ->when($tipo!=3, function ($users, $tipo) use($tipos) {//si tipo no es 3 ( es 1 o 2) agrega un where para filtar por pc o impresora
+      return $users->where('users.tipo',$tipos);
+    })
+    ->whereDate('upkeeps.created_at','>=',$fecha_inicial)->whereDate('upkeeps.created_at','<=',$fecha_final)->groupBy('users.id')->orderby('users.id','DESC')->paginate();
+
+    Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de mantenimientos realizados por encargados");
+    return Excel::download(new MantenimientosRealizadosExport($users), 'mttoPorEncargado'.Carbon::now()->format('d-m-y').'.xlsx');
+  }
+ }
+}
+
+
   ////////////////////////////////FIN DEL REPORTE DE MANTENIMIENTO POR EMPLEADOS/PRACTICANTES///////////////}/////////////////////77
 
 
+
+  /////REPORTE DE CANTIDAD DE REPUESTOS CAMBIADOS DE CADA TIPO////////
     public function repuestosCambiados(Request $request){
 
+      $depto=DB::select('select * from departments');
+      $fecha_inicial=$request->get('desde');
+      $fecha_final=$request->get('hasta');
+      $tipo=$request->get('tipo');
+      if(isset($fecha_inicial)){
+      if($this->validarFechas($fecha_inicial,$fecha_final)){
       $spares=DB::table('spares as s')
       ->join('upkeep_spare as us','s.id','=','us.spare_id')
+      ->join('upkeeps as u','us.upkeep_id','u.id')
       ->select('s.nombre','s.tipo','s.marca','s.valorAdqui',DB::raw('count(us.spare_id) as count'))
+      ->whereDate('u.created_at','>=',$fecha_inicial)
+      ->whereDate('u.created_at','<=',$fecha_final)
       ->groupBy('s.id')
       ->orderBy('s.id')
       ->paginate();
-      return view('gerenciales.repuestosCambiados',compact('spares'));
+      return view('gerenciales.repuestosCambiados',compact('spares','depto'));
+      }else
+      { 
+        return view ('gerenciales.repuestosCambiados')->withErrors('Error en las fechas ingresadas');
+      }
+    }else{
+      return view ('gerenciales.repuestosCambiados',compact('depto'));
+      }
     }
 
 //reporte que sobrepasen en 40% del valor de adquisicion respecto al costo de mantenimientos    

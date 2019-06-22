@@ -14,7 +14,7 @@
       <br><br>Unidad de Mantenimiento de Inform&aacute;tica
     </span>
     <span class="h4">
-      <br>Reporte de licencias vencidas o por vencer
+      <br>Reporte de equipo con licencias vencidas o por vencer
     </span>
   </h1>
 
@@ -91,7 +91,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary">Reporte de productos con licencias vencidas o por vencer</h6>
+          <h6 class="m-0 font-weight-bold text-primary">Reporte de equipo con licencias vencidas o por vencer</h6>
         </div>
             <div class="card-body">
               <div class="table-responsive">
