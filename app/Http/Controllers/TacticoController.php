@@ -280,6 +280,7 @@ class TacticoController extends Controller
 
 
  public function SoliMantEmple(){
+  Log::info("El usuarios: '".Auth::user()->name."' ha exportado ingresado a la pantalla de entrada para el reporte cant de soli mante por empleado");
   return view('tacticos.soliEmplMante');
   }
 
@@ -298,7 +299,7 @@ class TacticoController extends Controller
     GROUP BY  employees.nombre",[$fecha_inicial,$fecha_final]);
     $date = Carbon::now();
     $date = $date->format('d-m-Y');
-   
+    Log::info("El usuarios: '".Auth::user()->name."' ha solicitado la vista previa al reporte cant de soli mante por empleado");
    return view('tacticos.prevRepoEmplMante',compact('empleManto','date','fecha_inicial','fecha_final'));
    
 }
@@ -319,10 +320,12 @@ class TacticoController extends Controller
   $date = $date->format('d-m-Y'); 
 switch($request->method()){
   case "POST":
+  Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de Cantidad de mantenimientos por empleado");
   $pdf = PDF::loadView('pdf.EmpleadoMantenimiento', compact('empleManto','date'))->setPaper(array(0,0,612.00,792.00));  
   return $pdf->stream('repoManEmple.pdf',array("Attachment" => 0));
  break;
 case "GET":
+Log::info("El usuarios: '".Auth::user()->name."' ha solicitado IMPRIMIR el reporte de Cantidad de mantenimientos por empleado");
 return view('pdf.EmpleadoMantenimiento',compact('empleManto','date','imprimir'));
 }
   }
@@ -343,6 +346,7 @@ return view('pdf.EmpleadoMantenimiento',compact('empleManto','date','imprimir'))
 ///Reporte de Garantias por vencer o vencidas//////
 
   public function SoliGaraVen(){
+    Log::info("El usuarios: '".Auth::user()->name."' ha Ingresado a la pantalla de solicitud de reporte de garantias por vencer");
   return view('tacticos.SoliGarantiasPorVencer');
   }
   
@@ -380,7 +384,7 @@ return view('pdf.EmpleadoMantenimiento',compact('empleManto','date','imprimir'))
     }
     $date= Carbon::now();  
     $date = $date->format('d-m-Y'); 
-    return view('tacticos.prevGarantiasPorVencer',compact('empleManto','date','tiempoFaltante','tipo'));
+    
    
    // return view('tacticos.prevGarantiasPorVencer', compact('productVen','date','fecha_inicial','fecha_final'));
     
@@ -398,9 +402,7 @@ return view('pdf.EmpleadoMantenimiento',compact('empleManto','date','imprimir'))
          }         
         $i=$i+1;
        }
-       $date= Carbon::now();  
-       $date = $date->format('d-m-Y'); 
-       return view('tacticos.prevGarantiasPorVencer',compact('empleManto','date','tiempoFaltante','tipo'));
+      
       }else{
         if($tipo==1){
           
@@ -420,12 +422,15 @@ return view('pdf.EmpleadoMantenimiento',compact('empleManto','date','imprimir'))
       
       $i=$i+1;
      }
-     $date= Carbon::now();  
-       $date = $date->format('d-m-Y'); 
-       return view('tacticos.prevGarantiasPorVencer',compact('empleManto','date','tiempoFaltante','tipo'));    
+    
+     
     }
       }
   }
+  $date= Carbon::now();  
+  $date = $date->format('d-m-Y'); 
+  Log::info("El usuarios: '".Auth::user()->name."' ha ingresado a la vista previa del reporte de garantias por vencer");
+    return view('tacticos.prevGarantiasPorVencer',compact('empleManto','date','tiempoFaltante','tipo'));
  }
 
  public function pdfGaraVen(Request $request,$tipo)
@@ -505,11 +510,12 @@ $date= Carbon::now();
   $date = $date->format('d-m-Y'); 
 switch($request->method()){
   case "POST":
- 
+  Log::info("El usuarios: '".Auth::user()->name."' exportado a PDF el reporte de garantias por vencer");
  $pdf = PDF::loadView('pdf.equipoGarantivaVencida',compact('empleManto','date','tiempoFaltante','tipo'))->setPaper(array(0,0,612.00,792.00));  
 return $pdf->stream('GaranVeci.pdf',array("Attachment" => 0));    
  break;
 case "GET":
+Log::info("El usuarios: '".Auth::user()->name."' ha mandado a imprimir el reporte de garantias por vencer");
 return view('pdf.equipoGarantivaVencida',compact('empleManto','date','tiempoFaltante','tipo','imprimir'));
 }
  }
