@@ -27,7 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/licencias','TacticoController@licenciasPorVencer')->name('tacticos.licenciasPorVencer');
 
 
-    
+
 
     //RUTAS GONZALO
     Route::post('/info40', 'GerencialController@verInfo40')->name('info40');
@@ -42,14 +42,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/soligaranven', 'TacticoController@SoliGaraVen')->name('soligaranven');
     Route::get('/pregaranven', 'TacticoController@PrevGaraVen')->name('pregaranven');
     Route::get('/pdfgaranve/{tipo}', 'TacticoController@pdfGaraVen')->name('pdfgaranve');
-    
+
 
     //RUTAS EDWIN
     Route::get('/reportes/mantsxuser', 'GerencialController@getMantsXUser')->name('MantsXUser');
     Route::get('/reportes/equipoDescargado', 'TacticoController@getEquipoDescargado')->name('EquipoDescargado');
     Route::post('/reportes/mantsxuser', 'GerencialController@postMantsXUser')->name('PostMantUsrs');
     Route::post('/reportes/equipoDescargado', 'TacticoController@postEquipoDescargado')->name('PostEquipoDescargado');
-
+    Route::get('/etl',function() { return view('gerenciales.etl'); })->name('etlManual');
+    Route::post('/etl','GerencialController@generateETL');
 
 
 

@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Marquine\Etl\Etl;
+use Exception;
 
 class EtlAuto extends Command
 {
@@ -22,8 +23,9 @@ class EtlAuto extends Command
     protected $description = 'Ejecuta los procesos del ETL desde la BD transaccional hacia la gerencial';
 
     //estos nombres corresponden a la fuente y destino de datos. Deben existir en config/database.php
-    const source = 'mysql';
-    const dest = 'STDB';
+    const source = 'STDB';
+    const dest = 'mysql';
+
 
     /**
      * Create a new command instance.
@@ -52,7 +54,7 @@ class EtlAuto extends Command
       $etl8 = new Etl;
       $etl9 = new Etl;
       $etl10 = new Etl;
-
+try{
       $etl->extract('query', 'select * from departments', ['connection' => self::source,])
             ->transform('trim', ['type'=> 'both',])
             ->load('insert_update','departments', ['connection' => self::dest])
@@ -129,7 +131,14 @@ class EtlAuto extends Command
           ->transform('trim', ['type'=> 'both',])
           ->load('insert_update','product_release', $optionsProdRelsL)
           ->run();
+$this->info('Exito al cargar los datos.');
+$this->info('|200');
 
 
+}catch(\Exception $e){
+  $this->error('Ha ocurrido un error en la transferencia. Intente de nuevo.');
+  $this->info('|500');
+}
     }
+
 }

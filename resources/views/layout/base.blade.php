@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
+  @yield('meta-headers')
 
   <title>SIGME | Ciencias y Humanidades</title>
 
@@ -50,8 +51,26 @@
 
       <!-- Heading -->
       <div class="sidebar-heading">
+        ETL
+      </div>
+      <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseETL" aria-expanded="true" aria-controls="collapseTwo">
+        <i class="fas fa-fw fa-file"></i>
+        <span>ETL</span>
+      </a>
+      <div id="collapseETL" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <a class="collapse-item" href="{{route('etlManual')}}">Ejecutar Proceso</a>
+        </div>
+      </div>
+      </li>
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
         Reportes
       </div>
+
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
@@ -82,7 +101,7 @@
             <a class="collapse-item" href="{{route('tacticos.equipoAntiguoIndex')}}">Equipo antiguo</a>
             <a class="collapse-item" href="{{route('solimantempl')}}">Cantidad Mantes solicitados</a>
             <a class="collapse-item" href="{{route('soligaranven')}}">Equip. Garantias vencidas</a>
-            
+
           </div>
         </div>
 

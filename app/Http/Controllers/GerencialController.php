@@ -12,6 +12,9 @@ use Carbon\Carbon;
 use Dompdf\Dompdf;
 use DateTime;
 use Barryvdh\DomPDF\Facade as PDF;
+use Artisan;
+
+
 class GerencialController extends Controller
 {
 
@@ -50,7 +53,7 @@ class GerencialController extends Controller
       return view('gerenciales.repuestosCambiados',compact('spares'));
     }
 
-//reporte que sobrepasen en 40% del valor de adquisicion respecto al costo de mantenimientos    
+//reporte que sobrepasen en 40% del valor de adquisicion respecto al costo de mantenimientos
 public function getEqui(){
   $errores = ' ';
   return view('gerenciales.soliSobre4', ['errores' => $errores]);
@@ -95,13 +98,13 @@ public function verInfo40(Request $request)
     }
 
 return view('gerenciales.sobre4ad',compact('produc40','date','tipo'));
-    
+
   }
   $errores = 'Error en los datos ingresados';
-  return view('gerenciales.soliSobre4', ['errores' => $errores]);      
+  return view('gerenciales.soliSobre4', ['errores' => $errores]);
 }
 
-///genera el pdf del reporte    
+///genera el pdf del reporte
 public function pdfInfo40($tipo)
 {
   if($tipo!=0){
@@ -129,7 +132,7 @@ $date = $date->format('d-m-Y');
 $pdf = PDF::loadView('pdf.info40', compact('produc40','date'))->setPaper(array(0,0,612.00,792.00));
 
 return $pdf->stream('repo40.pdf',array("Attachment" => 0));
-  
+
 }
 
 
@@ -186,7 +189,7 @@ return $pdf->stream('repo40.pdf',array("Attachment" => 0));
       if ($fecha_final =="" || $fecha_inicial ==""){
         return false;
       }
-     
+
 
       $fecha1_arr = explode('-', $fecha_inicial);
       $fecha2_arr = explode('-', $fecha_final);
@@ -201,13 +204,13 @@ return $pdf->stream('repo40.pdf',array("Attachment" => 0));
 ///Reporte de cantidad de mantenimientos solicitados por departamento////////
 public function soliDepMant()
 {
-  
+
   $depto=DB::select('select * from departments');
   return view('gerenciales.EntraMantporDepto',compact('depto'));
 }
- 
+
 public function ManDep(Request $request){
- 
+
   $fecha_inicial=$request->get('desde');
   $fecha_final=$request->get('hasta');
   $tipo=$request->get('tipo');
@@ -216,60 +219,71 @@ public function ManDep(Request $request){
  if($this->validarFechas($fecha_inicial,$fecha_final)){
    if($tipo==0){
     $manDeto=DB::select("select departments.nombre as Departamento ,departments.id  ,COUNT(upkeeps.product_id) as Cantidad ,upkeeps.created_at
-    from departments JOIN employees on departments.id = employees.department_id JOIN products on employees.id = products.employee_id JOIN upkeeps 
-    on products.id = upkeeps.product_id 
+    from departments JOIN employees on departments.id = employees.department_id JOIN products on employees.id = products.employee_id JOIN upkeeps
+    on products.id = upkeeps.product_id
     WHERE upkeeps.created_at > ? AND upkeeps.created_at< ?
     GROUP BY departments.nombre",[$fecha_inicial,$fecha_final]);
     $date = Carbon::now();
     $date = $date->format('d-m-Y');
-   
+
    return view('gerenciales.previDeptManto',compact('manDeto','date','fecha_inicial','fecha_final','tipo'));
    }else{
     $manDeto=DB::select("select departments.nombre as Departamento ,  COUNT(upkeeps.product_id) as Cantidad ,upkeeps.created_at
-    from departments JOIN employees on departments.id = employees.department_id JOIN products on employees.id = products.employee_id JOIN upkeeps 
-    on products.id = upkeeps.product_id 
+    from departments JOIN employees on departments.id = employees.department_id JOIN products on employees.id = products.employee_id JOIN upkeeps
+    on products.id = upkeeps.product_id
     WHERE upkeeps.created_at > ? AND upkeeps.created_at< ? AND departments.id= ?
     GROUP BY departments.nombre",[$fecha_inicial,$fecha_final,$tipo]);
     $date = Carbon::now();
-    $date = $date->format('d-m-Y');   
+    $date = $date->format('d-m-Y');
     return view('gerenciales.previDeptManto',compact('manDeto','date','fecha_inicial','fecha_final','tipo'));
-   }  
+   }
 }
   return view('gerenciales.EntraMantporDepto',compact('depto'))->withErrors('Error en las fechas ingresadas');
 }
 else{
   return view('gerenciales.EntraMantporDepto',compact('depto'));
 }
-   
+
   }
 
  public function pdfMandep($fecha_inicial,$fecha_final,$tipo){
- 
+
   if($tipo==0){
     $manDeto=DB::select("select departments.nombre as Departamento ,departments.id  ,COUNT(upkeeps.product_id) as Cantidad ,upkeeps.created_at
-    from departments JOIN employees on departments.id = employees.department_id JOIN products on employees.id = products.employee_id JOIN upkeeps 
-    on products.id = upkeeps.product_id 
+    from departments JOIN employees on departments.id = employees.department_id JOIN products on employees.id = products.employee_id JOIN upkeeps
+    on products.id = upkeeps.product_id
     WHERE upkeeps.created_at > ? AND upkeeps.created_at< ?
     GROUP BY departments.nombre",[$fecha_inicial,$fecha_final]);
     $date = Carbon::now();
-    $date = $date->format('d-m-Y');   
-  
+    $date = $date->format('d-m-Y');
+
    }else{
     $manDeto=DB::select("select departments.nombre as Departamento ,  COUNT(upkeeps.product_id) as Cantidad ,upkeeps.created_at
-    from departments JOIN employees on departments.id = employees.department_id JOIN products on employees.id = products.employee_id JOIN upkeeps 
-    on products.id = upkeeps.product_id 
+    from departments JOIN employees on departments.id = employees.department_id JOIN products on employees.id = products.employee_id JOIN upkeeps
+    on products.id = upkeeps.product_id
     WHERE upkeeps.created_at > ? AND upkeeps.created_at< ? AND departments.id= ?
     GROUP BY departments.nombre",[$fecha_inicial,$fecha_final,$tipo]);
     $date = Carbon::now();
-    $date = $date->format('d-m-Y');      
-   }  
-  
-  $pdf = PDF::loadView('pdf.ManDepto', compact('manDeto','date'))->setPaper(array(0,0,612.00,792.00));  
+    $date = $date->format('d-m-Y');
+   }
+
+  $pdf = PDF::loadView('pdf.ManDepto', compact('manDeto','date'))->setPaper(array(0,0,612.00,792.00));
   return $pdf->stream('repoManDepto.pdf',array("Attachment" => 0));
- } 
+ }
 ///termina el reporte//////
 
+////////////////////////////PROCESOS ETL //////////////////////////////////////
 
+public function generateETL(){
+  Artisan::call('etl:auto');
+  $arr = explode('|', Artisan::output());
+  $msg = $arr[0];
+  $status =(Int) $arr[1];
 
+  return response()->json(array('msg'=> $msg), $status);
+
+}
+
+////////////////////////////FIN PROCESOS ETL //////////////////////////////////////
 
 }
