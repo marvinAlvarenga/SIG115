@@ -85,9 +85,9 @@ class GerencialController extends Controller
         }else{
          $products=Product::whereDate('created_at','>=',$fecha_inicial)->whereDate('created_at','<=',$fecha_final)->where('tipo',$tipo)->orderby('id','DESC')->paginate();
         }
-       
+
      }else{
-       
+
      }
     Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Equipo agregado al inventario");
     return Excel::download(new EquipoPorTipoExport($products), 'EquipoAgregado'.Carbon::now()->format('d-m-y').'.xlsx');
@@ -98,7 +98,7 @@ class GerencialController extends Controller
 
   public function mantenimientosRealizados(Request $request){
 
-  
+
     $fecha_inicial=$request->get('desde');
     $fecha_final=$request->get('hasta');
     $tipo=$request->get('tipo');
@@ -117,7 +117,7 @@ class GerencialController extends Controller
   }else {return view ('gerenciales.reporteMantenimientos');}
   }
 
-  
+
   public function mantenimientosRealizadosPdf(Request $request,$fecha_inicial,$fecha_final,$tipo){
     $imprimir=1;
     $tipos=$tipo;
@@ -195,7 +195,7 @@ class GerencialController extends Controller
       Log::info("El usuarios: '".Auth::user()->name."' ha ingresado a la pantalla del reporte de repuestos cambiados");
       return view('gerenciales.repuestosCambiados',compact('spares','depto','fecha_inicial','fecha_final','tipo'));
       }else
-      { 
+      {
         return view ('gerenciales.repuestosCambiados',compact('depto'))->withErrors('Error en las fechas ingresadas');
       }
     }else{
@@ -224,12 +224,12 @@ class GerencialController extends Controller
       ->orderBy('s.id')
       ->paginate();
       }else
-      { 
+      {
         return view ('gerenciales.repuestosCambiados',compact('depto'))->withErrors('Error en las fechas ingresadas');
       }
 
       $date = Carbon::now();
-      $date = $date->format('d-m-Y');    
+      $date = $date->format('d-m-Y');
       switch($request->method()){
       case "POST":
       Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de repuestos cambiados");
@@ -266,7 +266,7 @@ class GerencialController extends Controller
     }
 
 
-//reporte que sobrepasen en 40% del valor de adquisicion respecto al costo de mantenimientos    
+//reporte que sobrepasen en 40% del valor de adquisicion respecto al costo de mantenimientos
 public function getEqui(){
   $errores = ' ';
   Log::info("El usuarios: '".Auth::user()->name."' ha ingresado a la solicitud de reporte de valor de mante mayor al 40% del valor de adqui");
@@ -275,8 +275,8 @@ public function getEqui(){
 public function verInfo40(Request $request)
 {
   $tipo=$request->tipo;
-  
-  
+
+
     if ($request->tipo==0) {
       $produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
       products.numInv,products.numSe,products.estado,sum(spares.valorAdqui) as costoSpares from products
@@ -285,7 +285,7 @@ public function verInfo40(Request $request)
       join spares on spares.id = upkeep_spare.spare_id
       group by products.id) as prods
       where prods.costoSpares >= prods.ValorAdqui*0.4;");
-     
+
     }
     if ($request->tipo==1) {
       $produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
@@ -295,7 +295,7 @@ public function verInfo40(Request $request)
       join spares on spares.id = upkeep_spare.spare_id
       group by products.id) as prods
       where prods.costoSpares >= prods.ValorAdqui*0.4 AND prods.tipo = 1;");
-     
+
     }
     if ($request->tipo==2) {
       $produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
@@ -305,15 +305,15 @@ public function verInfo40(Request $request)
       join spares on spares.id = upkeep_spare.spare_id
       group by products.id) as prods
       where prods.costoSpares >= prods.ValorAdqui*0.4  AND prods.tipo = 2;");
-      
+
     }
     $date = Carbon::now();
       $date = $date->format('d-m-Y');
     Log::info("El usuarios: '".Auth::user()->name."' ha ingresado a la vista previa de reporte de valor de mante mayor al 40% del valor de adqui");
 return view('gerenciales.sobre4ad',compact('produc40','date','tipo'));
+}
 
-  
-///genera el pdf del reporte    
+///genera el pdf del reporte
 public function pdfInfo40(Request $request,$tipo)
 {
   $imprimir=1;
@@ -337,9 +337,9 @@ join upkeep_spare on upkeep_spare.upkeep_id = upkeeps.id
 join spares on spares.id = upkeep_spare.spare_id
 group by products.id) as prods
 where prods.costoSpares >= prods.ValorAdqui*0.4;");
-  
+
 $date = Carbon::now();
-$date = $date->format('d-m-Y');    
+$date = $date->format('d-m-Y');
 switch($request->method()){
  case "POST":
  Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de valor de mante mayor al 40% del valor de adqui");
@@ -482,7 +482,7 @@ public function ManDep(Request $request){
     WHERE upkeeps.created_at > ? AND upkeeps.created_at< ? AND departments.id= ?
     GROUP BY departments.nombre",[$fecha_inicial,$fecha_final,$tipo]);
     $date = Carbon::now();
-    $date = $date->format('d-m-Y');   
+    $date = $date->format('d-m-Y');
     Log::info("El usuarios: '".Auth::user()->name."' ha ingresado a la pantalla de vista previa del reporte cant de mante por depto");
 
     return view('gerenciales.previDeptManto',compact('manDeto','date','fecha_inicial','fecha_final','tipo'));
@@ -512,46 +512,46 @@ else{
     on products.id = upkeeps.product_id
     WHERE upkeeps.created_at > ? AND upkeeps.created_at< ? AND departments.id= ?
     GROUP BY departments.nombre",[$fecha_inicial,$fecha_final,$tipo]);
-      
-   }  
-  
+
+   }
+
    $date = Carbon::now();
-   $date = $date->format('d-m-Y');    
+   $date = $date->format('d-m-Y');
   switch($request->method()){
     case "POST":
     Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte cant de mante por depto");
-    $pdf = PDF::loadView('pdf.ManDepto', compact('manDeto','date'))->setPaper(array(0,0,612.00,792.00));  
+    $pdf = PDF::loadView('pdf.mandepto', compact('manDeto','date'))->setPaper(array(0,0,612.00,792.00));
     return $pdf->stream('repoManDepto.pdf',array("Attachment" => 0));
    break;
   case "GET":
   Log::info("El usuarios: '".Auth::user()->name."' ha mandado a imprimir el reporte cant de mante por depto");
-  return view('pdf.ManDepto',compact('manDeto','date','imprimir'));
+  return view('pdf.mandepto',compact('manDeto','date','imprimir'));
   }
- } 
+ }
 ///termina el reporte//////
 
 public function ExcelMandep($fecha_inicial,$fecha_final,$tipo){
- 
+
   if($tipo==0){
     $manDeto=DB::select("select departments.nombre as Departamento ,departments.id  ,COUNT(upkeeps.product_id) as Cantidad ,upkeeps.created_at
-    from departments JOIN employees on departments.id = employees.department_id JOIN products on employees.id = products.employee_id JOIN upkeeps 
-    on products.id = upkeeps.product_id 
+    from departments JOIN employees on departments.id = employees.department_id JOIN products on employees.id = products.employee_id JOIN upkeeps
+    on products.id = upkeeps.product_id
     WHERE upkeeps.created_at > ? AND upkeeps.created_at< ?
     GROUP BY departments.nombre",[$fecha_inicial,$fecha_final]);
-   
-  
+
+
    }else{
     $manDeto=DB::select("select departments.nombre as Departamento ,  COUNT(upkeeps.product_id) as Cantidad ,upkeeps.created_at
-    from departments JOIN employees on departments.id = employees.department_id JOIN products on employees.id = products.employee_id JOIN upkeeps 
-    on products.id = upkeeps.product_id 
+    from departments JOIN employees on departments.id = employees.department_id JOIN products on employees.id = products.employee_id JOIN upkeeps
+    on products.id = upkeeps.product_id
     WHERE upkeeps.created_at > ? AND upkeeps.created_at< ? AND departments.id= ?
     GROUP BY departments.nombre",[$fecha_inicial,$fecha_final,$tipo]);
-       
-   }  
-  
+
+   }
+
    Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Cantidad de mantenimientos por");
   return Excel::download(new ManDepExport($manDeto), 'MantenimientosPorDepto_'.Carbon::now()->format('d-m-y').'.xlsx');
- } 
+ }
 
 ///termina el reporte//////
 
