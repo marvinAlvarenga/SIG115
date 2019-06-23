@@ -265,6 +265,7 @@ class GerencialController extends Controller
 //reporte que sobrepasen en 40% del valor de adquisicion respecto al costo de mantenimientos    
 public function getEqui(){
   $errores = ' ';
+  Log::info("El usuarios: '".Auth::user()->name."' ha ingresado a la solicitud de reporte de valor de mante mayor al 40% del valor de adqui");
   return view('gerenciales.soliSobre4', ['errores' => $errores]);
 }
 public function verInfo40(Request $request)
@@ -280,8 +281,7 @@ public function verInfo40(Request $request)
       join spares on spares.id = upkeep_spare.spare_id
       group by products.id) as prods
       where prods.costoSpares >= prods.ValorAdqui*0.4;");
-      $date = Carbon::now();
-      $date = $date->format('d-m-Y');
+     
     }
     if ($request->tipo==1) {
       $produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
@@ -291,8 +291,7 @@ public function verInfo40(Request $request)
       join spares on spares.id = upkeep_spare.spare_id
       group by products.id) as prods
       where prods.costoSpares >= prods.ValorAdqui*0.4 AND prods.tipo = 1;");
-      $date = Carbon::now();
-      $date = $date->format('d-m-Y');
+     
     }
     if ($request->tipo==2) {
       $produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,
@@ -302,10 +301,11 @@ public function verInfo40(Request $request)
       join spares on spares.id = upkeep_spare.spare_id
       group by products.id) as prods
       where prods.costoSpares >= prods.ValorAdqui*0.4  AND prods.tipo = 2;");
-      $date = Carbon::now();
-      $date = $date->format('d-m-Y');
+      
     }
-
+    $date = Carbon::now();
+      $date = $date->format('d-m-Y');
+    Log::info("El usuarios: '".Auth::user()->name."' ha ingresado a la vista previa de reporte de valor de mante mayor al 40% del valor de adqui");
 return view('gerenciales.sobre4ad',compact('produc40','date','tipo'));
     
   
@@ -341,10 +341,12 @@ $date = Carbon::now();
 $date = $date->format('d-m-Y');    
 switch($request->method()){
  case "POST":
+ Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de valor de mante mayor al 40% del valor de adqui");
  $pdf = PDF::loadView('pdf.info40', compact('produc40','date'))->setPaper(array(0,0,612.00,792.00));
 return $pdf->stream('repo40.pdf',array("Attachment" => 0));
 break;
 case "GET":
+Log::info("El usuarios: '".Auth::user()->name."' ha mandado a imprimir el reporte de valor de mante mayor al 40% del valor de adqui");
 return view('pdf.info40',compact('produc40','date','imprimir'));
 }
 }
@@ -447,7 +449,7 @@ return Excel::download(new EquipSobre40Export($produc40), 'EquipoSobreAdqui_'.Ca
 ///Reporte de cantidad de mantenimientos solicitados por departamento////////
 public function soliDepMant()
 {
-  
+  Log::info("El usuarios: '".Auth::user()->name."' ha ingresado a la pantalla de solicitud del reporte cant de mante por depto");
   $depto=DB::select('select * from departments');
   return view('gerenciales.EntraMantporDepto',compact('depto'));
 }
@@ -478,6 +480,7 @@ public function ManDep(Request $request){
     GROUP BY departments.nombre",[$fecha_inicial,$fecha_final,$tipo]);
     $date = Carbon::now();
     $date = $date->format('d-m-Y');   
+    Log::info("El usuarios: '".Auth::user()->name."' ha ingresado a la pantalla de vista previa del reporte cant de mante por depto");
     return view('gerenciales.previDeptManto',compact('manDeto','date','fecha_inicial','fecha_final','tipo'));
    }  
 }
@@ -512,10 +515,12 @@ else{
    $date = $date->format('d-m-Y');    
   switch($request->method()){
     case "POST":
+    Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte cant de mante por depto");
     $pdf = PDF::loadView('pdf.ManDepto', compact('manDeto','date'))->setPaper(array(0,0,612.00,792.00));  
     return $pdf->stream('repoManDepto.pdf',array("Attachment" => 0));
    break;
   case "GET":
+  Log::info("El usuarios: '".Auth::user()->name."' ha mandado a imprimir el reporte cant de mante por depto");
   return view('pdf.ManDepto',compact('manDeto','date','imprimir'));
   }
  } 
