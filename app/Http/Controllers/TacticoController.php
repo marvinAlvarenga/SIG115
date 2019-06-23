@@ -182,6 +182,7 @@ class TacticoController extends Controller
       $vencida=$request->get('vencida');
       $tipo=$request->get('tipo');
       $tipos=$tipo; //para usar en el where dentro del when
+      if(isset($tipo)){
       if($vencida==1){
       $products=DB::table('products as p')
       ->join('product_licence as pl','p.id','=','pl.product_id')
@@ -208,6 +209,9 @@ class TacticoController extends Controller
       // ->orWhereDate('l.fechaVencimiento','<=',Carbon::now())->orWhere( DB::raw('DATEDIFF(l.fechaVencimiento,NOW()) <= 90'),1)->orderBy('p.id')->paginate();
       Log::info("El usuarios: '".Auth::user()->name."' ha ingresado al reporte de licencias por vencer");
       return view('tacticos.reportelicenciasPorVencer',compact('products','tipo','vencida'));
+  }else{
+    return view ('tacticos.reporteLicenciasPorVencer');
+  }
     }
 
     public function licenciasPorVencerPDF(Request $request,$vencida,$tipo)
