@@ -56,9 +56,13 @@
           </div>
         </div>
       
-              <div class="col-sm-3">
-                    <div class="card mb-3 mt-2">
+              <div class="col-sm-4">
+                    <div class="card mb-3">
                       <div class="card-body">
+                          <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text ">Departamento</span>
+                          </div>
                           <select class="custom-select" name="tipo">
                               <option value="0">Todo</option>
                               @foreach ($depto as $deptos)   
@@ -67,6 +71,7 @@
                               
                               
                             </select>
+                          </div>
                       </div>
                     </div>
                   </div>
@@ -117,6 +122,13 @@
 
      </div>
     </div>
+    <form method="post" action="{{route('gerenciales.repuestosCambiadosPdf',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo])}}">
+        @csrf
+      <input class="btn btn-primary" type="submit" name="submit" value="Generar PDF">
+ 
+    <a class="btn btn-primary" href="{{route('gerenciales.repuestosCambiadosImprimir',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo])}}" role="button">Imprimir</a>
+    <a class="btn btn-primary" href="{{route('gerenciales.repuestosCambiadosExcel',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo,])}}" role="button">Exportar Excel</a>
+  </form>
     @else
     <h3>No hay registros que cumplan con los parámetros ingresados</h3>
     @endif

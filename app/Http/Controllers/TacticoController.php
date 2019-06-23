@@ -206,6 +206,7 @@ class TacticoController extends Controller
       // ->join('licences as l','pl.licence_id','=','l.id')
       // ->select('p.numSe','p.numInv','p.tipo','p.valorAdqui as descripcion','l.nombre','l.fechaVencimiento')
       // ->orWhereDate('l.fechaVencimiento','<=',Carbon::now())->orWhere( DB::raw('DATEDIFF(l.fechaVencimiento,NOW()) <= 90'),1)->orderBy('p.id')->paginate();
+      Log::info("El usuarios: '".Auth::user()->name."' ha ingresado al reporte de licencias por vencer");
       return view('tacticos.reportelicenciasPorVencer',compact('products','tipo','vencida'));
     }
 
@@ -239,10 +240,12 @@ class TacticoController extends Controller
        $date = $date->format('d-m-Y');
        switch($request->method()){
         case "POST":
+        Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de licencias por vencer");
        $pdf = PDF::loadView('pdf.licenciasPorVencerPdf', compact('products','date'))->setPaper(array(0,0,612.00,792.00));
        return $pdf->stream('EquipoPorTipo_'.$date.'pdf',array("Attachment" => 0));
        break;
     case "GET":
+    Log::info("El usuarios: '".Auth::user()->name."' ha indicado imprimir el reporte de licencias por vencer");
     return view('pdf.licenciasPorVencerPdf',compact('products','fecha_inicial','fecha_final','tipo','imprimir','date'));
     }
   }

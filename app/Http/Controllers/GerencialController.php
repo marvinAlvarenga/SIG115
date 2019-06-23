@@ -17,6 +17,7 @@ use App\Exports\EquipSobre40Export;
 use App\Exports\ManDepExport;
 use App\Exports\EquipoPorTipoExport;
 use App\Exports\MantenimientosRealizadosExport;
+use App\Exports\RepuestosCambiadosExport;
 use Excel;
 class GerencialController extends Controller
 {
@@ -58,15 +59,16 @@ class GerencialController extends Controller
       }else{
         return view('gerenciales.equipoPorTipo')->withErrors('Error en las fechas ingresadas');
       }
-       Log::info("El usuario: '".Auth::user()->name." Vió el reporte de equipos agregados a inventario");
        $date = Carbon::now();
        $date = $date->format('d-m-Y');
        switch($request->method()){
         case "POST":
+        Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de equipos agregados a inventario ");
        $pdf = PDF::loadView('pdf.equipoPorTipoPdf', compact('products','date','tipo'))->setPaper(array(0,0,612.00,792.00));
        return $pdf->stream('EquipoPorTipo_'.$date.'pdf',array("Attachment" => 0));
        break;
     case "GET":
+    Log::info("El usuarios: '".Auth::user()->name."' ha exportado a indicado imprimir el reporte de equipos agregados a inventario ");
     return view('pdf.equipoPorTipoPdf',compact('products','fecha_inicial','fecha_final','tipo','imprimir','date'));
     }
   }
@@ -92,6 +94,7 @@ class GerencialController extends Controller
 
   public function mantenimientosRealizados(Request $request){
 
+  
     $fecha_inicial=$request->get('desde');
     $fecha_final=$request->get('hasta');
     $tipo=$request->get('tipo');
@@ -112,7 +115,7 @@ class GerencialController extends Controller
 
   
   public function mantenimientosRealizadosPdf(Request $request,$fecha_inicial,$fecha_final,$tipo){
-
+    $imprimir=1;
     $tipos=$tipo;
     if($this->validarFechas($fecha_inicial,$fecha_final)){
     $users=User::join('upkeeps','users.id','=','upkeeps.user_id')
@@ -128,10 +131,12 @@ class GerencialController extends Controller
       $date = $date->format('d-m-Y');
       switch($request->method()){
        case "POST":
+       Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de mantenimientos realizados");
       $pdf = PDF::loadView('pdf.mantenimientosRealizadosPdf', compact('users','date'))->setPaper(array(0,0,612.00,792.00));
       return $pdf->stream('EquipoPorTipo_'.$date.'pdf',array("Attachment" => 0));
       break;
    case "GET":
+   Log::info("El usuarios: '".Auth::user()->name."' ha indicado imprimir el reporte de mantenimientos realizados");
    return view('pdf.mantenimientosRealizadosPdf',compact('users','fecha_inicial','fecha_final','tipo','imprimir','date'));
    }
   }
@@ -166,26 +171,96 @@ class GerencialController extends Controller
       $fecha_inicial=$request->get('desde');
       $fecha_final=$request->get('hasta');
       $tipo=$request->get('tipo');
-      if(isset($fecha_inicial)){
+      $tipos=$tipo;
+      if(isset($fecha_inicial)||isset($fecha_final)){
       if($this->validarFechas($fecha_inicial,$fecha_final)){
       $spares=DB::table('spares as s')
       ->join('upkeep_spare as us','s.id','=','us.spare_id')
       ->join('upkeeps as u','us.upkeep_id','u.id')
+      ->join('products as p','u.product_id','p.id')
+      ->join('employees as e','p.employee_id','e.id')
       ->select('s.nombre','s.tipo','s.marca','s.valorAdqui',DB::raw('count(us.spare_id) as count'))
       ->whereDate('u.created_at','>=',$fecha_inicial)
       ->whereDate('u.created_at','<=',$fecha_final)
+      ->when($tipo!=0, function ($spares, $tipo) use($tipos) {//si tipo no es 3 ( es 1 o 2) agrega un where para filtar por pc o impresora
+        return $spares ->where('e.department_id',$tipo);
+      })
       ->groupBy('s.id')
       ->orderBy('s.id')
       ->paginate();
-      return view('gerenciales.repuestosCambiados',compact('spares','depto'));
+      Log::info("El usuarios: '".Auth::user()->name."' ha ingresado a la pantalla del reporte de repuestos cambiados");
+      return view('gerenciales.repuestosCambiados',compact('spares','depto','fecha_inicial','fecha_final','tipo'));
       }else
       { 
-        return view ('gerenciales.repuestosCambiados')->withErrors('Error en las fechas ingresadas');
+        return view ('gerenciales.repuestosCambiados',compact('depto'))->withErrors('Error en las fechas ingresadas');
       }
     }else{
       return view ('gerenciales.repuestosCambiados',compact('depto'));
       }
     }
+
+    public function repuestosCambiadosPdf(Request $request,$fecha_inicial,$fecha_final,$tipo){
+
+      $imprimir=1;
+      $depto=DB::select('select * from departments');
+      $tipos=$tipo;
+      if($this->validarFechas($fecha_inicial,$fecha_final)){
+      $spares=DB::table('spares as s')
+      ->join('upkeep_spare as us','s.id','=','us.spare_id')
+      ->join('upkeeps as u','us.upkeep_id','u.id')
+      ->join('products as p','u.product_id','p.id')
+      ->join('employees as e','p.employee_id','e.id')
+      ->select('s.nombre','s.tipo','s.marca','s.valorAdqui',DB::raw('count(us.spare_id) as count'))
+      ->whereDate('u.created_at','>=',$fecha_inicial)
+      ->whereDate('u.created_at','<=',$fecha_final)
+      ->when($tipo!=0, function ($spares, $tipo) use($tipos) {//si tipo no es 3 ( es 1 o 2) agrega un where para filtar por pc o impresora
+        return $spares ->where('e.department_id',$tipo);
+      })
+      ->groupBy('s.id')
+      ->orderBy('s.id')
+      ->paginate();
+      }else
+      { 
+        return view ('gerenciales.repuestosCambiados',compact('depto'))->withErrors('Error en las fechas ingresadas');
+      }
+
+      $date = Carbon::now();
+      $date = $date->format('d-m-Y');    
+      switch($request->method()){
+      case "POST":
+      Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de repuestos cambiados");
+      $pdf = PDF::loadView('pdf.repuestosCambiadosPdf', compact('spares','date'))->setPaper(array(0,0,612.00,792.00));
+      return $pdf->stream('repuestosCambiados'.$date.'pdf',array("Attachment" => 0));
+      break;
+      case "GET":
+      Log::info("El usuarios: '".Auth::user()->name."' ha indicado imprimir el reporte de repuestos cambiados");
+      return view('pdf.repuestosCambiadosPdf',compact('spares','date','imprimir'));
+      }
+    }
+
+    public function repuestosCambiadosExcel($fecha_inicial,$fecha_final,$tipo){
+
+      $tipos=$tipo;
+      $depto=DB::select('select * from departments');
+      $spares=DB::table('spares as s')
+      ->join('upkeep_spare as us','s.id','=','us.spare_id')
+      ->join('upkeeps as u','us.upkeep_id','u.id')
+      ->join('products as p','u.product_id','p.id')
+      ->join('employees as e','p.employee_id','e.id')
+      ->select('s.nombre','s.tipo','s.marca','s.valorAdqui',DB::raw('count(us.spare_id) as count'))
+      ->whereDate('u.created_at','>=',$fecha_inicial)
+      ->whereDate('u.created_at','<=',$fecha_final)
+      ->when($tipo!=0, function ($spares, $tipo) use($tipos) {//si tipo no es 3 ( es 1 o 2) agrega un where para filtar por pc o impresora
+        return $spares ->where('e.department_id',$tipo);
+      })
+      ->groupBy('s.id')
+      ->orderBy('s.id')
+      ->paginate();
+
+      Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de repuestos cambiados");
+      return Excel::download(new RepuestosCambiadosExport($spares), 'repuestosCambiados'.Carbon::now()->format('d-m-y').'.xlsx');
+    }
+
 
 //reporte que sobrepasen en 40% del valor de adquisicion respecto al costo de mantenimientos    
 public function getEqui(){

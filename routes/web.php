@@ -27,6 +27,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/equipoportipo/Excel/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@equipoPorTipoExcel')->name('gerenciales.equipoportipoExcel');
     
     Route::get('/repuestosCambiados','GerencialController@repuestosCambiados')->name('gerenciales.repuestosCambiados');
+    Route::post('/repuestosCambiados/pdf/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@repuestosCambiadosPdf')->name('gerenciales.repuestosCambiadosPdf');
+    Route::get('/repuestosCambiados/pdf/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@repuestosCambiadosPdf')->name('gerenciales.repuestosCambiadosImprimir');
+    Route::get('/repuestosCambiados/excel/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@repuestosCambiadosExcel')->name('gerenciales.repuestosCambiadosExcel');
 
     Route::get('/mantenimientos','GerencialController@mantenimientosRealizados')->name('gerenciales.mantenimientosRealizados');
     Route::post('/mantenimientos/pdf/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@mantenimientosRealizadosPdf')->name('gerenciales.mantenimientosRealizadosPdf');
