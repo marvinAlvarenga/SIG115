@@ -210,6 +210,7 @@ class TacticoController extends Controller
       Log::info("El usuarios: '".Auth::user()->name."' ha ingresado al reporte de licencias por vencer");
       return view('tacticos.reportelicenciasPorVencer',compact('products','tipo','vencida'));
   }else{
+    
     return view ('tacticos.reporteLicenciasPorVencer');
   }
     }
