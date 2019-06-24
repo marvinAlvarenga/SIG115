@@ -9,6 +9,7 @@ $factory->define(App\Employee::class, function (Faker $faker) {
     return [
         "nombre"=>$faker->name,
         "ubicacion"=>$faker->word,
-        "department_id"=>$faker->randomDigitNotNull
+        "department_id"=>$faker->randomDigitNotNull,
+
     ];
 });
