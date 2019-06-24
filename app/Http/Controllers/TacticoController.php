@@ -208,8 +208,9 @@ class TacticoController extends Controller
       // ->select('p.numSe','p.numInv','p.tipo','p.valorAdqui as descripcion','l.nombre','l.fechaVencimiento')
       // ->orWhereDate('l.fechaVencimiento','<=',Carbon::now())->orWhere( DB::raw('DATEDIFF(l.fechaVencimiento,NOW()) <= 90'),1)->orderBy('p.id')->paginate();
       Log::info("El usuarios: '".Auth::user()->name."' ha ingresado al reporte de licencias por vencer");
-      return view('tacticos.reportelicenciasPorVencer',compact('products','tipo','vencida'));
+      return view('tacticos.reporteLicenciasPorVencer',compact('products','tipo','vencida'));
   }else{
+    
     return view ('tacticos.reporteLicenciasPorVencer');
   }
     }
