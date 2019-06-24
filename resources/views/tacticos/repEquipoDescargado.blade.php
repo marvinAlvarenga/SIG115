@@ -48,5 +48,9 @@
   </tbody>
 </table>
 </div>
+<a class="btn btn-primary" href="{{route('pdfequipodescargado',['tipo'=> implode(',',$tipo),'fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final, 'valor'=>'pdf'])}}" role="button">Exportar a PDF</a>
+<a class="btn btn-primary" href="{{route('impequipodescargado',['tipo'=> implode(',',$tipo),'fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final, 'valor'=>'print'])}}" role="button">Imprimir</a>
+  &nbsp;
+  <a class="btn btn-primary" href="{{ route('EquipoDescargado') }}" role="button">Regresar</a>
 
 @endsection

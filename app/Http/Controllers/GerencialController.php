@@ -387,18 +387,27 @@ return Excel::download(new EquipSobre40Export($produc40), 'EquipoSobreAdqui_'.Ca
     //Muestra el formulario
     //Pantalla por default al clickear en reportes > Clientes y mantenimientos
     public function getMantsXUser(){
+      Log::info("El usuarios: '".Auth::user()->name."' ha ingresado a la pantalla de usuarios que solicitan mas mantenimientos.");
         return view('gerenciales.formMantsXUsers', ['errores' => '']);
     }
 
     //Gestiona el formulario.
     //El user escoge mostrar a los N users que mas solicitaron mants en el intervalo.
     public function postMantsXUser(Request $request){
+      Log::info("El usuarios: '".Auth::user()->name."' ha solicitado un reporte de usuarios que solicitan mas mantenimientos.");
+
       $count = $request->input('count', '10');
       $fecha_inicial = $request->input('fecha_inicial');
       $fecha_final = $request->input('fecha_final');
       if ($this->validarFechas($fecha_inicial, $fecha_final) && $this->validarInt($count)) {
         $usuarios = $this->getUsersWithUpksRequestsBG($count, $fecha_inicial, $fecha_final);
-        return view('gerenciales.resulMantsXUsers', ['usuarios' => $usuarios, 'errores' => '']);
+        $retValues = [
+          'usuarios' => $usuarios, 'errores' => '',
+          'fecha_inicial' => $fecha_inicial,
+          'fecha_final' => $fecha_final,
+          'count' => $count,
+        ];
+        return view('gerenciales.resulMantsXUsers', $retValues);
       }
       $errores = 'Error en los datos ingresados';
       return view('gerenciales.formMantsXUsers', ['errores' => $errores]);
@@ -424,6 +433,34 @@ return Excel::download(new EquipSobre40Export($produc40), 'EquipoSobreAdqui_'.Ca
 
 
       return $usuarios;
+    }
+
+    public function pdfMantsXUser(Request $request,$fecha_inicial,$fecha_final,$count, $valor){
+      $date = Carbon::now();
+      $imprimir = 1;
+      if ($this->validarFechas($fecha_inicial, $fecha_final) && $this->validarInt($count)) {
+        $usuarios = $this->getUsersWithUpksRequestsBG($count, $fecha_inicial, $fecha_final);
+        $retValues = [
+          'usuarios' => $usuarios, 'errores' => '',
+          'fecha_inicial' => $fecha_inicial,
+          'fecha_final' => $fecha_final,
+          'count' => $count,
+        ];
+        // return view('gerenciales.resulMantsXUsers', $retValues);
+        switch($valor){
+          case "pdf":
+          Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de users que piden mas mantenimiento");
+          $pdf = PDF::loadView('pdf.mantsXUSer', compact('usuarios','fecha_inicial','fecha_final','count', 'date'))->setPaper(array(0,0,612.00,792.00));
+          return $pdf->stream('reportMantsXUSer.pdf',array("Attachment" => 0));
+         break;
+        case "print":
+        Log::info("El usuarios: '".Auth::user()->name."' ha mandado a imprimir el reporte de users que piden mas mantenimiento");
+        return view('pdf.mantsXUSer',compact('usuarios','fecha_inicial','fecha_final','count','imprimir', 'date'));
+        }
+      }
+      $errores = 'Error en los datos ingresados';
+      return view('gerenciales.formMantsXUsers', ['errores' => $errores]);
+
     }
 
     //Valida que $entero sea un entero positivo de hasta 4 digits. 0-9999
