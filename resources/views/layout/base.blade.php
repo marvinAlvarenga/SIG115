@@ -48,6 +48,7 @@
 
       <!-- Divider -->
       <hr class="sidebar-divider">
+      @can('etl')
 
       <!-- Heading -->
       <div class="sidebar-heading">
@@ -65,15 +66,17 @@
       </div>
       </li>
       <hr class="sidebar-divider">
-
+      @endcan
+      @can('report.report')
       <!-- Heading -->
       <div class="sidebar-heading">
         Reportes
       </div>
 
-
+      
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
+          @can('report.generateGerenciales')
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseGerencial" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-file"></i>
           <span>Reportes Gerenciales</span>
@@ -81,13 +84,15 @@
         <div id="collapseGerencial" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Reportes:</h6>
-            <a class="collapse-item" href="{{route('gerenciales.mantenimientosRealizados')}}">Mantenimientos realizados</a>
-            <a class="collapse-item" href="{{route('gerenciales.repuestosCambiados')}}">Repuestos cambiados</a>
-            <a class="collapse-item" href="{{ route('MantsXUser') }}">Clientes y mantenimientos</a>
-            <a class="collapse-item" href="{{ route('soli40') }}">Costo de mante mayor al <br> 40% de valor adqui</a>
-            <a class="collapse-item" href="{{ route('solidepmant') }}">Cantidad de mante por <br>depto</a>
+            @can('report.mantenimientosRealizados')<a class="collapse-item" href="{{route('gerenciales.mantenimientosRealizados')}}">Mantenimientos realizados</a>@endcan
+            @can('report.repuestosCambiados')<a class="collapse-item" href="{{route('gerenciales.repuestosCambiados')}}">Repuestos cambiados</a>@endcan
+            @can('report.clientesYMantenimientos')<a class="collapse-item" href="{{ route('MantsXUser') }}">Clientes y mantenimientos</a>@endcan
+            @can('report.mayor40Adqui')<a class="collapse-item" href="{{ route('soli40') }}">Costo de mante mayor al <br> 40% de valor adqui</a>@endcan
+            @can('report.cantidadManteniDepto')<a class="collapse-item" href="{{ route('solidepmant') }}">Cantidad de mante por <br>depto</a>@endcan
           </div>
         </div>
+        @endcan
+        @can('report.generateTactico')
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTactico" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-file"></i>
           <span>Reportes Tácticos</span>
@@ -95,43 +100,24 @@
         <div id="collapseTactico" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Reportes:</h6>
-            <a class="collapse-item" href="{{route('gerenciales.equipoportipo')}}">Equipo agregado</a>
-            <a class="collapse-item" href="{{route('tacticos.licenciasPorVencer')}}">Licencias por vencer</a>
-            <a class="collapse-item" href="{{ route('EquipoDescargado') }}">Equipo descargado</a>
-            <a class="collapse-item" href="{{route('tacticos.equipoAntiguoIndex')}}">Equipo antiguo</a>
-            <a class="collapse-item" href="{{route('solimantempl')}}">Cantidad Mantes solicitados</a>
-            <a class="collapse-item" href="{{route('soligaranven')}}">Equip. Garantias vencidas</a>
+            @can('report.equipoAgregado')<a class="collapse-item" href="{{route('gerenciales.equipoportipo')}}">Equipo agregado</a>@endcan
+            @can('report.licencias')<a class="collapse-item" href="{{route('tacticos.licenciasPorVencer')}}">Licencias por vencer</a>@endcan
+            @can('report.equipoDescargado')<a class="collapse-item" href="{{ route('EquipoDescargado') }}">Equipo descargado</a>@endcan
+            @can('report.equipoAntiguo')<a class="collapse-item" href="{{route('tacticos.equipoAntiguoIndex')}}">Equipo antiguo</a>@endcan
+            @can('report.cantidadManteniSolicitados')<a class="collapse-item" href="{{route('solimantempl')}}">Cantidad Mantes solicitados</a>@endcan
+            @can('report.garantiasVencidas')<a class="collapse-item" href="{{route('soligaranven')}}">Equip. Garantias vencidas</a>@endcan
 
           </div>
         </div>
+        @endcan
 
       </li>
 
       <!-- Divider -->
       <hr class="sidebar-divider">
+      @endcan
 
-      <!-- Heading -->
-      <div class="sidebar-heading">
-        Cuenta
-      </div>
-
-      <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-          <i class="fas fa-fw fa-folder"></i>
-          <span>Mi cuenta</span>
-        </a>
-        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Mi cuenta:</h6>
-            <a class="collapse-item" href="#">Editar Mi Cuenta</a>
-          </div>
-        </div>
-      </li>
-
-      <!-- Divider -->
-      <hr class="sidebar-divider">
-
+      @can('gesti.users')
       <!-- Heading -->
       <div class="sidebar-heading">
         Usuarios
@@ -146,14 +132,16 @@
         <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Usuarios:</h6>
-          <a class="collapse-item" href="{{ route('usuarios.index') }}">Consultar Usuarios</a>
-          <a class="collapse-item" href="{{ route('register') }}">Registrar usuarios</a>
+          @can('users.index')<a class="collapse-item" href="{{ route('usuarios.index') }}">Consultar Usuarios</a>@endcan
+          @can('users.create')<a class="collapse-item" href="{{ route('register') }}">Registrar usuarios</a>@endcan
           </div>
         </div>
       </li>
 
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
+      @endcan
+      @can('bitacora')
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
@@ -161,9 +149,11 @@
           <i class="fas fa-fw fa-history"></i>
           <span>Bitacoras</span></a>
       </li>
+      
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
+      @endcan
 
       <!-- Sidebar Toggler (Sidebar) -->
       <div class="text-center d-none d-md-inline">
@@ -200,10 +190,6 @@
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                  <a class="dropdown-item" href="#">
-                      <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                      Cuenta
-                    </a>
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                         Cerrar sesión

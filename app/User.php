@@ -5,11 +5,12 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Caffeinated\Shinobi\Concerns\HasRolesAndPermissions;
 use Illuminate\Database\Eloquent\Model\Role;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, HasRolesAndPermissions;
 
     public static $ADMINISTRADOR = 1;
     public static $NIVEL_ESTRATEGICO = 2;
