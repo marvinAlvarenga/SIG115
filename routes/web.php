@@ -76,11 +76,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/etl',function() { return view('gerenciales.etl'); })->name('etlManual')->middleware('can:etl');
     Route::post('/etl','GerencialController@generateETL')->middleware('can:etl');
 
-    Route::get('/impmantsxuser/{fecha_inicial}/{fecha_final}/{count}/{valor}', 'GerencialController@pdfMantsXUser')->name('impMantsXUser');
-    Route::get('/pdfmantsxuser/{fecha_inicial}/{fecha_final}/{count}/{valor}', 'GerencialController@pdfMantsXUser')->name('pdfMantsXUser');
-    // Route::get('/excelgaranve/{tipo}', 'TacticoController@ExcelGaraVen')->name('excelgaranve');
-    Route::get('/impequipodescargado/{tipo}/{fecha_inicial}/{fecha_final}/{valor}', 'TacticoController@pdfEquipoDescargado')->name('impequipodescargado');
-    Route::get('/pdfequipodescargado/{tipo}/{fecha_inicial}/{fecha_final}/{valor}', 'TacticoController@pdfEquipoDescargado')->name('pdfequipodescargado');
+    Route::get('/impmantsxuser/{fecha_inicial}/{fecha_final}/{count}/{valor}', 'GerencialController@pdfMantsXUser')->name('impMantsXUser')->middleware('can:report.clientesYMantenimientos');
+    Route::get('/pdfmantsxuser/{fecha_inicial}/{fecha_final}/{count}/{valor}', 'GerencialController@pdfMantsXUser')->name('pdfMantsXUser')->middleware('can:report.clientesYMantenimientos');
+    Route::get('/impequipodescargado/{tipo}/{fecha_inicial}/{fecha_final}/{valor}', 'TacticoController@pdfEquipoDescargado')->name('impequipodescargado')->middleware('can:report.equipoDescargado');
+    Route::get('/pdfequipodescargado/{tipo}/{fecha_inicial}/{fecha_final}/{valor}', 'TacticoController@pdfEquipoDescargado')->name('pdfequipodescargado')->middleware('can:report.equipoDescargado');
 
 
     //RUTAS MARVIN

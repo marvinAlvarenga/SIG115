@@ -47,6 +47,8 @@
 
       <a class="btn btn-primary" href="{{route('pdfMantsXUser',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'count'=>$count, 'valor'=>'pdf'])}}" role="button">Exportar a PDF</a>
       <a class="btn btn-primary" href="{{route('impMantsXUser',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'count'=>$count, 'valor'=>'print'])}}" role="button">Imprimir</a>
+      <a class="btn btn-primary" href="{{route('impMantsXUser',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'count'=>$count, 'valor'=>'excel'])}}" role="button">Exportar Excel</a>
+
         &nbsp;
         <a class="btn btn-primary" href="{{ route('MantsXUser') }}" role="button">Regresar</a>
 

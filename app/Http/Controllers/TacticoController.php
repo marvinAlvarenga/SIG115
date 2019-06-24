@@ -17,6 +17,7 @@ use App\Exports\EquipoViejoExport;
 use App\Exports\ManEmplExport;
 use App\Exports\GaranVenExport;
 use App\Exports\LicenciasPorVencerExport;
+use App\Exports\EqDescargadoExport;
 use Carbon\Carbon;
 
 class TacticoController extends Controller
@@ -63,6 +64,10 @@ public function pdfEquipoDescargado(Request $request,$tipo, $fecha_inicial,$fech
     case "print":
     Log::info("El usuarios: '".Auth::user()->name."' ha mandado a imprimir el reporte de equipo descargado");
     return view('pdf.pdfEquiposDescargados',compact('productos','fecha_inicial','fecha_final','imprimir', 'date'));
+    case "excel":
+    Log::info("El usuarios: '".Auth::user()->name."' ha exportado en Excel el reporte de equipo descargado");
+    return Excel::download(new EqDescargadoExport($productos), 'EquipoDescargado_'.Carbon::now()->format('d-m-y').'.xlsx');
+    break;
     }
   }
   $errores = "Error en los datos ingresados";

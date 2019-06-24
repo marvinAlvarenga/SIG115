@@ -18,6 +18,7 @@ use App\Exports\ManDepExport;
 use App\Exports\EquipoPorTipoExport;
 use App\Exports\MantenimientosRealizadosExport;
 use App\Exports\RepuestosCambiadosExport;
+use App\Exports\MantsXUserExport;
 use Excel;
 
 use Artisan;
@@ -456,6 +457,11 @@ return Excel::download(new EquipSobre40Export($produc40), 'EquipoSobreAdqui_'.Ca
         case "print":
         Log::info("El usuarios: '".Auth::user()->name."' ha mandado a imprimir el reporte de users que piden mas mantenimiento");
         return view('pdf.mantsXUSer',compact('usuarios','fecha_inicial','fecha_final','count','imprimir', 'date'));
+        break;
+        case "excel":
+        Log::info("El usuarios: '".Auth::user()->name."' ha exportado en Excel el reporte de users que piden mas mantenimiento");
+        return Excel::download(new MantsXUserExport($usuarios), 'MantenimientosPorUsuario_'.Carbon::now()->format('d-m-y').'.xlsx');
+        break;
         }
       }
       $errores = 'Error en los datos ingresados';
