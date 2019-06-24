@@ -12,5 +12,6 @@ class UpkeepTableSeeder extends Seeder
     public function run()
     {
         factory(App\Upkeep::class,30)->create();
+       
     }
 }

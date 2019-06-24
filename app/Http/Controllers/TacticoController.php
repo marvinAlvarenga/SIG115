@@ -364,11 +364,8 @@ return view('pdf.EmpleadoMantenimiento',compact('empleManto','date','imprimir'))
     ->get();
     $i=0;
     $tipo=$request->tipo;
-
-   if($tipo==3){
-
-
-    
+    $existeRegis=0;
+   if($tipo==3){   
   
     foreach ($products as $product) {
      $date=Carbon::parse($product->fechaAdqui);
@@ -378,12 +375,14 @@ return view('pdf.EmpleadoMantenimiento',compact('empleManto','date','imprimir'))
       if( $fechaActual > $fechaVenciminto){
        $empleManto[$i]=$product;
        $tiempoFaltante[$i]=0;
+       $existeRegis=1;
       } else {   
      $mesesDiferencia =$fechaVenciminto->diffInMonths($fechaActual);// compara las fechas para saber cuanto es la diferencia de meses
      
       if($mesesDiferencia <=3 ){
        $empleManto[$i]=$product;
-       $tiempoFaltante[$i]=$mesesDiferencia;        
+       $tiempoFaltante[$i]=$mesesDiferencia; 
+       $existeRegis=1;          
       }
     }
      
@@ -406,6 +405,7 @@ return view('pdf.EmpleadoMantenimiento',compact('empleManto','date','imprimir'))
          if( $fechaActual > $fechaVenciminto){
           $empleManto[$i]=$product;
           $tiempoFaltante[$i]=0;
+          $existeRegis=1;   
          }         
         $i=$i+1;
        }
@@ -423,7 +423,8 @@ return view('pdf.EmpleadoMantenimiento',compact('empleManto','date','imprimir'))
       
        if($mesesDiferencia <=3 ){
         $empleManto[$i]=$product;
-        $tiempoFaltante[$i]=$mesesDiferencia;        
+        $tiempoFaltante[$i]=$mesesDiferencia;    
+        $existeRegis=1;    
        }
        }
       
@@ -434,10 +435,17 @@ return view('pdf.EmpleadoMantenimiento',compact('empleManto','date','imprimir'))
     }
       }
   }
-  $date= Carbon::now();  
-  $date = $date->format('d-m-Y'); 
-  Log::info("El usuarios: '".Auth::user()->name."' ha ingresado a la vista previa del reporte de garantias por vencer");
-    return view('tacticos.prevGarantiasPorVencer',compact('empleManto','date','tiempoFaltante','tipo'));
+  if ($existeRegis==1) {
+    $date= Carbon::now();  
+    $date = $date->format('d-m-Y'); 
+    Log::info("El usuarios: '".Auth::user()->name."' ha ingresado a la vista previa del reporte de garantias por vencer");
+      return view('tacticos.prevGarantiasPorVencer',compact('empleManto','date','tiempoFaltante','tipo'));
+  }
+  else {
+    
+  return view('tacticos.SoliGarantiasPorVencer')->withErrors('No hay ningun registro que cumpla con los parametros');
+  
+  }
  }
 
  public function pdfGaraVen(Request $request,$tipo)
