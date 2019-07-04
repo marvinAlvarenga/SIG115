@@ -320,11 +320,11 @@ public function pdfEquipoDescargado(Request $request,$tipo, $fecha_inicial,$fech
   }
         ////////////////////////////////FIN DEL REPORTE LICENCIAS POR VENCER////////////////////////////////////
 
-/////REPORTE DE MANTENIMIENTOS SOLICITADOS POR EMPLEADOS EN UN RANGO DE TIEMPO////////
+/////REPORTE DE MANTENIMIENTOS SOLICITADOS EN RANGO DE TIEMPO////////
 
 
  public function SoliMantEmple(){
-  Log::info("El usuarios: '".Auth::user()->name."' ha exportado ingresado a la pantalla de entrada para el reporte cant de soli mante por empleado");
+  Log::info("El usuarios: '".Auth::user()->name."' ha ingresado a la pantalla de entrada para el reporte cant de soli mante por empleado");
   return view('tacticos.soliEmplMante');
   }
 
@@ -335,12 +335,11 @@ public function pdfEquipoDescargado(Request $request,$tipo, $fecha_inicial,$fech
   $fecha_final=$request->get('hasta');
 
  if($this->validarFechas($fecha_inicial,$fecha_final)){
-
-    $empleManto=DB::select("select employees.nombre  ,employees.ubicacion, COUNT(upkeeps.product_id) as Cantidad
-    from employees JOIN products on employees.id = products.employee_id
-    JOIN upkeeps on products.id = upkeeps.product_id
-    WHERE upkeeps.created_at > ? AND upkeeps.created_at< ?
-    GROUP BY  employees.nombre",[$fecha_inicial,$fecha_final]);
+  $empleManto=DB::select("select users.name as nombre  ,products.numSe,products.numInv,products.marca,products.modelo,products.tipo, COUNT(upkeeps.product_id) as Cantidad
+  from users JOIN products on users.id = products.employee_id
+  JOIN upkeeps on products.id = upkeeps.product_id
+  WHERE upkeeps.created_at > ? AND upkeeps.created_at< ?
+  GROUP BY  users.id",[$fecha_inicial,$fecha_final]);
     $date = Carbon::now();
     $date = $date->format('d-m-Y');
     Log::info("El usuarios: '".Auth::user()->name."' ha solicitado la vista previa al reporte cant de soli mante por empleado");
@@ -353,11 +352,11 @@ public function pdfEquipoDescargado(Request $request,$tipo, $fecha_inicial,$fech
 
   public function PdfMantEmple(Request $request,$fecha_inicial,$fecha_final){
     $imprimir=1;
-    $empleManto=DB::select("select employees.nombre  ,employees.ubicacion, COUNT(upkeeps.product_id) as Cantidad
-    from employees JOIN products on employees.id = products.employee_id
+    $empleManto=DB::select("select users.name as nombre  ,products.numSe,products.numInv,products.marca,products.modelo,products.tipo, COUNT(upkeeps.product_id) as Cantidad
+    from users JOIN products on users.id = products.employee_id
     JOIN upkeeps on products.id = upkeeps.product_id
     WHERE upkeeps.created_at > ? AND upkeeps.created_at< ?
-    GROUP BY  employees.nombre",[$fecha_inicial,$fecha_final]);
+    GROUP BY  users.id",[$fecha_inicial,$fecha_final]);
 
 
   $date= Carbon::now();
@@ -375,11 +374,11 @@ return view('pdf.EmpleadoMantenimiento',compact('empleManto','date','imprimir'))
   }
 
   public function ExcelMantEmple($fecha_inicial,$fecha_final){
-    $empleManto=DB::select("select employees.nombre  ,employees.ubicacion, COUNT(upkeeps.product_id) as Cantidad
-    from employees JOIN products on employees.id = products.employee_id
+    $empleManto=DB::select("select users.name as nombre  ,products.numSe,products.numInv,products.marca,products.modelo,products.tipo, COUNT(upkeeps.product_id) as Cantidad
+    from users JOIN products on users.id = products.employee_id
     JOIN upkeeps on products.id = upkeeps.product_id
     WHERE upkeeps.created_at > ? AND upkeeps.created_at< ?
-    GROUP BY  employees.nombre",[$fecha_inicial,$fecha_final]);
+    GROUP BY  users.id",[$fecha_inicial,$fecha_final]);
 
     Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Cantidad de mantenimientos por empleado");
     return Excel::download(new ManEmplExport($empleManto), 'MantenimientosPorEmpleado_'.Carbon::now()->format('d-m-y').'.xlsx');

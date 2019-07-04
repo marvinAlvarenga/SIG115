@@ -14,7 +14,7 @@
       <br><br>Unidad de Mantenimiento de Inform&aacute;tica
     </span>
     <span class="h4">
-      <br>Reporte de Mantenimientos Solicitados por empleados en un rango de tiempo.
+      <br>Reporte de Mantenimientos Solicitados.
     </span>
   </h1>
 
