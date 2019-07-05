@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rule; 
+use Illuminate\Validation\Rule;
 use DateTime;
 use Auth;
 use PDF;
@@ -17,6 +17,7 @@ use App\Exports\EquipoViejoExport;
 use App\Exports\ManEmplExport;
 use App\Exports\GaranVenExport;
 use App\Exports\LicenciasPorVencerExport;
+use App\Exports\EqDescargadoExport;
 use Carbon\Carbon;
 
 class TacticoController extends Controller
@@ -24,22 +25,57 @@ class TacticoController extends Controller
 
 /////////////////////////REPORTE EQUIPOS DESCARGADOS//////////////////////////
   public function getEquipoDescargado(){
+    Log::info("El usuarios: '".Auth::user()->name."' ha ingresado a la pantalla de equipo descargado.");
     return view('tacticos.formEquipoDescargado', ['errores' => '']);
   }
 
   public function postEquipoDescargado(Request $request){
+    Log::info("El usuarios: '".Auth::user()->name."' ha solicitado un reporte de equipos descargados.");
     $tipo = $request->input('tipo_arr', [200]);
     $fecha_inicial = $request->input('fecha_inicial');
     $fecha_final = $request->input('fecha_final');
 
     if($this->validarArrayTipo($tipo) && $this->validarFechas($fecha_inicial, $fecha_final)){
       $productos = $this-> getProductosDescargados($tipo, $fecha_inicial, $fecha_final);
-      return view('tacticos.repEquipoDescargado', ['productos' => $productos]);
+      $retVals = ['productos' => $productos,
+      'tipo'=>$tipo,
+      'fecha_inicial'=> $fecha_inicial,
+      'fecha_final'=> $fecha_final];
+      return view('tacticos.repEquipoDescargado', $retVals);
     }
 
     $errores = "Error en los datos ingresados";
     return view('tacticos.formEquipoDescargado', ['errores' => $errores]);
   }
+
+public function pdfEquipoDescargado(Request $request,$tipo, $fecha_inicial,$fecha_final, $valor){
+  $imprimir = 1;
+  $tipos = explode(',', $tipo);
+
+  $date = Carbon::now();
+  if( $this->validarFechas($fecha_inicial, $fecha_final)){
+    $productos = $this-> getProductosDescargados($tipos, $fecha_inicial, $fecha_final);
+    switch($valor){
+      case "pdf":
+      Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de equipo descargado");
+      $pdf = PDF::loadView('pdf.pdfEquiposDescargados', compact('productos','fecha_inicial','fecha_final', 'date'))->setPaper(array(0,0,612.00,792.00));
+      return $pdf->stream('reportEquipoDescargado.pdf',array("Attachment" => 0));
+     break;
+    case "print":
+    Log::info("El usuarios: '".Auth::user()->name."' ha mandado a imprimir el reporte de equipo descargado");
+    return view('pdf.pdfEquiposDescargados',compact('productos','fecha_inicial','fecha_final','imprimir', 'date'));
+    case "excel":
+    Log::info("El usuarios: '".Auth::user()->name."' ha exportado en Excel el reporte de equipo descargado");
+    return Excel::download(new EqDescargadoExport($productos), 'EquipoDescargado_'.Carbon::now()->format('d-m-y').'.xlsx');
+    break;
+    }
+  }
+  $errores = "Error en los datos ingresados";
+  return view('tacticos.formEquipoDescargado', ['errores' => $errores]);
+
+
+}
+
   //Valida qe cada elemento del array sea un entero.
   private function validarArrayTipo($tipo_arr){
     $valido = true;
@@ -101,7 +137,7 @@ class TacticoController extends Controller
 
     public function equipoAntiguoGenerate(Request $request)
     {
-      
+
       if($request['tipo'] == null) return redirect('reportes/equipoAntiguo')->with('status', 'Debe seleccionar al menos un tipo de equipo de la lista');
 
       $computadoras = null;
@@ -115,7 +151,7 @@ class TacticoController extends Controller
       }
 
       Log::info("El usuario: '".Auth::user()->name."' está viendo el reporte: Ver empleados con equipo antiguo");
-      
+
       return view('tacticos.reporteEquipoAntiguoIndex')->with('computadoras', $computadoras)->with('impresoras', $impresoras);
     }
 
@@ -174,7 +210,7 @@ class TacticoController extends Controller
 
     ////////////////////////////////FIN DEL REPORTE DE EQUIPO ANTIGUO////////////////////////////////////77
 
-    
+
     /////REPORTE DE LICENCIAS POR VENCER////////
     public function licenciasPorVencer(Request $request){
       $date=Carbon::now();
@@ -210,7 +246,7 @@ class TacticoController extends Controller
       Log::info("El usuarios: '".Auth::user()->name."' ha ingresado al reporte de licencias por vencer");
       return view('tacticos.reporteLicenciasPorVencer',compact('products','tipo','vencida'));
   }else{
-    
+
     return view ('tacticos.reporteLicenciasPorVencer');
   }
     }
@@ -284,52 +320,51 @@ class TacticoController extends Controller
   }
         ////////////////////////////////FIN DEL REPORTE LICENCIAS POR VENCER////////////////////////////////////
 
-/////REPORTE DE MANTENIMIENTOS SOLICITADOS POR EMPLEADOS EN UN RANGO DE TIEMPO////////
+/////REPORTE DE MANTENIMIENTOS SOLICITADOS EN RANGO DE TIEMPO////////
 
 
  public function SoliMantEmple(){
-  Log::info("El usuarios: '".Auth::user()->name."' ha exportado ingresado a la pantalla de entrada para el reporte cant de soli mante por empleado");
+  Log::info("El usuarios: '".Auth::user()->name."' ha ingresado a la pantalla de entrada para el reporte cant de soli mante por empleado");
   return view('tacticos.soliEmplMante');
   }
 
   public function PrevMantEmple(Request $request)
   {
-    
+
   $fecha_inicial=$request->get('desde');
-  $fecha_final=$request->get('hasta');  
-  
+  $fecha_final=$request->get('hasta');
+
  if($this->validarFechas($fecha_inicial,$fecha_final)){
-   
-    $empleManto=DB::select("select employees.nombre  ,employees.ubicacion, COUNT(upkeeps.product_id) as Cantidad 
-    from employees JOIN products on employees.id = products.employee_id 
-    JOIN upkeeps on products.id = upkeeps.product_id 
-    WHERE upkeeps.created_at > ? AND upkeeps.created_at< ?
-    GROUP BY  employees.nombre",[$fecha_inicial,$fecha_final]);
+  $empleManto=DB::select("select users.name as nombre  ,products.numSe,products.numInv,products.marca,products.modelo,products.tipo, COUNT(upkeeps.product_id) as Cantidad
+  from users JOIN products on users.id = products.employee_id
+  JOIN upkeeps on products.id = upkeeps.product_id
+  WHERE upkeeps.created_at > ? AND upkeeps.created_at< ?
+  GROUP BY  users.id",[$fecha_inicial,$fecha_final]);
     $date = Carbon::now();
     $date = $date->format('d-m-Y');
     Log::info("El usuarios: '".Auth::user()->name."' ha solicitado la vista previa al reporte cant de soli mante por empleado");
    return view('tacticos.prevRepoEmplMante',compact('empleManto','date','fecha_inicial','fecha_final'));
-   
+
 }
   return view('tacticos.soliEmplMante')->withErrors('Error en las fechas ingresadas');
- 
+
 }
 
   public function PdfMantEmple(Request $request,$fecha_inicial,$fecha_final){
     $imprimir=1;
-    $empleManto=DB::select("select employees.nombre  ,employees.ubicacion, COUNT(upkeeps.product_id) as Cantidad 
-    from employees JOIN products on employees.id = products.employee_id 
-    JOIN upkeeps on products.id = upkeeps.product_id 
+    $empleManto=DB::select("select users.name as nombre  ,products.numSe,products.numInv,products.marca,products.modelo,products.tipo, COUNT(upkeeps.product_id) as Cantidad
+    from users JOIN products on users.id = products.employee_id
+    JOIN upkeeps on products.id = upkeeps.product_id
     WHERE upkeeps.created_at > ? AND upkeeps.created_at< ?
-    GROUP BY  employees.nombre",[$fecha_inicial,$fecha_final]);
-   
-   
-  $date= Carbon::now();  
-  $date = $date->format('d-m-Y'); 
+    GROUP BY  users.id",[$fecha_inicial,$fecha_final]);
+
+
+  $date= Carbon::now();
+  $date = $date->format('d-m-Y');
 switch($request->method()){
   case "POST":
   Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de Cantidad de mantenimientos por empleado");
-  $pdf = PDF::loadView('pdf.EmpleadoMantenimiento', compact('empleManto','date'))->setPaper(array(0,0,612.00,792.00));  
+  $pdf = PDF::loadView('pdf.EmpleadoMantenimiento', compact('empleManto','date'))->setPaper(array(0,0,612.00,792.00));
   return $pdf->stream('repoManEmple.pdf',array("Attachment" => 0));
  break;
 case "GET":
@@ -339,12 +374,12 @@ return view('pdf.EmpleadoMantenimiento',compact('empleManto','date','imprimir'))
   }
 
   public function ExcelMantEmple($fecha_inicial,$fecha_final){
-    $empleManto=DB::select("select employees.nombre  ,employees.ubicacion, COUNT(upkeeps.product_id) as Cantidad 
-    from employees JOIN products on employees.id = products.employee_id 
-    JOIN upkeeps on products.id = upkeeps.product_id 
+    $empleManto=DB::select("select users.name as nombre  ,products.numSe,products.numInv,products.marca,products.modelo,products.tipo, COUNT(upkeeps.product_id) as Cantidad
+    from users JOIN products on users.id = products.employee_id
+    JOIN upkeeps on products.id = upkeeps.product_id
     WHERE upkeeps.created_at > ? AND upkeeps.created_at< ?
-    GROUP BY  employees.nombre",[$fecha_inicial,$fecha_final]);
-   
+    GROUP BY  users.id",[$fecha_inicial,$fecha_final]);
+
     Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Cantidad de mantenimientos por empleado");
     return Excel::download(new ManEmplExport($empleManto), 'MantenimientosPorEmpleado_'.Carbon::now()->format('d-m-y').'.xlsx');
   }
@@ -357,178 +392,178 @@ return view('pdf.EmpleadoMantenimiento',compact('empleManto','date','imprimir'))
     Log::info("El usuarios: '".Auth::user()->name."' ha Ingresado a la pantalla de solicitud de reporte de garantias por vencer");
   return view('tacticos.SoliGarantiasPorVencer');
   }
-  
+
   public function PrevGaraVen(Request $request){
-    $fechafinal= Carbon::now();   
+    $fechafinal= Carbon::now();
 
     $products=DB::table('products')
     ->get();
     $i=0;
     $tipo=$request->tipo;
     $existeRegis=0;
-   if($tipo==3){   
-  
+   if($tipo==3){
+
     foreach ($products as $product) {
      $date=Carbon::parse($product->fechaAdqui);
     $fechaVenciminto=$date->addYear($product->garantia);
-   
+
      $fechaActual = Carbon::parse( $fechafinal );  /// da formato Y-m-d
       if( $fechaActual > $fechaVenciminto){
        $empleManto[$i]=$product;
        $tiempoFaltante[$i]=0;
        $existeRegis=1;
-      } else {   
+      } else {
      $mesesDiferencia =$fechaVenciminto->diffInMonths($fechaActual);// compara las fechas para saber cuanto es la diferencia de meses
-     
+
       if($mesesDiferencia <=3 ){
        $empleManto[$i]=$product;
-       $tiempoFaltante[$i]=$mesesDiferencia; 
-       $existeRegis=1;          
+       $tiempoFaltante[$i]=$mesesDiferencia;
+       $existeRegis=1;
       }
     }
-     
+
      $i=$i+1;
     }
-    $date= Carbon::now();  
-    $date = $date->format('d-m-Y'); 
-    
-   
+    $date= Carbon::now();
+    $date = $date->format('d-m-Y');
+
+
    // return view('tacticos.prevGarantiasPorVencer', compact('productVen','date','fecha_inicial','fecha_final'));
-    
+
   }
   else{
     if($tipo==2){
       foreach ($products as $product) {
         $date=Carbon::parse($product->fechaAdqui);
        $fechaVenciminto=$date->addYear($product->garantia);
-      
+
         $fechaActual = Carbon::parse( $fechafinal );  /// da formato Y-m-d
          if( $fechaActual > $fechaVenciminto){
           $empleManto[$i]=$product;
           $tiempoFaltante[$i]=0;
-          $existeRegis=1;   
-         }         
+          $existeRegis=1;
+         }
         $i=$i+1;
        }
-      
+
       }else{
         if($tipo==1){
-          
+
     foreach ($products as $product) {
       $date=Carbon::parse($product->fechaAdqui);
      $fechaVenciminto=$date->addYear($product->garantia);
-    
+
       $fechaActual = Carbon::parse( $fechafinal );  /// da formato Y-m-d
        if( $fechaActual < $fechaVenciminto){
         $mesesDiferencia =$fechaVenciminto->diffInMonths($fechaActual);// compara las fechas para saber cuanto es la diferencia de meses
-      
+
        if($mesesDiferencia <=3 ){
         $empleManto[$i]=$product;
-        $tiempoFaltante[$i]=$mesesDiferencia;    
-        $existeRegis=1;    
+        $tiempoFaltante[$i]=$mesesDiferencia;
+        $existeRegis=1;
        }
        }
-      
+
       $i=$i+1;
      }
-    
-     
+
+
     }
       }
   }
   if ($existeRegis==1) {
-    $date= Carbon::now();  
-    $date = $date->format('d-m-Y'); 
+    $date= Carbon::now();
+    $date = $date->format('d-m-Y');
     Log::info("El usuarios: '".Auth::user()->name."' ha ingresado a la vista previa del reporte de garantias por vencer");
       return view('tacticos.prevGarantiasPorVencer',compact('empleManto','date','tiempoFaltante','tipo'));
   }
   else {
-    
+
   return view('tacticos.SoliGarantiasPorVencer')->withErrors('No hay ningun registro que cumpla con los parametros');
-  
+
   }
  }
 
  public function pdfGaraVen(Request $request,$tipo)
  {
-  
-  $fechafinal= Carbon::now();   
+
+  $fechafinal= Carbon::now();
   $imprimir=1;
   $products=DB::table('products')
   ->get();
   $i=0;
- 
 
- if($tipo==3){  
+
+ if($tipo==3){
 
   foreach ($products as $product) {
    $date=Carbon::parse($product->fechaAdqui);
   $fechaVenciminto=$date->addYear($product->garantia);
- 
+
    $fechaActual = Carbon::parse( $fechafinal );  /// da formato Y-m-d
     if( $fechaActual > $fechaVenciminto){
      $empleManto[$i]=$product;
      $tiempoFaltante[$i]=0;
-    } else {   
+    } else {
    $mesesDiferencia =$fechaVenciminto->diffInMonths($fechaActual);// compara las fechas para saber cuanto es la diferencia de meses
-   
+
     if($mesesDiferencia <=3 ){
      $empleManto[$i]=$product;
-     $tiempoFaltante[$i]=$mesesDiferencia;        
+     $tiempoFaltante[$i]=$mesesDiferencia;
     }
   }
-   
+
    $i=$i+1;
   }
 
- 
+
  // return view('tacticos.prevGarantiasPorVencer', compact('productVen','date','fecha_inicial','fecha_final'));
-  
+
 }
 else{
   if($tipo==2){
     foreach ($products as $product) {
       $date=Carbon::parse($product->fechaAdqui);
      $fechaVenciminto=$date->addYear($product->garantia);
-    
+
       $fechaActual = Carbon::parse( $fechafinal );  /// da formato Y-m-d
        if( $fechaActual > $fechaVenciminto){
         $empleManto[$i]=$product;
         $tiempoFaltante[$i]=0;
-       }         
+       }
       $i=$i+1;
      }
-    
+
     }else{
       if($tipo==1){
-        
+
   foreach ($products as $product) {
     $date=Carbon::parse($product->fechaAdqui);
    $fechaVenciminto=$date->addYear($product->garantia);
-  
+
     $fechaActual = Carbon::parse( $fechafinal );  /// da formato Y-m-d
      if( $fechaActual < $fechaVenciminto){
       $mesesDiferencia =$fechaVenciminto->diffInMonths($fechaActual);// compara las fechas para saber cuanto es la diferencia de meses
-    
+
      if($mesesDiferencia <=3 ){
       $empleManto[$i]=$product;
-      $tiempoFaltante[$i]=$mesesDiferencia;        
+      $tiempoFaltante[$i]=$mesesDiferencia;
      }
      }
-    
+
     $i=$i+1;
    }
-   
+
   }
     }
 }
-$date= Carbon::now();  
-  $date = $date->format('d-m-Y'); 
+$date= Carbon::now();
+  $date = $date->format('d-m-Y');
 switch($request->method()){
   case "POST":
   Log::info("El usuarios: '".Auth::user()->name."' exportado a PDF el reporte de garantias por vencer");
- $pdf = PDF::loadView('pdf.equipoGarantivaVencida',compact('empleManto','date','tiempoFaltante','tipo'))->setPaper(array(0,0,612.00,792.00));  
-return $pdf->stream('GaranVeci.pdf',array("Attachment" => 0));    
+ $pdf = PDF::loadView('pdf.equipoGarantivaVencida',compact('empleManto','date','tiempoFaltante','tipo'))->setPaper(array(0,0,612.00,792.00));
+return $pdf->stream('GaranVeci.pdf',array("Attachment" => 0));
  break;
 case "GET":
 Log::info("El usuarios: '".Auth::user()->name."' ha mandado a imprimir el reporte de garantias por vencer");
@@ -538,73 +573,73 @@ return view('pdf.equipoGarantivaVencida',compact('empleManto','date','tiempoFalt
 
  public function ExcelGaraVen($tipo)
  {
-  
-  $fechafinal= Carbon::now();   
+
+  $fechafinal= Carbon::now();
 
   $products=DB::table('products')
   ->get();
   $i=0;
- 
 
- if($tipo==3){  
+
+ if($tipo==3){
 
   foreach ($products as $product) {
    $date=Carbon::parse($product->fechaAdqui);
   $fechaVenciminto=$date->addYear($product->garantia);
- 
+
    $fechaActual = Carbon::parse( $fechafinal );  /// da formato Y-m-d
     if( $fechaActual > $fechaVenciminto){
      $empleManto[$i]=$product;
      $tiempoFaltante[$i]=0;
-    } else {   
+    } else {
    $mesesDiferencia =$fechaVenciminto->diffInMonths($fechaActual);// compara las fechas para saber cuanto es la diferencia de meses
-   
+
     if($mesesDiferencia <=3 ){
      $empleManto[$i]=$product;
-     $tiempoFaltante[$i]=$mesesDiferencia;        
+     $tiempoFaltante[$i]=$mesesDiferencia;
     }
   }
-   
+
    $i=$i+1;
   }
   Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Garantias por vencer o vencidas");
      return Excel::download(new GaranVenExport($empleManto,$tiempoFaltante), 'Garantias_por_vencer_o_vencidas_'.Carbon::now()->format('d-m-y').'.xlsx');
- 
+
  // return view('tacticos.prevGarantiasPorVencer', compact('productVen','date','fecha_inicial','fecha_final'));
-  
+
 }
 else{
   if($tipo==2){
     foreach ($products as $product) {
       $date=Carbon::parse($product->fechaAdqui);
      $fechaVenciminto=$date->addYear($product->garantia);
-    
+
       $fechaActual = Carbon::parse( $fechafinal );  /// da formato Y-m-d
        if( $fechaActual > $fechaVenciminto){
         $empleManto[$i]=$product;
         $tiempoFaltante[$i]=0;
-       }         
+       }
       $i=$i+1;
      }
      Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Garantias por vencer o vencidas");
      return Excel::download(new GaranVenExport($empleManto,$tiempoFaltante), 'Garantias_por_vencer_o_vencidas_'.Carbon::now()->format('d-m-y').'.xlsx');
     }else{
       if($tipo==1){
-        
+
   foreach ($products as $product) {
     $date=Carbon::parse($product->fechaAdqui);
    $fechaVenciminto=$date->addYear($product->garantia);
-  
+
     $fechaActual = Carbon::parse( $fechafinal );  /// da formato Y-m-d
      if( $fechaActual < $fechaVenciminto){
       $mesesDiferencia =$fechaVenciminto->diffInMonths($fechaActual);// compara las fechas para saber cuanto es la diferencia de meses
-    
+
      if($mesesDiferencia <=3 ){
       $empleManto[$i]=$product;
-      $tiempoFaltante[$i]=$mesesDiferencia;        
+      $tiempoFaltante[$i]=$mesesDiferencia;
      }
      }
-    
+
     $i=$i+1;
    }
    Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Cantidad de Garantias por vencer o vencidas");
@@ -613,6 +648,6 @@ else{
     }
 }
  }
-    
-    
+
+
 }

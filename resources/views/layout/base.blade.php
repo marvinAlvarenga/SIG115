@@ -104,7 +104,7 @@
             @can('report.licencias')<a class="collapse-item" href="{{route('tacticos.licenciasPorVencer')}}">Licencias por vencer</a>@endcan
             @can('report.equipoDescargado')<a class="collapse-item" href="{{ route('EquipoDescargado') }}">Equipo descargado</a>@endcan
             @can('report.equipoAntiguo')<a class="collapse-item" href="{{route('tacticos.equipoAntiguoIndex')}}">Equipo antiguo</a>@endcan
-            @can('report.cantidadManteniSolicitados')<a class="collapse-item" href="{{route('solimantempl')}}">Cantidad Mantes solicitados</a>@endcan
+            @can('report.cantidadManteniSolicitados')<a class="collapse-item" href="{{route('solimantempl')}}">Cantidad Mantes realizados</a>@endcan
             @can('report.garantiasVencidas')<a class="collapse-item" href="{{route('soligaranven')}}">Equip. Garantias vencidas</a>@endcan
 
           </div>

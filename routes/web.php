@@ -25,7 +25,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/equipoportipo/pdf/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@equipoPorTipoPdf')->name('gerenciales.equipoportipoPdf')->middleware('can:report.equipoAgregado');
     Route::get('/equipoportipo/pdf/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@equipoPorTipoPdf')->name('gerenciales.equipoportipoImprimir')->middleware('can:report.equipoAgregado');
     Route::get('/equipoportipo/Excel/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@equipoPorTipoExcel')->name('gerenciales.equipoportipoExcel')->middleware('can:report.equipoAgregado');
-    
+
     Route::get('/repuestosCambiados','GerencialController@repuestosCambiados')->name('gerenciales.repuestosCambiados')->middleware('can:report.repuestosCambiados');
     Route::post('/repuestosCambiados/pdf/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@repuestosCambiadosPdf')->name('gerenciales.repuestosCambiadosPdf')->middleware('can:report.repuestosCambiados');
     Route::get('/repuestosCambiados/pdf/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@repuestosCambiadosPdf')->name('gerenciales.repuestosCambiadosImprimir')->middleware('can:report.repuestosCambiados');
@@ -58,7 +58,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/excelmanDeto/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@ExcelMandep')->name('excelmanDeto')->middleware('can:report.cantidadManteniDepto');
     Route::get('/solimantempl', 'TacticoController@SoliMantEmple')->name('solimantempl')->middleware('can:report.cantidadManteniSolicitados');
     Route::get('/premantempl', 'TacticoController@PrevMantEmple')->name('premantempl')->middleware('can:report.cantidadManteniSolicitados');
-    Route::post('/pdfmantempl/{fecha_inicial}/{fecha_final}', 'TacticoController@PdfMantEmple')->name('pdfmantempl')->middleware('can:report.cantidadManteniSolicitados'); 
+    Route::post('/pdfmantempl/{fecha_inicial}/{fecha_final}', 'TacticoController@PdfMantEmple')->name('pdfmantempl')->middleware('can:report.cantidadManteniSolicitados');
     Route::get('/impmantempl/{fecha_inicial}/{fecha_final}', 'TacticoController@PdfMantEmple')->name('impmantempl')->middleware('can:report.cantidadManteniSolicitados');
     Route::get('/excelmantempl/{fecha_inicial}/{fecha_final}', 'TacticoController@ExcelMantEmple')->name('excelmantempl')->middleware('can:report.cantidadManteniSolicitados');
     Route::get('/soligaranven', 'TacticoController@SoliGaraVen')->name('soligaranven')->middleware('can:report.garantiasVencidas');
@@ -66,7 +66,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pdfgaranve/{tipo}', 'TacticoController@pdfGaraVen')->name('pdfgaranve')->middleware('can:report.garantiasVencidas');
     Route::get('/impgaranve/{tipo}', 'TacticoController@pdfGaraVen')->name('impgaranve')->middleware('can:report.garantiasVencidas');
     Route::get('/excelgaranve/{tipo}', 'TacticoController@ExcelGaraVen')->name('excelgaranve')->middleware('can:report.garantiasVencidas');
-    
+
 
     //RUTAS EDWIN
     Route::get('/reportes/mantsxuser', 'GerencialController@getMantsXUser')->name('MantsXUser')->middleware('can:report.clientesYMantenimientos');
@@ -76,6 +76,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/etl',function() { return view('gerenciales.etl'); })->name('etlManual')->middleware('can:etl');
     Route::post('/etl','GerencialController@generateETL')->middleware('can:etl');
 
+    Route::get('/impmantsxuser/{fecha_inicial}/{fecha_final}/{count}/{valor}', 'GerencialController@pdfMantsXUser')->name('impMantsXUser')->middleware('can:report.clientesYMantenimientos');
+    Route::get('/pdfmantsxuser/{fecha_inicial}/{fecha_final}/{count}/{valor}', 'GerencialController@pdfMantsXUser')->name('pdfMantsXUser')->middleware('can:report.clientesYMantenimientos');
+    Route::get('/impequipodescargado/{tipo}/{fecha_inicial}/{fecha_final}/{valor}', 'TacticoController@pdfEquipoDescargado')->name('impequipodescargado')->middleware('can:report.equipoDescargado');
+    Route::get('/pdfequipodescargado/{tipo}/{fecha_inicial}/{fecha_final}/{valor}', 'TacticoController@pdfEquipoDescargado')->name('pdfequipodescargado')->middleware('can:report.equipoDescargado');
 
 
     //RUTAS MARVIN
