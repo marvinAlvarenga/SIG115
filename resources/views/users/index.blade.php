@@ -27,6 +27,7 @@
                 {{ session('status') }}
             </div>
             @endif
+          <a href="{{route('usuarios.reporte')}}" class="btn btn-sm btn-info">Reporte de Usuarios Registrados</a>
                 <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                           <thead>

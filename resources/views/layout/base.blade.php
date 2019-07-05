@@ -41,7 +41,7 @@
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item active">
-        <a class="nav-link" href="/">
+      <a class="nav-link" href="{{url('/')}}">
           <i class="fas fa-fw fa-home"></i>
           <span>Inicio</span></a>
       </li>

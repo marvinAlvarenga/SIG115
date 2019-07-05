@@ -82,6 +82,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/usuarios', 'UserController@index')->name('usuarios.index')->middleware('can:users.index');
     Route::get('/usuarios/{usuario}/editar', 'UserController@edit')->name('usuarios.edit')->middleware('can:users.edit');
     Route::post('/usuarios/{usuario}/actualizar', 'UserController@update')->name('usuarios.update')->middleware('can:users.edit');
+    Route::get('/usuarios/reporte', 'UserController@reporte')->name('usuarios.reporte')->middleware('can:users.report');
 
     Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('logs')->middleware('can:bitacora');
 

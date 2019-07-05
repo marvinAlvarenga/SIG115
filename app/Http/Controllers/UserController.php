@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 use Auth;
+use PDF;
 
 class UserController extends Controller
 {
@@ -79,6 +81,14 @@ class UserController extends Controller
 
         return redirect('/usuarios')->with('users', User::all())->with('status', $mensaje)->with('type_message', $type);
 
+    }
+
+    public function reporte()
+    {
+        $users = User::all();
+        $pdf = PDF::loadView('pdf.reporteUsuarios', ["usuarios" => $users]);
+        Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de los usuarios registrados en el sistema");
+        return $pdf->stream('usuariosRegistrados_'.Carbon::now()->format('d-m-y').'.pdf');
     }
 
 }

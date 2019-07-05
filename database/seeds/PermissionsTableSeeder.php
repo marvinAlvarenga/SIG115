@@ -153,7 +153,14 @@ class PermissionsTableSeeder extends Seeder
                 'slug'          =>  'etl',
                 'description'   =>  'Permite ejecutar el ETL para cargar el SIG'
             ]);
-            $r1->permissions()->saveMany([$p18, $p19]);
+            $p20 = Permission::create([
+                'name'          =>  'Reporte de Usuarios',
+                'slug'          =>  'users.report',
+                'description'   =>  'Generar el reporte de usuarios registrado',
+            ]);
+            $r1->permissions()->saveMany([$p18, $p19, $p20]);
+            $r2->permissions()->save($p20);
+
 
             //Asignando rol a los usuarios iniciales
             User::find(1)->roles()->save($r1);
