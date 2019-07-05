@@ -49,7 +49,7 @@
                     <br>   
                     <br>   
             <div style="height:28px; width:100%; float:left;"><br><p>Unidad Solicitante: ADMINISTRACION FINANCIERA<p>
-                <br>Cantidad de mantenimientos por departamento
+                <br>Mantenimientos realizados en un rango de fecha
             </div>
             <br>    
             <br>   
@@ -73,11 +73,18 @@
                                 <tr>
                   
                      
-                                    <th scope="row">Departamento</th>
-
-                                    <th scope="row">Ubicacion</th>
+                                    <th scope="row">Persona que realizo el mante</th>
+            
+                                    <th scope="row">N° de serie</th>
                                  
-                                    <th scope="row">Cantidad de mantenimientos solicitados</th>
+                                    
+                                    <th scope="row">N° de inv</th>
+                                    
+                                    <th scope="row">Marca</th>
+                                    
+                                    <th scope="row">Modelo</th>
+                                    
+                                    <th scope="row">Tipo</th>
                                  
                                     
                                    </tr>                     
@@ -87,13 +94,19 @@
                                 <tr>
                               
                                 <td>{{$empleMantos->nombre}}</td>
-
-                                <td>{{$empleMantos->ubicacion}}</td>
+            
+                                <td>{{$empleMantos->numSe}}</td>
                               
-                                <td>{{$empleMantos->Cantidad}}</td>
+                                <td>{{$empleMantos->numInv}}</td>
+                                
+                                <td>{{$empleMantos->marca}}</td>
+                                
+                                <td>{{$empleMantos->modelo}}</td>
+                                
+                                <td>{{$empleMantos->tipo}}</td>
                               
                                 </tr>       
-                         @endforeach                       
+                         @endforeach                             
                             </tbody>
                         </table>
                     </div >

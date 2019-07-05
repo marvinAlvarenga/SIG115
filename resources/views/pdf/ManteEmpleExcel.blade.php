@@ -1,19 +1,26 @@
 @if(isset($empleMantos)!= null)
    
         <div  align="center" >                
-           <p>Cantidad de mantenimientos solicitados por empleados</p>
+           <p>Mantenimientos realizados en un rango de fecha</p>
             <table>
                 
-                    <caption> <h3 class="page-header">Cantidad de mantenimientos solicitados por empleado</h3></caption>
+                    <caption> <h3 class="page-header">Mantenimientos realizados en un rango de fecha</h3></caption>
                     <thead>
                         <tr>
           
              
-                            <th scope="row">Nombre</th>
+                            <th scope="row">Persona que realizo el mante</th>
     
-                            <th scope="row">Ubicacion</th>
+                            <th scope="row">N° de serie</th>
                          
-                            <th scope="row">Cantidad de mantenimientos solicitados</th>
+                            
+                            <th scope="row">N° de inv</th>
+                            
+                            <th scope="row">Marca</th>
+                            
+                            <th scope="row">Modelo</th>
+                            
+                            <th scope="row">Tipo</th>
                          
                             
                            </tr>                     
@@ -24,9 +31,15 @@
                       
                         <td>{{$empleMantos->nombre}}</td>
     
-                        <td>{{$empleMantos->ubicacion}}</td>
+                        <td>{{$empleMantos->numSe}}</td>
                       
-                        <td>{{$empleMantos->Cantidad}}</td>
+                        <td>{{$empleMantos->numInv}}</td>
+                        
+                        <td>{{$empleMantos->marca}}</td>
+                        
+                        <td>{{$empleMantos->modelo}}</td>
+                        
+                        <td>{{$empleMantos->tipo}}</td>
                       
                         </tr>       
                  @endforeach                             
