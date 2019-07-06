@@ -25,7 +25,7 @@
                         }
 
                     </style>
-                <title>Document</title>
+                <title>Reporte</title>
             </head>
             <body>
                 <div >
@@ -47,12 +47,21 @@
                     </div>
                     <br>
                     <br>
-
-            <br>
+                    <br>
                 <br>
-                <div tyle="height:28px; width:100%; float:both;"  class="form-group" align="right" >
+                <div style="height:28px; width:100%; float:left;">
+                    <br>
+                    <br><p>CONSULTADO EN LAS FECHAS:</p>
+
+                    de: {{$inicial}} &nbsp; hasta: {{$final}}
+                    <br>
+                </div>
+                <br>
+                <br>
+
+                <div class="form-group" align="right" >
                         <br>
-                        <br>
+
                         <br>
                         <label for="txtfecha" class="col-sm-2 control-label">Fecha</label>
                         <div class="col-sm-4">

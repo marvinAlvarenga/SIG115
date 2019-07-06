@@ -52,21 +52,27 @@ public function pdfEquipoDescargado(Request $request,$tipo, $fecha_inicial,$fech
   $imprimir = 1;
   $tipos = explode(',', $tipo);
 
+
   $date = Carbon::now();
   if( $this->validarFechas($fecha_inicial, $fecha_final)){
     $productos = $this-> getProductosDescargados($tipos, $fecha_inicial, $fecha_final);
+    $inicial = Carbon::parse( $fecha_inicial );
+    $inicial = $inicial->format('d-m-Y');
+    $final = Carbon::parse( $fecha_final );
+    $final = $final->format('d-m-Y');
+    $date = $date->format('d-m-Y');
     switch($valor){
       case "pdf":
       Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de equipo descargado");
-      $pdf = PDF::loadView('pdf.pdfEquiposDescargados', compact('productos','fecha_inicial','fecha_final', 'date'))->setPaper(array(0,0,612.00,792.00));
+      $pdf = PDF::loadView('pdf.pdfEquiposDescargados', compact('productos','inicial','final', 'date'))->setPaper(array(0,0,612.00,792.00));
       return $pdf->stream('reportEquipoDescargado.pdf',array("Attachment" => 0));
      break;
     case "print":
     Log::info("El usuarios: '".Auth::user()->name."' ha mandado a imprimir el reporte de equipo descargado");
-    return view('pdf.pdfEquiposDescargados',compact('productos','fecha_inicial','fecha_final','imprimir', 'date'));
+    return view('pdf.pdfEquiposDescargados',compact('productos','inicial','final','imprimir', 'date'));
     case "excel":
     Log::info("El usuarios: '".Auth::user()->name."' ha exportado en Excel el reporte de equipo descargado");
-    return Excel::download(new EqDescargadoExport($productos), 'EquipoDescargado_'.Carbon::now()->format('d-m-y').'.xlsx');
+    return Excel::download(new EqDescargadoExport($productos, $inicial, $final), 'EquipoDescargado_'.Carbon::now()->format('d-m-y').'.xlsx');
     break;
     }
   }

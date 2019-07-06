@@ -22,6 +22,14 @@
    </div>
 
 <div class="p-5">
+
+  <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Usuarios que solicitan mas mantenimientos</h6>
+      </div>
+          <div class="card-body">
+            <div class="table-responsive">
+
   <table class="table table-bordered" style="width:850px;" align="center">
     <thead>
       <tr>
@@ -44,6 +52,7 @@
       @endforelse
     </tbody>
   </table>
+</div></div></div>
 
       <a class="btn btn-primary" href="{{route('pdfMantsXUser',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'count'=>$count, 'valor'=>'pdf'])}}" role="button">Exportar a PDF</a>
       <a class="btn btn-primary" href="{{route('impMantsXUser',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'count'=>$count, 'valor'=>'print'])}}" role="button">Imprimir</a>

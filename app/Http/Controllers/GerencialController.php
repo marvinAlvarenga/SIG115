@@ -150,7 +150,7 @@ class GerencialController extends Controller
        case "POST":
        Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de mantenimientos realizados");
       $pdf = PDF::loadView('pdf.mantenimientosRealizadosPdf', compact('users','date','fechaInicial','fechaFinal'))->setPaper(array(0,0,612.00,792.00));
-     
+
       return $pdf->stream('EquipoPorTipo_'.$date.'pdf',array("Attachment" => 0));
       break;
    case "GET":
@@ -457,6 +457,7 @@ return Excel::download(new EquipSobre40Export($produc40), 'EquipoSobreAdqui_'.Ca
         ->take($count)
         ->whereDate('upkeeps.created_at', '>=', $inicial)
         ->whereDate('upkeeps.created_at', '<=', $final)
+        ->orderBy('count', 'DESC')
         ->get();
 
 
@@ -475,21 +476,28 @@ return Excel::download(new EquipSobre40Export($produc40), 'EquipoSobreAdqui_'.Ca
           'count' => $count,
         ];
         // return view('gerenciales.resulMantsXUsers', $retValues);
-        switch($valor){
-          case "pdf":
-          Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de users que piden mas mantenimiento");
-          $pdf = PDF::loadView('pdf.mantsXUSer', compact('usuarios','fecha_inicial','fecha_final','count', 'date'))->setPaper(array(0,0,612.00,792.00));
-          return $pdf->stream('reportMantsXUSer.pdf',array("Attachment" => 0));
-         break;
-        case "print":
-        Log::info("El usuarios: '".Auth::user()->name."' ha mandado a imprimir el reporte de users que piden mas mantenimiento");
-        return view('pdf.mantsXUSer',compact('usuarios','fecha_inicial','fecha_final','count','imprimir', 'date'));
-        break;
-        case "excel":
-        Log::info("El usuarios: '".Auth::user()->name."' ha exportado en Excel el reporte de users que piden mas mantenimiento");
-        return Excel::download(new MantsXUserExport($usuarios), 'MantenimientosPorUsuario_'.Carbon::now()->format('d-m-y').'.xlsx');
-        break;
-        }
+        $inicial = Carbon::parse( $fecha_inicial );
+                $inicial = $inicial->format('d-m-Y');
+                $final = Carbon::parse( $fecha_final );
+                $final = $final->format('d-m-Y');
+                $date = $date->format('d-m-Y');
+
+
+                switch($valor){
+                  case "pdf":
+                  Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de users que piden mas mantenimiento");
+                  $pdf = PDF::loadView('pdf.mantsXUSer', compact('usuarios','inicial','final','count', 'date'))->setPaper(array(0,0,612.00,792.00));
+                  return $pdf->stream('reportMantsXUSer.pdf',array("Attachment" => 0));
+                 break;
+                case "print":
+                Log::info("El usuarios: '".Auth::user()->name."' ha mandado a imprimir el reporte de users que piden mas mantenimiento");
+                return view('pdf.mantsXUSer',compact('usuarios','inicial','final','count','imprimir', 'date'));
+                break;
+                case "excel":
+                Log::info("El usuarios: '".Auth::user()->name."' ha exportado en Excel el reporte de users que piden mas mantenimiento");
+                return Excel::download(new MantsXUserExport($usuarios, $final, $inicial), 'MantenimientosPorUsuario_'.Carbon::now()->format('d-m-y').'.xlsx');
+                break;
+                }
       }
       $errores = 'Error en los datos ingresados';
       return view('gerenciales.formMantsXUsers', ['errores' => $errores]);

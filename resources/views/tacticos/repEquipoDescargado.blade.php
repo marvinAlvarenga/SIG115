@@ -21,33 +21,43 @@
     <img style="width:150px; height:150px;" src="{{ asset('img/logo.jpg') }}" class="img-fluid pull-xs-left" alt="Logo Minerva">
   </div>
 
-<div style="padding-left: 100px;">
+  <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Equipos Descargados</h6>
+      </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th scope="col">N&uacute;mero de serie</th>
+                    <th scope="col">N&uacute;mero de inventario</th>
+                    <th scope="col">Marca</th>
+                    <th scope="col">Modelo</th>
+                    <th scope="col">C&oacute;digo Descargo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @forelse($productos as $producto)
+                    <tr>
+                      <td>{{ $producto->numSe }}</td>
+                      <td>{{ $producto->numInv }}</td>
+                      <td>{{ $producto->marca }}</td>
+                      <td>{{ $producto->modelo }}</td>
+                      <td>{{ $producto->codigo }}</td>
+                    </tr>
+                  @empty
+                    <tr><td colspan="5">Ningun registro cumple los parametros asignados</td></tr>
+                  @endforelse
+              </tbody>
+            </table>
 
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th scope="col">N&uacute;mero de serie</th>
-        <th scope="col">N&uacute;mero de inventario</th>
-        <th scope="col">Marca</th>
-        <th scope="col">Modelo</th>
-        <th scope="col">C&oacute;digo Descargo</th>
-      </tr>
-    </thead>
-    <tbody>
-      @forelse($productos as $producto)
-        <tr>
-          <td>{{ $producto->numSe }}</td>
-          <td>{{ $producto->numInv }}</td>
-          <td>{{ $producto->marca }}</td>
-          <td>{{ $producto->modelo }}</td>
-          <td>{{ $producto->codigo }}</td>
-        </tr>
-      @empty
-        <tr><td colspan="5">Ningun registro cumple los parametros asignados</td></tr>
-      @endforelse
-  </tbody>
-</table>
-</div>
+
+
+            </div>
+            </div>
+            </div>
+
 <a class="btn btn-primary" href="{{route('pdfequipodescargado',['tipo'=> implode(',',$tipo),'fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final, 'valor'=>'pdf'])}}" role="button">Exportar a PDF</a>
 <a class="btn btn-primary" href="{{route('impequipodescargado',['tipo'=> implode(',',$tipo),'fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final, 'valor'=>'print'])}}" role="button">Imprimir</a>
 <a class="btn btn-primary" href="{{route('impequipodescargado',['tipo'=> implode(',',$tipo),'fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final, 'valor'=>'excel'])}}" role="button">Eportar Excel</a>
