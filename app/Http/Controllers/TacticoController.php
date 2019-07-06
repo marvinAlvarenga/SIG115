@@ -216,7 +216,7 @@ public function pdfEquipoDescargado(Request $request,$tipo, $fecha_inicial,$fech
       $date=Carbon::now();
       $date=$date->toDateString();
       $vencida=$request->get('vencida');
-      $tipo=$request->get('tipo');
+      $tipo=3;
       $tipos=$tipo; //para usar en el where dentro del when
       if(isset($tipo)){
       if($vencida==1){

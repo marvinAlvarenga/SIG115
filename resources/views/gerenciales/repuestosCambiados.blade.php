@@ -28,6 +28,7 @@
        {{$errors->first()}}
  </div>
  @endif
+ @if(!isset($spares))
 <div class="row ">
         <div class="col-sm-7">
           <div class="card mb-3">
@@ -81,6 +82,7 @@
                 </div>
       </div>
     </form>
+    @endif
 @if(isset($spares))
 @if(count($spares)>0)
 <div class="row">
@@ -128,9 +130,11 @@
  
     <a class="btn btn-primary" href="{{route('gerenciales.repuestosCambiadosImprimir',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo])}}" role="button">Imprimir</a>
     <a class="btn btn-primary" href="{{route('gerenciales.repuestosCambiadosExcel',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,'tipo'=>$tipo,])}}" role="button">Exportar Excel</a>
+    <a class="btn btn-primary" href="{{ url()->previous() }}" class="btn btn-default">Regresar</a>
   </form>
     @else
     <h3>No hay registros que cumplan con los parámetros ingresados</h3>
+    <a class="btn btn-primary" href="{{ url()->previous() }}" class="btn btn-default">Regresar</a>
     @endif
     
     @endif
