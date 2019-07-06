@@ -50,7 +50,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pdfinfo40/{tipo}', 'GerencialController@pdfInfo40')->name('pdfinfo40')->middleware('can:report.mayor40Adqui');
     Route::get('/impinfo40/{tipo}', 'GerencialController@pdfInfo40')->name('impinfo40')->middleware('can:report.mayor40Adqui');
     Route::get('/soliInf40', 'GerencialController@getEqui')->name('soli40')->middleware('can:report.mayor40Adqui');
-    Route::get('/excellinfo40/{tipo}', 'GerencialController@excellInfo40')->name('excellinfo40')->middleware('can:report.mayor40Adqui');
+    Route::get('/excelinfo40/{tipo}', 'GerencialController@excelInfo40')->name('excelinfo40')->middleware('can:report.mayor40Adqui');
     Route::get('/deptmante', 'GerencialController@ManDep')->name('depmant')->middleware('can:report.cantidadManteniDepto');
     Route::get('/soliInfdepma', 'GerencialController@soliDepMant')->name('solidepmant')->middleware('can:report.cantidadManteniDepto');
     Route::post('/pdfmanDeto/{fecha_inicial}/{fecha_final}/{tipo}', 'GerencialController@pdfMandep')->name('pdfmanDeto')->middleware('can:report.cantidadManteniDepto');

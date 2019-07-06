@@ -66,15 +66,19 @@ class GerencialController extends Controller
       }
        $date = Carbon::now();
        $date = $date->format('d-m-Y');
+       $fechaInicial = Carbon::parse( $fecha_inicial );
+  $fechaInicial = $fechaInicial->format('d-m-Y');
+  $fechaFinal = Carbon::parse( $fecha_final );
+  $fechaFinal = $fechaFinal->format('d-m-Y');
        switch($request->method()){
         case "POST":
         Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de equipos agregados a inventario ");
-       $pdf = PDF::loadView('pdf.equipoPorTipoPdf', compact('products','date','tipo'))->setPaper(array(0,0,612.00,792.00));
+       $pdf = PDF::loadView('pdf.equipoPorTipoPdf', compact('products','date','tipo','fechaInicial','fechaFinal'))->setPaper(array(0,0,612.00,792.00));
        return $pdf->stream('EquipoPorTipo_'.$date.'pdf',array("Attachment" => 0));
        break;
     case "GET":
     Log::info("El usuarios: '".Auth::user()->name."' ha exportado a indicado imprimir el reporte de equipos agregados a inventario ");
-    return view('pdf.equipoPorTipoPdf',compact('products','fecha_inicial','fecha_final','tipo','imprimir','date'));
+    return view('pdf.equipoPorTipoPdf',compact('products','fecha_inicial','fecha_final','tipo','imprimir','date','fechaInicial','fechaFinal'));
     }
   }
 
@@ -90,8 +94,12 @@ class GerencialController extends Controller
      }else{
 
      }
+     $fechaInicial = Carbon::parse( $fecha_inicial );
+     $fechaInicial = $fechaInicial->format('d-m-Y');
+     $fechaFinal = Carbon::parse( $fecha_final );
+     $fechaFinal = $fechaFinal->format('d-m-Y');
     Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Equipo agregado al inventario");
-    return Excel::download(new EquipoPorTipoExport($products), 'EquipoAgregado'.Carbon::now()->format('d-m-y').'.xlsx');
+    return Excel::download(new EquipoPorTipoExport($products,$fechaInicial,$fechaFinal), 'EquipoAgregado'.Carbon::now()->format('d-m-y').'.xlsx');
 
   }
 
@@ -134,15 +142,24 @@ class GerencialController extends Controller
 
       $date = Carbon::now();
       $date = $date->format('d-m-Y');
+      $fechaInicial = Carbon::parse( $fecha_inicial );
+      $fechaInicial = $fechaInicial->format('d-m-Y');
+      $fechaFinal = Carbon::parse( $fecha_final );
+      $fechaFinal = $fechaFinal->format('d-m-Y');
       switch($request->method()){
        case "POST":
        Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de mantenimientos realizados");
-      $pdf = PDF::loadView('pdf.mantenimientosRealizadosPdf', compact('users','date'))->setPaper(array(0,0,612.00,792.00));
+      $pdf = PDF::loadView('pdf.mantenimientosRealizadosPdf', compact('users','date','fechaInicial','fechaFinal'))->setPaper(array(0,0,612.00,792.00));
+     
       return $pdf->stream('EquipoPorTipo_'.$date.'pdf',array("Attachment" => 0));
       break;
    case "GET":
+   $fechaInicial = Carbon::parse( $fecha_inicial );
+      $fechaInicial = $fechaInicial->format('d-m-Y');
+      $fechaFinal = Carbon::parse( $fecha_final );
+      $fechaFinal = $fechaFinal->format('d-m-Y');
    Log::info("El usuarios: '".Auth::user()->name."' ha indicado imprimir el reporte de mantenimientos realizados");
-   return view('pdf.mantenimientosRealizadosPdf',compact('users','fecha_inicial','fecha_final','tipo','imprimir','date'));
+   return view('pdf.mantenimientosRealizadosPdf',compact('users','fecha_inicial','fecha_final','tipo','imprimir','date','fechaInicial','fechaFinal'));
    }
   }
 
@@ -157,9 +174,12 @@ class GerencialController extends Controller
       return $users->where('users.tipo',$tipos);
     })
     ->whereDate('upkeeps.created_at','>=',$fecha_inicial)->whereDate('upkeeps.created_at','<=',$fecha_final)->groupBy('users.id')->orderby('users.id','DESC')->paginate();
-
+    $fechaInicial = Carbon::parse( $fecha_inicial );
+    $fechaInicial = $fechaInicial->format('d-m-Y');
+    $fechaFinal = Carbon::parse( $fecha_final );
+    $fechaFinal = $fechaFinal->format('d-m-Y');
     Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de mantenimientos realizados por encargados");
-    return Excel::download(new MantenimientosRealizadosExport($users), 'mttoPorEncargado'.Carbon::now()->format('d-m-y').'.xlsx');
+    return Excel::download(new MantenimientosRealizadosExport($users,$fechaInicial,$fechaFinal), 'mttoPorEncargado'.Carbon::now()->format('d-m-y').'.xlsx');
   }
  }
 }
@@ -231,15 +251,19 @@ class GerencialController extends Controller
 
       $date = Carbon::now();
       $date = $date->format('d-m-Y');
+      $fechaInicial = Carbon::parse( $fecha_inicial );
+      $fechaInicial = $fechaInicial->format('d-m-Y');
+      $fechaFinal = Carbon::parse( $fecha_final );
+      $fechaFinal = $fechaFinal->format('d-m-Y');
       switch($request->method()){
       case "POST":
       Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de repuestos cambiados");
-      $pdf = PDF::loadView('pdf.repuestosCambiadosPdf', compact('spares','date'))->setPaper(array(0,0,612.00,792.00));
+      $pdf = PDF::loadView('pdf.repuestosCambiadosPdf', compact('spares','date','fechaInicial','fechaFinal'))->setPaper(array(0,0,612.00,792.00));
       return $pdf->stream('repuestosCambiados'.$date.'pdf',array("Attachment" => 0));
       break;
       case "GET":
       Log::info("El usuarios: '".Auth::user()->name."' ha indicado imprimir el reporte de repuestos cambiados");
-      return view('pdf.repuestosCambiadosPdf',compact('spares','date','imprimir'));
+      return view('pdf.repuestosCambiadosPdf',compact('spares','date','imprimir','fechaInicial','fechaFinal'));
       }
     }
 
@@ -261,9 +285,12 @@ class GerencialController extends Controller
       ->groupBy('s.id')
       ->orderBy('s.id')
       ->paginate();
-
+      $fechaInicial = Carbon::parse( $fecha_inicial );
+      $fechaInicial = $fechaInicial->format('d-m-Y');
+      $fechaFinal = Carbon::parse( $fecha_final );
+      $fechaFinal = $fechaFinal->format('d-m-Y');
       Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de repuestos cambiados");
-      return Excel::download(new RepuestosCambiadosExport($spares), 'repuestosCambiados'.Carbon::now()->format('d-m-y').'.xlsx');
+      return Excel::download(new RepuestosCambiadosExport($spares,$fechaInicial,$fechaFinal), 'repuestosCambiados'.Carbon::now()->format('d-m-y').'.xlsx');
     }
 
 
@@ -353,8 +380,8 @@ Log::info("El usuarios: '".Auth::user()->name."' ha mandado a imprimir el report
 return view('pdf.info40',compact('produc40','date','imprimir'));
 }
 }
-//generar excell
-public function excellInfo40($tipo)
+//generar excel
+public function excelInfo40($tipo)
     {
       if($tipo!=0){
         $produc40=DB::select("select * from (select products.id, products.valorAdqui,products.marca,products.modelo,

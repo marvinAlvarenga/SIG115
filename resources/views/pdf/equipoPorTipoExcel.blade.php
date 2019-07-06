@@ -9,6 +9,9 @@
         <th>Modelo</th>
         <th>Garantía</th>
         <th>Adquisicion</th>
+        <th scope="row"> DE:{{$fechaInicial}} </th>
+                      
+        <th scope="row"> HASTA:{{$fechaFinal}}</th>
       </tr>
     </thead>
 

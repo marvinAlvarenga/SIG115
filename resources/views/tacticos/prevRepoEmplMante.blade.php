@@ -102,7 +102,7 @@
     <input class="btn btn-primary" type="submit" name="submit" value="Generar PDF">
 
   <a class="btn btn-primary" href="{{route('impmantempl',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,])}}" role="button">Imprimir</a>
-  <a class="btn btn-primary" href="{{route('excelmantempl',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,])}}" role="button">Generar Excell</a>
+  <a class="btn btn-primary" href="{{route('excelmantempl',['fecha_inicial'=>$fecha_inicial,'fecha_final'=>$fecha_final,])}}" role="button">Generar Excel</a>
   &nbsp;
   <a class="btn btn-primary" href="{{ route('solimantempl') }}" role="button">Regresar</a>
 

@@ -103,7 +103,7 @@
     <input class="btn btn-primary" type="submit" name="submit" value="Generar PDF">
 
   <a class="btn btn-primary" href="{{route('impgaranve',['tipo'=>$tipo,])}}" role="button">Imprimir</a>
-  <a class="btn btn-primary" href="{{route('excelgaranve',['tipo'=>$tipo,])}}" role="button">Generar Excell</a>
+  <a class="btn btn-primary" href="{{route('excelgaranve',['tipo'=>$tipo,])}}" role="button">Generar Excel</a>
     &nbsp;
     <a class="btn btn-primary" href="{{ route('soligaranven') }}" role="button">Regresar</a>
 

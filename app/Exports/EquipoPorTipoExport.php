@@ -9,10 +9,14 @@ class EquipoPorTipoExport implements FromView
 {
 
     private $products;
+    private $fechaInicial;
+    private $fechaFinal;
 
-    public function __construct($products)
+    public function __construct($products,$fechaIn,$FechaFi)
     {
         $this->products = $products;
+        $this->fechaInicial=$FechaFi;
+        $this->fechaFinal=$FechaFi;
 
     }
 
@@ -20,6 +24,8 @@ class EquipoPorTipoExport implements FromView
     {
         return view('pdf.equipoPorTipoExcel', [
             'products' => $this->products,
+            'fechaInicial' => $this->fechaInicial,
+            'fechaFinal' => $this->fechaFinal,
         ]);
     }
 }

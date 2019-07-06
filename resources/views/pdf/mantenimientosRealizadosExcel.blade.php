@@ -8,6 +8,9 @@
             <th>Status</th>
             <th>Tipo</th>
             <th>Total mantenimientos</th>
+            <th scope="row"> DE:{{$fechaInicial}} </th>
+                      
+        <th scope="row"> HASTA:{{$fechaFinal}}</th>
           </tr>
         </thead>
 

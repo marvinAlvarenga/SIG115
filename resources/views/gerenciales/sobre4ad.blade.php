@@ -104,7 +104,7 @@
 <input class="btn btn-primary" type="submit" name="submit" value="Generar PDF">
 
 <a class="btn btn-primary" href="{{route('impinfo40', ['tipo' => $tipo,])}}" role="button">Imprimir</a>
-<a class="btn btn-primary"  href="{{route('excellinfo40', ['tipo' => $tipo,])}}">Generar Excell</a>
+<a class="btn btn-primary"  href="{{route('excelinfo40', ['tipo' => $tipo,])}}">Generar Excel</a>
 &nbsp;
 <a class="btn btn-primary" class="btn btb-primary" href="{{route('soli40')}}">Regresar</a>
 
