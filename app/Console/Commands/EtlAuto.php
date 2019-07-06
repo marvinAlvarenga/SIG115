@@ -136,7 +136,7 @@ $this->info('|200');
 
 
 }catch(\Exception $e){
-  $this->error('Ha ocurrido un error en la transferencia. Intente de nuevo.');
+  $this->error('Ha ocurrido un error en la transferencia. Intente de nuevo.',$e);
   $this->info('|500');
 }
     }
