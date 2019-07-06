@@ -9,10 +9,14 @@ class RepuestosCambiadosExport implements FromView
 {
 
     private $spares;
+    private $fechaInicial;
+    private $fechaFinal;
 
-    public function __construct($spares)
+    public function __construct($spares,$fechaIn,$FechaFi)
     {
         $this->spares = $spares;
+        $this->fechaInicial=$FechaFi;
+        $this->fechaFinal=$FechaFi;
 
     }
 
@@ -20,6 +24,8 @@ class RepuestosCambiadosExport implements FromView
     {
         return view('pdf.repuestosCambiadosExcel', [
             'spares' => $this->spares,
+            'fechaInicial' => $this->fechaInicial,
+            'fechaFinal' => $this->fechaFinal,
         ]);
     }
 }

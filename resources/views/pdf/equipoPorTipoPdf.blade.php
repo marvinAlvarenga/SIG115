@@ -51,6 +51,9 @@
         <br>   
 <div style="height:28px; width:100%; float:left;"><br><p>Unidad Solicitante: ADMINISTRACION FINANCIERA<p>
     <br>Equipo agregado a inventario por fecha. 
+    <br>    
+                DE:{{$fechaInicial}} &nbsp; HASTA:{{$fechaFinal}}
+    <br>   
 </div>
     <div tyle="height:28px; width:100%; float:both;"  class="form-group" align="right" >
             <br>    
