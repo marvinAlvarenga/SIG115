@@ -50,6 +50,15 @@
 
             <br>
                 <br>
+                <div style="height:28px; width:100%; float:left;">
+                    <br>
+                    <br><p>CONSULTADO EN LAS FECHAS:</p>
+
+                    de: {{$inicial}} &nbsp; hasta: {{$final}}
+
+                </div>
+s
+
                 <div tyle="height:28px; width:100%; float:both;"  class="form-group" align="right" >
                         <br>
                         <br>
@@ -59,7 +68,7 @@
                           <p>{{$date}}</p>
                         </div>
                     </div>
-
+                    <br>
 
                     <div  align="center" >
                       <table class="table table-bordered">

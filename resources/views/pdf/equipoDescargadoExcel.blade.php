@@ -1,6 +1,6 @@
 <p>Reporte de Equipos Descargados.</p>
 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-        <caption> <h3 class="page-header">Equipo Con licencias vencidas o por vencer</h3></caption>
+        <caption> <h3 class="page-header">Equipo que ha sido descargado.</h3></caption>
         <thead>
           <tr>
             <th scope="col">N&uacute;mero de serie</th>
@@ -20,5 +20,13 @@
               <td>{{ $producto->codigo }}</td>
             </tr>
           @endforeach
+          <tr>
+          </tr>
+          <tr>
+          </tr>
+          <tr>
+            <td>Desde: {{$fecha_inicial}}</td>
+            <td>Hasta: {{$fecha_final}}</td>
+          </tr>
         </tbody>
         </table>
