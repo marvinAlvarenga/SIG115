@@ -55,7 +55,7 @@
             <br>    
            
             <br>  
-            <label for="txtfecha" class="col-sm-2 control-label">Fecha</label>
+            <label for="txtfecha" class="col-sm-2 control-label">Fecha de emision</label>
             <div class="col-sm-4">
                 <p>{{$date}}</p>
             </div>
@@ -100,9 +100,9 @@
             
                     <td>{{$producs40->estado}}</td>
             
-                    <td>{{$producs40->valorAdqui}}</td>
+                    <td>${{$producs40->valorAdqui}}</td>
             
-                    <td>{{$producs40->costoSpares}}</td>
+                    <td>${{$producs40->costoSpares}}</td>
                   
                     </tr>       
              @endforeach                       

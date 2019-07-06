@@ -51,6 +51,7 @@
             <div style="height:28px; width:100%; float:left;"><br><p>Unidad Solicitante: ADMINISTRACION FINANCIERA<p>
                 <br>Cantidad de mantenimientos por departamento 
                 <br>    
+                de:{{$fechaInicial}} &nbsp; hasta:{{$fechaFinal}}
                 <br>   
                 <br>  
             </div>
@@ -60,7 +61,7 @@
                         <br>    
                         <br>   
                         <br>  
-                        <label for="txtfecha" class="col-sm-2 control-label">Fecha</label>
+                        <label for="txtfecha" class="col-sm-2 control-label">Fecha de emision</label>
                         <div class="col-sm-4">
                           <p>{{$date}}</p>    
                         </div>
@@ -69,6 +70,10 @@
                
                     <div  align="center" >                
                        
+                        <div >
+                            <div >
+                              <h6>Cantidad de mantenimientos por departamento</h6>
+                            </div>
                         <table>
                             
                             <thead>

@@ -11,7 +11,7 @@
       <br>Facultad de Ciencias y Humanidades
     </span>
     <span class="h4">
-      <br><br>Unidad de Mantenimiento de Inform&aacute;tica
+      <br>Unidad de Mantenimiento de Inform&aacute;tica
     </span>
     <span class="h4">
       <br>Reporte de Garantias vencidas o por vencer

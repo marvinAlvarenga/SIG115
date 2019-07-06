@@ -560,10 +560,14 @@ else{
 
    $date = Carbon::now();
    $date = $date->format('d-m-Y');
+   $fechaInicial = Carbon::parse( $fecha_inicial );
+   $fechaInicial = $fechaInicial->format('d-m-Y');
+   $fechaFinal = Carbon::parse( $fecha_final );
+   $fechaFinal = $fechaFinal->format('d-m-Y');
   switch($request->method()){
     case "POST":
     Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte cant de mante por depto");
-    $pdf = PDF::loadView('pdf.mandepto', compact('manDeto','date'))->setPaper(array(0,0,612.00,792.00));
+    $pdf = PDF::loadView('pdf.mandepto', compact('manDeto','date','fechaInicial','fechaFinal'))->setPaper(array(0,0,612.00,792.00));
     return $pdf->stream('repoManDepto.pdf',array("Attachment" => 0));
    break;
   case "GET":
@@ -591,9 +595,12 @@ public function ExcelMandep($fecha_inicial,$fecha_final,$tipo){
     GROUP BY departments.nombre",[$fecha_inicial,$fecha_final,$tipo]);
 
    }
-
+$fechaInicial = Carbon::parse( $fecha_inicial );
+   $fechaInicial = $fechaInicial->format('d-m-Y');
+   $fechaFinal = Carbon::parse( $fecha_final );
+   $fechaFinal = $fechaFinal->format('d-m-Y');
    Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Cantidad de mantenimientos por");
-  return Excel::download(new ManDepExport($manDeto), 'MantenimientosPorDepto_'.Carbon::now()->format('d-m-y').'.xlsx');
+  return Excel::download(new ManDepExport($manDeto,$fechaInicial,$fechaFinal), 'MantenimientosPorDepto_'.Carbon::now()->format('d-m-y').'.xlsx');
  }
 
 ///termina el reporte//////

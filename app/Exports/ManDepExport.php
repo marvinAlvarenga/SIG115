@@ -9,17 +9,21 @@ class ManDepExport implements FromView
 {
     
     private $manDeto;
-   
-    public function __construct($manDetos)
+    private $fechaInicial;
+    private $fechaFinal;
+    public function __construct($manDetos,$fechaIn,$FechaFi)
     {
         $this->manDeto = $manDetos;
-      
+        $this->fechaInicial=$FechaFi;
+        $this->fechaFinal=$FechaFi;
        
     }
     public function view(): View
     {
         return view('pdf.ManteDeptoExcel', [
             'manDeto' => $this->manDeto,
+            'fechaInicial' => $this->fechaInicial,
+            'fechaFinal' => $this->fechaFinal,
             
         ]);
     }

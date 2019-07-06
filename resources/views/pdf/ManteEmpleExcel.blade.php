@@ -22,7 +22,9 @@
                             
                             <th scope="row">Tipo</th>
                          
-                            
+                            <th scope="row"> DE:{{$fechaInicial}} </th>
+                      
+                            <th scope="row"> HASTA:{{$fechaFinal}}</th>
                            </tr>                     
                     </thead>
                     <tbody>

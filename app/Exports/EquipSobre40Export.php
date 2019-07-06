@@ -9,6 +9,7 @@ class EquipSobre40Export  implements FromView
 {
     
     private $produc40;
+   
     
     public function __construct($products)
     {
@@ -20,6 +21,7 @@ class EquipSobre40Export  implements FromView
     {
         return view('pdf.equipSobre40Excel', [
             'produc40' => $this->produc40,
+            
                     ]);
     }
 }

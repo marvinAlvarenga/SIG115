@@ -11,7 +11,7 @@
             <br>Facultad de Ciencias y Humanidades
           </span>
           <span class="h4">
-            <br><br>Unidad de Mantenimiento de Inform&aacute;tica
+            <br>Unidad de Mantenimiento de Inform&aacute;tica
           </span>
           <span class="h4">
             <br>Reporte de Garantias proximas a vencer
@@ -24,11 +24,7 @@
             <br>    
             <br>   
             <br>  
-            <label for="txtfecha" class="col-sm-2 control-label">Fecha</label>
-            <div class="col-sm-4">
-              <p>{{$date}}</p>    
-            </div>
-        </div>
+           
    
 @if(isset($empleManto))
 @if(count($empleManto)>0)

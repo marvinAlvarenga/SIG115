@@ -361,11 +361,15 @@ public function pdfEquipoDescargado(Request $request,$tipo, $fecha_inicial,$fech
 
   $date= Carbon::now();
   $date = $date->format('d-m-Y');
+  $fechaInicial = Carbon::parse( $fecha_inicial );
+  $fechaInicial = $fechaInicial->format('d-m-Y');
+  $fechaFinal = Carbon::parse( $fecha_final );
+  $fechaFinal = $fechaFinal->format('d-m-Y');
 switch($request->method()){
   case "POST":
   Log::info("El usuarios: '".Auth::user()->name."' ha exportado a PDF el reporte de Cantidad de mantenimientos por empleado");
-  $pdf = PDF::loadView('pdf.EmpleadoMantenimiento', compact('empleManto','date'))->setPaper(array(0,0,612.00,792.00));
-  return $pdf->stream('repoManEmple.pdf',array("Attachment" => 0));
+  $pdf = PDF::loadView('pdf.EmpleadoMantenimiento', compact('empleManto','date','fechaInicial','fechaFinal'))->setPaper(array(0,0,612.00,792.00));
+  return $pdf->stream('repoManSoli.pdf',array("Attachment" => 0));
  break;
 case "GET":
 Log::info("El usuarios: '".Auth::user()->name."' ha solicitado IMPRIMIR el reporte de Cantidad de mantenimientos por empleado");
@@ -379,9 +383,12 @@ return view('pdf.EmpleadoMantenimiento',compact('empleManto','date','imprimir'))
     JOIN upkeeps on products.id = upkeeps.product_id
     WHERE upkeeps.created_at > ? AND upkeeps.created_at< ?
     GROUP BY  users.id",[$fecha_inicial,$fecha_final]);
-
+    $fechaInicial = Carbon::parse( $fecha_inicial );
+    $fechaInicial = $fechaInicial->format('d-m-Y');
+    $fechaFinal = Carbon::parse( $fecha_final );
+    $fechaFinal = $fechaFinal->format('d-m-Y');
     Log::info("El usuarios: '".Auth::user()->name."' ha exportado a EXCEL el reporte de Cantidad de mantenimientos por empleado");
-    return Excel::download(new ManEmplExport($empleManto), 'MantenimientosPorEmpleado_'.Carbon::now()->format('d-m-y').'.xlsx');
+    return Excel::download(new ManEmplExport($empleManto,$fechaInicial,$fechaFinal), 'MantenimientosPorEmpleado_'.Carbon::now()->format('d-m-y').'.xlsx');
   }
 
 /////Fin del reporte////

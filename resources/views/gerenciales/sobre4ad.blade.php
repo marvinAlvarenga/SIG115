@@ -11,7 +11,7 @@
             <br>Facultad de Ciencias y Humanidades
           </span>
           <span class="h4">
-            <br><br>Unidad de Mantenimiento de Inform&aacute;tica
+            <br>Unidad de Mantenimiento de Inform&aacute;tica
           </span>
           <span class="h4">
             <br>Reporte de Equipos con costo de Mantenimiento mayor al 40% del precio de adquisicion.
@@ -20,15 +20,7 @@
       
         <img style="width:150px; height:150px;" src="{{ asset('img/logo.jpg') }}" class="img-fluid pull-xs-left" alt="Logo Minerva">
        </div>
-    <div tyle="height:28px; width:100%; float:both;"  class="form-group" align="right" >
-            <br>    
-            <br>   
-            <br>  
-            <label for="txtfecha" class="col-sm-2 control-label">Fecha</label>
-            <div class="col-sm-4">
-              <p>{{$date}}</p>    
-            </div>
-        </div>
+   
      
         @if(isset($produc40))
 @if(count($produc40)>0)
@@ -37,7 +29,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary">Equipo informático agregado al inventario por tipo</h6>
+          <h6 class="m-0 font-weight-bold text-primary">Reporte de Equipos con costo de Mantenimiento mayor al 40% del precio de adquisicion.</h6>
         </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -75,9 +67,9 @@
                 
                         <td>{{$producs40->estado}}</td>
                 
-                        <td>{{$producs40->valorAdqui}}</td>
+                        <td>${{$producs40->valorAdqui}}</td>
                 
-                        <td>{{$producs40->costoSpares}}</td>
+                        <td>${{$producs40->costoSpares}}</td>
                       
                         </tr>       
                  @endforeach                       

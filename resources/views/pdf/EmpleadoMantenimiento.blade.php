@@ -49,7 +49,10 @@
                     <br>   
                     <br>   
             <div style="height:28px; width:100%; float:left;"><br><p>Unidad Solicitante: ADMINISTRACION FINANCIERA<p>
-                <br>Mantenimientos realizados en un rango de fecha
+                <br>Mantenimientos realizados 
+                <br>    
+                DE:{{$fechaInicial}} &nbsp; HASTA:{{$fechaFinal}}
+                <br>   
             </div>
             <br>    
             <br>   
@@ -58,7 +61,7 @@
                         <br>    
                         <br>   
                         <br>  
-                        <label for="txtfecha" class="col-sm-2 control-label">Fecha</label>
+                        <label for="txtfecha" class="col-sm-2 control-label">Fecha de emision </label>
                         <div class="col-sm-4">
                           <p>{{$date}}</p>    
                         </div>

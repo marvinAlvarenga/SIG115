@@ -13,7 +13,9 @@
                          
                             <th scope="row">Cantidad de mantenimientos</th>
                          
-                            
+                            <th scope="row"> DE:{{$fechaInicial}} </th>
+                      
+                            <th scope="row"> HASTA:{{$fechaFinal}}</th>
                            </tr>                     
                     </thead>
                     <tbody>

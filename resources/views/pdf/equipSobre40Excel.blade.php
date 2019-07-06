@@ -21,6 +21,8 @@
                         <th scope="row">Valor adquisicion</th>
                        
                         <th scope="row">Monto</th>
+
+                      
                        </tr>                     
                 </thead>
                 <tbody>
@@ -37,11 +39,12 @@
             
                     <td>{{$producs40->estado}}</td>
             
-                    <td>{{$producs40->valorAdqui}}</td>
+                    <td>${{$producs40->valorAdqui}}</td>
             
-                    <td>{{$producs40->costoSpares}}</td>
+                    <td>${{$producs40->costoSpares}}</td>
                   
                     </tr>       
+                    
              @endforeach                       
                 </tbody>
             </table>

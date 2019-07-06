@@ -87,8 +87,8 @@
             @can('report.mantenimientosRealizados')<a class="collapse-item" href="{{route('gerenciales.mantenimientosRealizados')}}">Mantenimientos realizados</a>@endcan
             @can('report.repuestosCambiados')<a class="collapse-item" href="{{route('gerenciales.repuestosCambiados')}}">Repuestos cambiados</a>@endcan
             @can('report.clientesYMantenimientos')<a class="collapse-item" href="{{ route('MantsXUser') }}">Clientes y mantenimientos</a>@endcan
-            @can('report.mayor40Adqui')<a class="collapse-item" href="{{ route('soli40') }}">Costo de mante mayor al <br> 40% de valor adqui</a>@endcan
-            @can('report.cantidadManteniDepto')<a class="collapse-item" href="{{ route('solidepmant') }}">Cantidad de mante por <br>depto</a>@endcan
+            @can('report.mayor40Adqui')<a class="collapse-item" href="{{ route('soli40') }}">Reporte de Equipos <br> con costo de Mantenimiento <br>mayor al 40% del <br>precio de adquisicion.</a>@endcan
+            @can('report.cantidadManteniDepto')<a class="collapse-item" href="{{ route('solidepmant') }}">Reporte de Mantenimientos <br> por departamento</a>@endcan
           </div>
         </div>
         @endcan
@@ -104,7 +104,7 @@
             @can('report.licencias')<a class="collapse-item" href="{{route('tacticos.licenciasPorVencer')}}">Licencias por vencer</a>@endcan
             @can('report.equipoDescargado')<a class="collapse-item" href="{{ route('EquipoDescargado') }}">Equipo descargado</a>@endcan
             @can('report.equipoAntiguo')<a class="collapse-item" href="{{route('tacticos.equipoAntiguoIndex')}}">Equipo antiguo</a>@endcan
-            @can('report.cantidadManteniSolicitados')<a class="collapse-item" href="{{route('solimantempl')}}">Cantidad Mantes realizados</a>@endcan
+            @can('report.cantidadManteniSolicitados')<a class="collapse-item" href="{{route('solimantempl')}}">Reporte de <br> Mantenimientos Solicitados.</a>@endcan
             @can('report.garantiasVencidas')<a class="collapse-item" href="{{route('soligaranven')}}">Equip. Garantias vencidas</a>@endcan
 
           </div>

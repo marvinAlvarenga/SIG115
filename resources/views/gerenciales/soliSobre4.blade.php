@@ -14,7 +14,7 @@
         <br><br>Unidad de Mantenimiento de Inform&aacute;tica
       </span>
       <span class="h4">
-        <br>Reporte de Equipo con costos de mante mayor al 40% del valor de adqui
+        <br>Reporte de Equipo con costos de mante mayor al 40% del valor de adquisicion
       </span>
     </h1>
   
