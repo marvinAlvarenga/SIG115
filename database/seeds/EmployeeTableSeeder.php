@@ -13,25 +13,25 @@ class EmployeeTableSeeder extends Seeder
     {
         factory(App\Employee::class,30)->create();
         App\User::create([
-            'name'=> 'Administrador',
-            'email'=> 'admin@ues.com',
-            'password'=> bcrypt('1234'),
+            'name'=> 'Julio Paredes',
+            'email'=> 'julio.paredes@ues.edu.sv',
+            'password'=> bcrypt('adminpa01*'),
 
         ]);
    
         App\User::create([
-            'name'      =>  'Usuario Estratégico',
-            'email'     =>  'estra@ues.edu.sv',
-            'password'  =>  bcrypt('1234'),
+            'name'      =>  'Javier Pérez',
+            'email'     =>  'javier.perez@ues.edu.sv',
+            'password'  =>  bcrypt('gerenpe01*'),
         ]);
 
         App\User::create([
-            'name'      =>  'Usuario Táctico',
-            'email'     =>  'tacti@ues.edu.sv',
-            'password'  =>  bcrypt('1234'),
+            'name'      =>  'Aarón Rosales',
+            'email'     =>  'aaron.rosales@ues.edu.sv',
+            'password'  =>  bcrypt('tactiro01*'),
         ]);
         
-        factory(App\User::class,30)->create();
+        //factory(App\User::class,7)->create();
     }
 
 

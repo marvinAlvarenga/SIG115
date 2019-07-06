@@ -2,8 +2,6 @@
 
 @section('content')
 
-<div class="card shadow mb-4">
-    <div class="card-body m">
         <!-- Content Row -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <img style="width:120px; height:148px;" src="{{ asset('img/logoUes.jpg') }}" class="img-fluid pull-xs-left" alt="Logo Minerva">
@@ -28,22 +26,35 @@
                             {{ session('status') }}
                         </div>
                 @endif
-
-        
-                <form action="{{ route('tacticos.equipoAntiguoGenerate') }}" method="POST" class='pl-5'>
-                    @csrf
-                        <label><h5>Tipo de Equipo:</h5></label><br>
-                        <div class="form-group">
-                            <label class="checkbox-inline">
-                                <input type="checkbox" id="todos">Todos
-                              </label>
-                              <label class="checkbox-inline">
-                                <input type="checkbox" id="computadora" name="tipo[]" value="1">Computadora
-                              </label>
-                              <label class="checkbox-inline">
-                                <input type="checkbox" id="impresora" name="tipo[]" value="2">Impresora
-                              </label>
-                        </div>
+                  <div class="col-sm-7">
+                    <div class="card mb-3">
+                      <div class="card-body">
+                        <form action="{{ route('tacticos.equipoAntiguoGenerate') }}" method="POST" class='pl-5'>
+                          @csrf
+                              <div class="row">
+                                <div class="col">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text ">Tipo de Equipo:</span>
+                                        </div>
+                                        <div class="form-group form-control">
+                                          <label class="checkbox-inline">
+                                              <input type="checkbox" id="todos">Todos
+                                            </label>
+                                            <label class="checkbox-inline">
+                                              <input type="checkbox" id="computadora" name="tipo[]" value="1">Computadora
+                                            </label>
+                                            <label class="checkbox-inline">
+                                              <input type="checkbox" id="impresora" name="tipo[]" value="2">Impresora
+                                            </label>
+                                      </div>
+                                    </div>
+                                </div>
+                              </div>
+                            
+                      </div>
+                    </div>
+                  </div>
                         <div class="row justify-content-center">
                         <div class="col-6">
                         
@@ -55,7 +66,11 @@
         @else
 
                 @if($computadoras != null)
-                <span class="h5">Computadoras</span>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Computadoras</h6>
+                      </div>
+                      <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead>
@@ -82,10 +97,16 @@
               </tbody>
             </table>
           </div>
+                      </div>
+                </div>
         @endif
 
         @if($impresoras != null)
-        <span class="h5">Impresoras</span>
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Impresoras</h6>
+              </div>
+              <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead>
@@ -112,6 +133,8 @@
               </tbody>
             </table>
           </div>
+              </div>
+        </div>
         @endif
 
         @if ($computadoras==null && $impresoras==null)
@@ -138,8 +161,6 @@
     </div>
         @endif 
         @endif     
-    </div>
-</div>
 
 @endsection
 

@@ -44,7 +44,7 @@
         <br>    
         <br>   
         <br>   
-<div style="height:28px; width:100%; float:left;"><label for="txtfecha" class="col-sm-2 control-label">Fecha</label><p>{{(Carbon\Carbon::now())->format('d/m/y')}}</p></div>
+<div style="height:28px; width:100%; float:left;"><label for="txtfecha" class="col-sm-2 control-label">Fecha de generación</label><p>{{(Carbon\Carbon::now())->format('d/m/y')}}</p></div>
     <div tyle="height:28px; width:100%; float:both;"  class="form-group" align="right" >
             <br>    
             <br>   
