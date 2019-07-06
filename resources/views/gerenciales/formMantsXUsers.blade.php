@@ -26,27 +26,53 @@
 <div class="pl-5">
 
 <form action="{{ route('PostMantUsrs') }}" method="POST">
-  <div class="form-group p-4" style="display:inline-block;">
-    <label for="id_count">Cantidad de Registros:</label>
-      <input type="number" class="form-control" id="id_count" name="count" value="">
+  <div class="row ">
+          <div class="col-sm-11">
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row">
+      <div class="col">
+
+          <div class="input-group">
+              <div class="input-group-prepend">
+                  <span class="input-group-text ">Cant. Registros</span>
+              </div>
+              <input type="number" class="form-control" id="id_count" name="count" value="">
+          </div>
+      </div>
+      <div class="col">
+          <div class="input-group">
+              <div class="input-group-prepend">
+                  <span class="input-group-text ">Desde</span>
+              </div>
+                <input type="date" class="form-control" id="id_fechai" name="fecha_inicial" value="">
+          </div>
+      </div>
+      <div class="col">
+          <div class="input-group">
+              <div class="input-group-prepend">
+                  <span class="input-group-text ">Hasta</span>
+              </div>
+                    <input type="date" class="form-control" id="id_fechaf" name="fecha_final" value="">
+          </div>
+      </div>
+
+    </div>
+    </div>
   </div>
-  <div class="form-group p-4" style="display:inline-block;">
-    <label for="id_fechai">Fecha de Inicio:</label>
-    <input type="date" class="form-control" id="id_fechai" name="fecha_inicial" value="">
-  </div>
-  <div class="form-group p-4" style="display:inline-block;">
-    <label for="id_fechaf">Fecha de Finalizaci&oacute;n:</label>
-    <input type="date" class="form-control" id="id_fechaf" name="fecha_final" value="">
-  </div>
-  <br><br>
+</div>
+</div>
   <div class="pl-4">
   <input type="submit" class="btn btn-primary" value="Generar Reporte" style="width:220px;">
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <input type="" class="btn btn-primary" value="Limpiar Campos">
   </div>
   <input type="hidden" name="_token" value="{{ csrf_token() }}">
 </form>
 </div>
+
 <br><br><br><br>
+
+
+
 
 @endsection
