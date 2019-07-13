@@ -56,7 +56,7 @@
                 </div>
             </div>
 
-            <div class="form-group row">
+            <div class="form-group row" style="display: none">
                 <label for="tipo" class="col-md-4 col-form-label text-md-right">{{ __('Tipo') }}</label>
 
                 <div class="col-md-6">

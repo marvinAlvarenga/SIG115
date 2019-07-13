@@ -77,7 +77,7 @@ try{
 
       $optionsUpkps = [
         'connection' => self::dest,
-        'columns' => ['id', 'product_id', 'user_id', 'tipoequipo']
+        'columns' => ['id', 'product_id', 'user_id', 'tipoequipo','created_at','updated_at']
       ];
 
       $etl5->extract('query', 'select * from upkeeps', ['connection' => self::source,])

@@ -4,7 +4,7 @@
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-center text-primary">Bienvenido al Sistema de Información Gerencial para el manejo de equipo informático de la Alcaldía La Paterna</h6>
+        <h6 class="m-0 font-weight-bold text-center text-primary">Bienvenido al Sistema de Información Gerencial para el manejo de equipo informático de la Facultad de Ciencias y Humanidades</h6>
     </div>
     <div class="card-body m">
         <center>

@@ -107,7 +107,7 @@
                       <th>Nombre</th>
                       <th>E-Mail</th>
                       <th>Status</th>
-                      <th>Tipo</th>
+                      {{--  <th>Tipo</th>  --}}
                       <th>Total mantenimientos</th>
                     </tr>
                   </thead>
@@ -119,7 +119,7 @@
                             <td>{{$user->name}}</td>
                             <td>{{$user->email}}</td>
                             <td>{{$user->estado}}</td>
-                            <td>{{$user->tipo}}</td>
+                            {{--  <td>{{$user->tipo}}</td>  --}}
                             <td>{{$user->total}}</td>
                     @endforeach
                 </tbody>

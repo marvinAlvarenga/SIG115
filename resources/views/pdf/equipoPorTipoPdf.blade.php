@@ -111,7 +111,7 @@
             </table>
         </div >
 
-<hr>
+
 
 <P  align="right" >_________________________________<br>Nombre<br> &nbsp; _________________________________<br>Firma</p>
     <p align="left">Sello</p>  
